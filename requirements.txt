@@ -1,0 +1,15 @@
+# Provisional: se ajusta cuando se decida el stack.
+numpy
+pandas
+pyarrow
+geopandas
+rasterio
+rioxarray
+xarray
+scikit-learn
+matplotlib
+plotly
+pyyaml
+requests
+tqdm
+jupyterlab

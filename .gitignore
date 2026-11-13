@@ -1,0 +1,50 @@
+# --- Datos pesados (se comparten por Drive, no por git) ---
+data/raw/**
+data/interim/**
+data/processed/**
+!data/**/
+!data/**/.gitkeep
+!data/**/README.md
+
+# Formatos ráster/científicos grandes en cualquier sitio
+*.tif
+*.tiff
+*.img
+*.IMG
+*.nc
+*.h5
+*.hdf
+*.jp2
+*.zip
+*.tar.gz
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+*.egg-info/
+
+# --- Node / frontend ---
+node_modules/
+dist/
+build/
+.next/
+
+# --- Entorno y secretos ---
+.env
+*.key
+credentials*.json
+
+# --- SO / editores ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# --- Vídeos pesados de la presentación ---
+presentation/**/*.mp4
+presentation/**/*.mov

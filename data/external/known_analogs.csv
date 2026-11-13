@@ -1,0 +1,21 @@
+name,country,lat,lon,analog_of,environment,notes
+Atacama Desert (Yungay),Chile,-24.10,-70.00,mars,hyperarid desert,"Oxidizing soils, perchlorates, high UV"
+Haughton Crater (Devon Island),Canada,75.38,-89.67,mars;moon,polar desert impact crater,Haughton-Mars Project
+Death Valley (Badwater),USA,36.23,-116.77,mars,arid playa evaporites,Alluvial fans and salt flats
+McMurdo Dry Valleys,Antarctica,-77.50,162.00,mars,cold hyperarid polar,Permafrost and ice-cemented soils
+Rio Tinto,Spain,37.69,-6.55,mars,acidic iron-rich river,Jarosite like Meridiani Planum
+Lanzarote (Timanfaya),Spain,29.00,-13.75,moon;mars,basaltic volcanic + lava tubes,ESA PANGAEA training
+Teide (Tenerife),Spain,28.27,-16.64,mars,volcanic,ExoMars rover field tests
+Mauna Kea,USA,19.82,-155.47,moon;mars,basaltic volcanic,PISCES and HI-SEAS
+Kilauea,USA,19.41,-155.28,moon;mars,basaltic volcanic,Lava flows and tubes
+Askja,Iceland,65.05,-16.75,moon;mars,basaltic volcanic,Apollo astronaut training
+SP Crater / Black Point lava flow,USA,35.58,-111.63,moon,volcanic cinder cone,NASA Desert RATS
+Meteor Crater,USA,35.03,-111.02,moon,impact crater,Apollo training
+Ries Crater,Germany,48.88,10.56,moon,impact crater,Apollo 14 training
+Mars Desert Research Station (Hanksville),USA,38.41,-110.79,mars,arid sedimentary,Habitat simulation
+Bockfjord (Svalbard),Norway,79.43,13.33,mars,polar volcanic + ice,AMASE expeditions
+Craters of the Moon,USA,43.42,-113.52,moon,basaltic lava field,Lava fields and tubes
+Sudbury,Canada,46.60,-81.18,moon,impact structure,Artemis geology training
+Pilbara (Dresser Formation),Australia,-21.20,119.40,mars,ancient sedimentary,Early life astrobiology
+Lonar Crater,India,19.98,76.51,moon;mars,impact crater in basalt,
+Dallol,Ethiopia,14.24,40.30,mars,hyperacid hypersaline volcanic,
