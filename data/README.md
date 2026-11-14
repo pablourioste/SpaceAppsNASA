@@ -53,7 +53,11 @@ Estado: **identificado** = existe y sabemos dónde está · **descargado** · **
 | Diviner PCP (diurnal / seasonal) | Luna | temperaturas polares | [verificar] | [verificar] | PDS Geosciences → Diviner → PCP | identificado | |
 | LOLA GDR / SLDEM | Luna | relieve → pendiente, rugosidad | según producto | [verificar] | PDS Geosciences / Lunar ODE | identificado | |
 | Mini-RF | Luna | radar (CPR) | [verificar] | [verificar] | PDS Geosciences (página caída el 13/11) | por comprobar | |
-| MOLA / MOLA-HRSC | Marte | relieve | 463 m / ~200 m [verificar] | [verificar] | PDS / Mars ODE | identificado | |
+| MOLA MEGDR 16 ppd (`megt90n000eb`, `megc90n000eb`) → `raw/mars/mola_megdr_16ppd/` | Marte | topography (m, radius − areoid) + shots per cell | 16 px/deg (~3.7 km) | binary `.img` + PDS3/PDS4 labels, ~33 MB each | PDS Geosciences → MGS → MOLA → MEGDR (PDS4 bundle) | descargado | |
+| TES thermal inertia (`global_ti_{day,night}_2007` + masks) → `raw/mars/tes_thermal_inertia/` | Marte | thermal inertia (J m⁻² K⁻¹ s⁻½) | [see label] | binary `.img` + PDS3 `.lbl` | PDS Geosciences → MGS → TES → Thermal Inertia Maps | descargado | |
+| GRS special products (NS/HEND neutron flux, 2002) → `raw/mars/grs_special/` | Marte | epithermal / thermal / fast neutron flux | [see label] | `.tab` text + labels | PDS Geosciences → Odyssey → GRS → Special Products | descargado | |
+| GRS element maps, smoothed 5°×5° → `raw/mars/grs_elements/` | Marte | H₂O, Cl, Fe, Si, K, Th (wt%/ppm), K/Th | 5°×5° | `.tab` text + labels | PDS Geosciences → Odyssey → GRS → Element concentration maps | descargado | |
+| MOLA-HRSC blend | Marte | relieve | ~200 m [verificar] | [verificar] | PDS / Mars ODE | identificado | |
 | `NASADEM_HGT` v001 | Tierra | relieve | 1″ (~30 m) | [verificar] | Earthdata (LP DAAC) | identificado | |
 | `MOD11C3` v061 | Tierra | temperatura de superficie mensual | 0,05° | HDF | Earthdata (LP DAAC) | identificado | |
 | `MOD21A2` v061 | Tierra | temperatura de superficie, 8 días | 1 km | HDF | Earthdata (LP DAAC) | identificado | |
