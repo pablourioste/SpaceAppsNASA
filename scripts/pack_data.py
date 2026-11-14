@@ -1,6 +1,8 @@
 """Pack data/raw/<body>/ into one zip per dataset, ready to attach to a GitHub Release.
 
     python scripts/pack_data.py mars --out C:\\some\\folder
+    python scripts/pack_data.py earth --out E:\\          # straight to a USB stick
+    python scripts/pack_data.py tables --out E:\\         # only the processed tables (enough for buscar.py)
 
 Each zip keeps the path below data/raw/, so whoever downloads it just unzips it into
 data/raw/ and every file lands in the right place, e.g.
@@ -16,7 +18,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from analogs.paths import RAW  # noqa: E402
+from analogs.paths import DATA, RAW  # noqa: E402
 
 # zip name → folders under data/raw/<body>/
 PACKS = {
@@ -38,10 +40,35 @@ PACKS = {
         "moon_south_pole_pgda.zip": ["pgda_south_pole"],             # ~0.35 GB raw
         "moon_other.zip": ["diviner_rocks", "lunar_prospector_grs", "usgs_geology", "lroc_pits"],
     },
+    # Folders as written by scripts/download_earth.py (see src/analogs/catalog.py)
+    "earth": {
+        "earth_mask.zip": ["mcd12c1", "imerg_monthly"],                # ~2.3 GB raw (land cover + rain)
+        "earth_relief.zip": ["srtmgl30", "etopo2022_30s"],             # ~1.9 GB raw
+        "earth_temperature.zip": ["myd11c3"],                          # ~4.2 GB raw
+        "earth_dust_snow.zip": ["merra2_dust", "mod10cm"],             # ~0.2 GB raw
+        "earth_silica.zip": ["ecostress_wps"],                         # ~2.5 GB raw
+    },
 }
+# "tables": the PROCESSED tables (a few hundred MB) — enough to run scripts/buscar.py without any raw data.
+# Zip paths start with processed/ or interim/, and scripts/importar_datos.py puts them back in place.
+TABLES = {"processed": "*.parquet", "interim": "*.npz"}
+
+
+def pack_tables(out: Path) -> None:
+    out.mkdir(parents=True, exist_ok=True)
+    target = out / "tables_processed.zip"
+    files = [f for sub, pattern in TABLES.items() for f in sorted((DATA / sub).glob(pattern))]
+    with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
+        for f in files:
+            z.write(f, f.relative_to(DATA).as_posix())
+        if (DATA / "LEEME.md").exists():
+            z.write(DATA / "LEEME.md", "LEEME.md")
+    print(f"{target.name:32s} {len(files):3d} files → {target.stat().st_size / 1e6:8.1f} MB")
 
 
 def pack(body: str, out: Path) -> None:
+    if body == "tables":
+        return pack_tables(out)
     out.mkdir(parents=True, exist_ok=True)
     for zip_name, folders in PACKS[body].items():
         target = out / zip_name
@@ -60,7 +87,7 @@ def pack(body: str, out: Path) -> None:
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("body", choices=sorted(PACKS))
+    p.add_argument("body", choices=sorted(PACKS) + ["tables"])
     p.add_argument("--out", type=Path, required=True, help="folder for the zips (keep it outside OneDrive)")
     args = p.parse_args()
     pack(args.body, args.out)

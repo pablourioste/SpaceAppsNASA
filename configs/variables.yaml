@@ -25,7 +25,7 @@ variables:
     sources:
       moon:  "Global: calculada desde LOLA ldem_64. Polo (80–90S): PGDA LDRM_80S_1000MPP_ADJ_SLP_<L>M. Ver docs/06_datos_luna.md"
       mars:  "MOLA / MOLA-HRSC blend (PDS) [verificar]"
-      earth: "NASADEM_HGT (Earthdata) o Copernicus DEM GLO-30 (Copernicus Data Space)"
+      earth: "SRTMGL30 (Earthdata, 30″ ≈ 0,93 km), media del hexágono H3 res 5"
 
   roughness_deg:
     label: "Rugosidad (RMS de la pendiente)"
@@ -36,7 +36,7 @@ variables:
     sources:
       moon:  "Global: calculada desde LOLA ldem_64. Polo: PGDA …_ROUGH_<L>M (o RMSD) [verificar definición]"
       mars:  "MOLA [verificar]"
-      earth: "NASADEM / Copernicus DEM"
+      earth: "SRTMGL30, RMS de la pendiente en el hexágono H3 res 5"
 
   rock_abundance_pct:
     label: "Abundancia de rocas"
@@ -80,7 +80,7 @@ variables:
     sources:
       moon:  "Global: Diviner GCP (media de tbol, 0,5°). Polo: Diviner PRP temp_avg (0,5 km)"
       mars:  "Mars Climate Database [verificar]"
-      earth: "MODIS LST, MOD11C3 (Earthdata)"
+      earth: "MYD11C3 (Aqua), media de los 12 meses de (día+noche)/2, climatología 2019–2023"
 
   t_max_K:
     label: "Temperatura máxima anual"
@@ -90,7 +90,29 @@ variables:
     sources:
       moon:  "Global: Diviner GCP (máximo de tbol, 0,5°). Polo: Diviner PRP temp_max"
       mars:  "Mars Climate Database [verificar]"
-      earth: "MODIS LST, MOD11C3 / MOD21A2 (Earthdata)"
+      earth: "MYD11C3 (Aqua 13:30), mes más cálido de la climatología 2019–2023"
+
+  t_min_K:
+    label: "Temperatura mínima anual"
+    unit: "K"
+    type: numeric
+    tolerance: 30                    # [supuesto]
+    note: "Condición típica (mes/hora más fría de la climatología), no el récord"
+    sources:
+      moon:  "Global: Diviner GCP (mínimo de tbol, 0,5°). Polo: Diviner PRP"
+      mars:  "TES MY26 noche (~02 h) [verificar cobertura]"
+      earth: "MYD11C3 (Aqua 01:30), mes más frío de la climatología 2019–2023"
+
+  precip_mm_year:
+    label: "Lluvia media anual (aridez)"
+    unit: "mm/año"
+    type: numeric
+    tolerance: 250                   # [supuesto]
+    note: "En la Luna y Marte vale 0: mide cuánto se aleja la Tierra de un ambiente sin agua líquida"
+    sources:
+      moon:  "0 (no llueve)"
+      mars:  "0 (no llueve)"
+      earth: "GPM IMERG mensual v07, media 2019–2023"
 
   ice_depth_m:
     label: "Profundidad del hielo"
@@ -111,7 +133,29 @@ variables:
     sources:
       moon:  null
       mars:  "TES / Mars Climate Database, opacidad del polvo [verificar]"
-      earth: "MCD19A2CMG, MODIS MAIAC AOD (Earthdata)"
+      earth: "MERRA-2 M2TMNXAER, DUEXTTAU (solo polvo, 550 nm), media anual 2019–2023"
+
+  silica_wt_pct:
+    label: "Sílice (SiO₂)"
+    unit: "% peso"
+    type: numeric
+    tolerance: 5                     # [supuesto]
+    note: "Composición de la superficie expuesta. Basalto ~45–52 %, granito ~70 %, arena de cuarzo > 90 %"
+    sources:
+      moon:  "Lunar Prospector GRS, SiO₂ (2°, ~60 km) [verificar unidades]"
+      mars:  "Mars Odyssey GRS, Si (5°) × 2,139 → SiO₂ [verificar]"
+      earth: "ECOSTRESS ECO_L3G_WPS (0,01°, 53° N–53° S), media en el píxel de 0,05°"
+
+  snow_cover_pct:
+    label: "Nieve (cobertura media anual)"
+    unit: "%"
+    type: numeric
+    tolerance: 30                    # [supuesto]
+    note: "Solo Tierra de momento: sirve para filtrar o para buscar a mano (hielo superficial)"
+    sources:
+      moon:  null
+      mars:  "Escarcha estacional de CO₂/H₂O [verificar]"
+      earth: "MODIS MOD10CM, climatología 2019–2023"
 
   caves:
     label: "Cuevas o tubos de lava (0 = no, 1 = sí)"
