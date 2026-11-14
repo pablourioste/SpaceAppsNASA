@@ -52,3 +52,6 @@ desktop.ini
 # --- Vídeos pesados de la presentación ---
 presentation/**/*.mp4
 presentation/**/*.mov
+
+# --- Local Claude Code config (preview server) ---
+.claude/

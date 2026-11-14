@@ -5,7 +5,7 @@
 
 **Legend:** `app/` = the web app (Vite + CesiumJS) · `src/analogs/` = the engine and Python preprocessing · `app/data/` = the index the app reads (format in [`app/README.md`](app/README.md)).
 
-**Progress:** 26 / 59 tasks done.
+**Progress:** 27 / 59 tasks done.
 
 ---
 
@@ -48,8 +48,12 @@
 - [x] **3.2** Download the TES thermal inertia maps → `data/raw/mars/tes_thermal_inertia/`. Day + night 7200×3600 (20 px/deg), int16 big-endian, 0…4999 (0 = no data) + interpolation masks.
 - [x] **3.3** Download GRS → `data/raw/mars/grs_special/` (NS neutron flux on a 0.5° grid, −99.999 = no data) and `data/raw/mars/grs_elements/` (H₂O, Cl, Fe, Si, K, Th on a 5°×5° grid, 9999.999 = no data).
   Run: `python scripts/download_data.py` (safe to re-run; skips files already downloaded).
-- [ ] **3.4** Download surface temperature (MCS / TES) and dust opacity (Montabone).
-- [ ] **3.5** Extract the variables at each Mars target site: slope, roughness, thermal inertia, hydrogen, temperature and dust.
+- [x] **3.4** Download surface temperature and dust opacity: MGS TES IR retrievals for Mars Year 26 (Montabone et al., PDS Atmospheres) → `data/raw/mars/tes_atmos_my26/`. One product gives column dust OD, water-ice OD, surface temperature and surface pressure: 5.29 M retrievals over the full year (Ls 0–360). **All retrievals are daytime (~14 h)**, so they give `t_max_K` and `dust_aod` but not a night or diurnal-mean temperature (`t_mean_K` needs another source, see 3.5). MY26 chosen because MY25 had a global dust storm. ~490 MB; the server is slow (~0.1–0.6 MB/s). `python scripts/download_data.py tes_atmos` (resumable).
+- [ ] **3.5** Extract the variables at each Mars target site: slope, roughness, thermal inertia, hydrogen, temperature and dust. *Draft code in `src/analogs/mars.py` + `scripts/build_mars_features.py` (readers checked on MOLA, TES TI and GRS; not run end-to-end yet).*
+  **To decide when doing 3.5:**
+  - Source for `t_mean_K`: the TES retrievals are daytime only, so a night/diurnal-mean surface temperature needs another product (e.g. MCS surface temperature, PDS Atmospheres).
+  - GRS element maps have no data north of ~45° (Arcadia, Phoenix, Viking 2): use the NS epithermal neutron flux there for ice/hydrogen.
+  - Whether to add the Mars-only extras (thermal inertia, GRS H₂O/Cl, surface pressure) to `configs/variables.yaml`.
 
 ### 3B · Moon
 - [ ] **3.6** Download Diviner PRP (temperature, ice depth) and LOLA.
@@ -65,7 +69,7 @@
 ### 3D · Engine and export
 - [x] **3.13** Similarity formula in `src/analogs/similarity.py` with tests in `tests/test_similarity.py`.
 - [ ] **3.14** Fill `configs/variables.yaml` (units, tolerances) and `configs/pruebas.yaml` (weights per test type) with real values.
-- [ ] **3.15** Normalize variables across bodies (percentiles or z-scores per body).
+- [ ] **3.15** Put every variable on the same scale on all bodies: compute it at the ~10 km site footprint (decision 006) and compare in physical units with tolerances (decision 003, not percentiles or z-scores per body).
 - [ ] **3.16** Export the real index to `app/data/` with `python scripts/run_pipeline.py`.
 - [ ] **3.17** Validate: known analogs (Atacama, Río Tinto, Devon, Antarctica…) must rank high for their matching sites.
 

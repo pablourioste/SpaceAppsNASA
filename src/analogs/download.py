@@ -61,6 +61,9 @@ _MOLA = f"{PDS_GEO}/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg016"
 _TES = f"{PDS_GEO}/mgs/mgs-m-tes-5-timap-v1/mgst_9001/data"
 _GRS_SPECIAL = f"{PDS_GEO}/ody/urn-nasa-pds-odyssey_grs_special/data"
 _GRS_ELEMENTS = f"{PDS_GEO}/ody/ody-m-grs-5-elements-v1/odgm_xxxx/data/smoothed"
+_TES_ATMOS = "https://atmos.nmsu.edu/PDS/data/PDS4/mgs_tes_atmos_dust-ice/data_IR_Aerosol_Optical_Depth/MY26"
+# Mars Year 26 (2002–2004): a full year without a global dust storm (MY25 had one in 2001)
+_TES_ATMOS_STEMS = [f"TES_COD_IR_MY26_Ls{a:03d}_Ls{a + 30:03d}" for a in range(0, 360, 30)]
 
 
 def _with_labels(stems: list[str], data_ext: str, label_exts: list[str]) -> list[str]:
@@ -112,6 +115,15 @@ DATASETS: dict[str, Dataset] = {
             ["h2o_sr_5x5", "cl_sr_5x5", "fe_sr_5x5", "si_sr_5x5", "k_sr_5x5", "th_sr_5x5", "kvsth_sr_5x5"],
             "tab", ["lbl", "xml"],
         ),
+    ),
+    "tes_atmos": Dataset(
+        key="tes_atmos",
+        body="mars",
+        folder="tes_atmos_my26",
+        description="MGS TES IR retrievals, Mars Year 26 (Montabone et al., PDS Atmospheres): "
+                    "column dust and water-ice optical depth, surface temperature, surface pressure",
+        base_url=_TES_ATMOS,
+        files=_with_labels(_TES_ATMOS_STEMS, "dat", ["xml"]),
     ),
 }
 

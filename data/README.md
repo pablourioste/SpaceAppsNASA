@@ -57,6 +57,7 @@ Estado: **identificado** = existe y sabemos dónde está · **descargado** · **
 | TES thermal inertia (`global_ti_{day,night}_2007` + masks) → `raw/mars/tes_thermal_inertia/` | Marte | thermal inertia (J m⁻² K⁻¹ s⁻½) | [see label] | binary `.img` + PDS3 `.lbl` | PDS Geosciences → MGS → TES → Thermal Inertia Maps | descargado | |
 | GRS special products (NS/HEND neutron flux, 2002) → `raw/mars/grs_special/` | Marte | epithermal / thermal / fast neutron flux | [see label] | `.tab` text + labels | PDS Geosciences → Odyssey → GRS → Special Products | descargado | |
 | GRS element maps, smoothed 5°×5° → `raw/mars/grs_elements/` | Marte | H₂O, Cl, Fe, Si, K, Th (wt%/ppm), K/Th | 5°×5° | `.tab` text + labels | PDS Geosciences → Odyssey → GRS → Element concentration maps | descargado | |
+| TES IR retrievals, Mars Year 26 (Montabone et al.) → `raw/mars/tes_atmos_my26/` | Marte | column dust OD (9.3 µm), water-ice OD (12.1 µm), surface temperature (K), surface pressure (Pa). **Daytime only (~14 h local time)**: 5.29 M retrievals, Ls 0–360 | individual retrievals (~3 km footprint), 12 files × 30° Ls | fixed-width text `.dat` + PDS4 `.xml`, ~490 MB | PDS Atmospheres → MGS → TES → Atmospheric IR and VIS Derived Data | descargado | |
 | MOLA-HRSC blend | Marte | relieve | ~200 m [verificar] | [verificar] | PDS / Mars ODE | identificado | |
 | `NASADEM_HGT` v001 | Tierra | relieve | 1″ (~30 m) | [verificar] | Earthdata (LP DAAC) | identificado | |
 | `MOD11C3` v061 | Tierra | temperatura de superficie mensual | 0,05° | HDF | Earthdata (LP DAAC) | identificado | |
