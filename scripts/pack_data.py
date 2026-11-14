@@ -26,6 +26,17 @@ PACKS = {
         "mars_tes_thermal_inertia.zip": ["tes_thermal_inertia"],
         "mars_grs.zip": ["grs_special", "grs_elements"],
         "mars_tes_atmos_my26.zip": ["tes_atmos_my26"],
+        "mars_mola_polar128.zip": ["mola_megdr_polar128"],
+        "mars_swim2_ice.zip": ["swim2_ice"],
+        "mars_mcs_tsurf_my31.zip": ["mcs_tsurf_my31"],
+    },
+    # Folders as written by scripts/download_moon.py (see data/raw/moon/MANIFEST.csv)
+    "moon": {
+        "moon_diviner_gcp.zip": ["diviner_gcp"],                     # ~2.7 GB raw (temperature, global)
+        "moon_diviner_prp.zip": ["diviner_prp"],                     # ~0.6 GB raw (south pole)
+        "moon_lola_ldem64.zip": ["lola_ldem64"],                     # ~0.5 GB raw (relief, global)
+        "moon_south_pole_pgda.zip": ["pgda_south_pole"],             # ~0.35 GB raw
+        "moon_other.zip": ["diviner_rocks", "lunar_prospector_grs", "usgs_geology", "lroc_pits"],
     },
 }
 
@@ -34,6 +45,10 @@ def pack(body: str, out: Path) -> None:
     out.mkdir(parents=True, exist_ok=True)
     for zip_name, folders in PACKS[body].items():
         target = out / zip_name
+        missing = [f for f in folders if not (RAW / body / f).is_dir()]
+        if missing:
+            print(f"{zip_name:32s} skipped: missing folder(s) {missing} in {RAW / body}")
+            continue
         files = [f for folder in folders for f in sorted((RAW / body / folder).rglob("*"))
                  if f.is_file() and not f.name.endswith(".part")]
         with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:

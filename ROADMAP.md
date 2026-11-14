@@ -5,7 +5,9 @@
 
 **Legend:** `app/` = the web app (Vite + CesiumJS) · `src/analogs/` = the engine and Python preprocessing · `app/data/` = the index the app reads (format in [`app/README.md`](app/README.md)).
 
-**Progress:** 27 / 60 tasks done.
+**Progress:** 28 / 62 tasks done.
+
+> **Main goal (decision 007, proposal):** click **any point** of the Moon or Mars → the app finds the most similar place on Earth and flies there. So Mars and the Moon need a **global card grid**, not only the 21 target sites (tasks 3.4b, 3.5, 3.7, 3.16, 4.9).
 
 ---
 
@@ -49,18 +51,25 @@
 - [x] **3.3** Download GRS → `data/raw/mars/grs_special/` (NS neutron flux on a 0.5° grid, −99.999 = no data) and `data/raw/mars/grs_elements/` (H₂O, Cl, Fe, Si, K, Th on a 5°×5° grid, 9999.999 = no data).
   Run: `python scripts/download_data.py` (safe to re-run; skips files already downloaded).
 - [x] **3.4** Download surface temperature and dust opacity: MGS TES IR retrievals for Mars Year 26 (Montabone et al., PDS Atmospheres) → `data/raw/mars/tes_atmos_my26/`. One product gives column dust OD, water-ice OD, surface temperature and surface pressure: 5.29 M retrievals over the full year (Ls 0–360). **All retrievals are daytime (~14 h)**, so they give `t_max_K` and `dust_aod` but not a night or diurnal-mean temperature (`t_mean_K` needs another source, see 3.5). MY26 chosen because MY25 had a global dust storm. ~490 MB; the server is slow (~0.1–0.6 MB/s). `python scripts/download_data.py tes_atmos` (resumable).
-- [ ] **3.5** Extract the variables at each Mars target site: slope, roughness, thermal inertia, hydrogen, temperature and dust. *Draft code in `src/analogs/mars.py` + `scripts/build_mars_features.py` (readers checked on MOLA, TES TI and GRS; not run end-to-end yet).*
-  **Slope and roughness at ~463 m (decided):** use MOLA MEGDR 128 px/deg instead of the 16 px/deg global map (3.7 km). The ~10 km site footprint then holds ~20×20 pixels instead of 3×3, and the baseline matches the Moon (LOLA `ldem_64`, ~474 m) and Earth (Copernicus DEM resampled to ~460 m), as decision 006 requires. Tiles in `data/raw/mars/mola_megdr_128ppd/` (`python scripts/download_data.py mola128`, only the tiles that contain a target site).
+- [x] **3.4b** ✅ Done 2026-11-14: all 16 tiles (32 files, 2.9 GB) + both polar maps. Download the **10 remaining MOLA 128 px/deg tiles** (16 in total, ~3.1 GB with the shots-per-cell tiles) so slope/roughness exist for all of Mars (decision 007). Better outside OneDrive with `ANALOGS_DATA_DIR`. *(Moved here from old task 5.6.)* `python scripts/download_data.py mola128_all`.
+  **Poles:** MOLA polar MEGDRs at 128 px/deg (460 m/px, polar stereographic, 37.45°→90° N and S; ~630 MB with the shots-per-cell maps) → `data/raw/mars/mola_megdr_polar128/` (`python scripts/download_data.py mola_polar`). Same baseline as the tiles; use them for |lat| > 88° (and to cross-check the overlap). ⚠️ The polar topography is stored as **unsigned** 16-bit (`MSB_UNSIGNED_INTEGER`) with a scale and offset (from the label): **topography (m) = stored × 0.25 − 8000**, relative to a 3,396,000 m sphere (not the areoid, unlike the tiles).
+- [ ] **3.5** Build the **Mars card grid for the whole planet** (decision 007) and the cards of the 12 Mars target sites: slope, roughness, thermal inertia, hydrogen/ice, temperature and dust.
+  - Grid (decided): **H3 resolution 5** (~9 km hexagons on Mars and the Moon ≈ the ~10 km footprint of decision 006; ~2 M cells per body, H3 treats the body as a sphere with planetocentric lat/lon) → one row per cell with every variable. Exported **split by the 122 H3 base cells** so the app only downloads the region that was clicked (~600 KB each). Two clicks less than ~9 km apart give the same answer: that is the scale the data support (GRS is ~300 km, TES/MCS atmosphere tens of km). Target sites: their own ~10 km footprint card, as planned.
+  - Coverage gaps are fine: a variable missing in a cell (SWIM beyond ±60°, GRS elements beyond ~±45°) is left empty and the formula skips it.
+  *Draft code in `src/analogs/mars.py` + `scripts/build_mars_features.py` (readers checked on MOLA, TES TI and GRS; written for the sites only, not run end-to-end yet; extend to the grid).*
+  **Slope and roughness at ~463 m (decided):** use MOLA MEGDR 128 px/deg instead of the 16 px/deg global map (3.7 km). The ~10 km site footprint then holds ~20×20 pixels instead of 3×3, and the baseline matches the Moon (LOLA `ldem_64`, ~474 m) and Earth (Copernicus DEM resampled to ~460 m), as decision 006 requires. Tiles in `data/raw/mars/mola_megdr_128ppd/` (`python scripts/download_data.py mola128`; today only the 6 tiles that contain a target site, the rest in 3.4b).
   > ⚠️ **Warning: interpolated cells.** MOLA measures along the spacecraft ground tracks; near the equator the gaps between tracks can be several km wide, so at 128 px/deg many cells have **no laser shot and are interpolated**. In those cells the slope comes out **smoother than reality**. For every site, use the shots-per-cell tile (`megc…hb`) to report the **fraction of measured cells** in the footprint, store it as a QC column (e.g. `mola_measured_frac`) and flag sites where it is low (threshold to decide).
   > **Measured so far (2026-11-14):** at the 12 Mars sites only **15–46 %** of the 128 px/deg cells in the footprint have a laser shot (Viking 1 15 %, Arcadia 19 %, Jezero 46 %). So a fixed "< 50 %" threshold would flag every site: report the fraction on the card instead of discarding sites, and consider computing slope only from measured cells.
+  **`t_mean_K` (decided, data downloaded):** MRO MCS surface temperature, day (~15 h) and night (~03 h), Mars Year 31 (2011-09-13 → 2013-07-30), one Earth day in 10, two 4-hour files per day → `data/raw/mars/mcs_tsurf_my31/` (only the T_surf columns are kept, ~1 GB of source files reduced to a few MB; source URLs in MANIFEST). Reading notes: `LTST` is a **fraction of a sol** (0.0–0.1 = night, 0.5–0.6 = day), `T_surf = -9999` = no retrieval (drop). Bin day and night separately (e.g. 5° cells) and take `t_mean_K = (mean day + mean night) / 2`.
+  > **Checked (2026-11-14):** 131 of 138 files (7 missing: MCS has **no data at all from 2012-08-07 to 2012-09-07**; nearby days used where possible), 4.2 MB, 40,151 valid T_surf (20 k night, 19 k day), every 5° cell has data but only ~7–8 samples per cell per day/night, and some cells have no day sample (e.g. Gale). Values make sense (Jezero ~224 K, Arcadia ~194 K, Phoenix ~168 K). **Suggested:** day mean from TES MY26 (millions of retrievals) + night mean from MCS, both binned at 5° (or smoothed), `t_mean_K = (day + night) / 2`.
+  **`ice_depth_m` (decided, data downloaded):** SWIM 2.0 combined ice-consistency maps (−1 = inconsistent with ice … +1 = consistent) for 0–1 m, 1–5 m and >5 m → `data/raw/mars/swim2_ice/`. GeoTIFF, Mars2000 equicylindrical, ~3 km pixels, **±60° latitude only**. Proposed rule: depth = 0.5 m if CI[0–1 m] > 0, else 3 m if CI[1–5 m] > 0, else 5 m if CI[>5 m] > 0, else "no ice" (NaN or large value, to decide). Checked at the sites: Arcadia +0.43 (shallow ice), Oxia −0.50 and Viking 1 −0.45 (no ice). **Phoenix (68° N) is outside SWIM**: use GRS neutrons plus the ice the lander itself found a few cm down.
   **To decide when doing 3.5:**
-  - Source for `t_mean_K`: the TES retrievals are daytime only, so a night/diurnal-mean surface temperature needs another product (e.g. MCS surface temperature, PDS Atmospheres).
   - GRS element maps have no data north of ~45° (Arcadia, Phoenix, Viking 2): use the NS epithermal neutron flux there for ice/hydrogen.
   - Whether to add the Mars-only extras (thermal inertia, GRS H₂O/Cl, surface pressure) to `configs/variables.yaml`.
 
 ### 3B · Moon
 - [ ] **3.6** Download Diviner PRP (temperature, ice depth) and LOLA.
-- [ ] **3.7** Extract the variables at each Moon target site.
+- [ ] **3.7** Build the **Moon card grid for the whole Moon** (same grid as Mars: H3 res 5, ~9 km, split by base cell; decision 007) and the cards of the 9 Moon target sites. Marc's kit covers the globe (Diviner GCP, LOLA `ldem_64`, Lunar Prospector) plus the south pole in detail (Diviner PRP, PGDA): see `docs/06_datos_luna.md`.
 
 ### 3C · Earth
 - [ ] **3.8** Build the H3 resolution-4 grid for Earth (land only).
@@ -73,7 +82,7 @@
 - [x] **3.13** Similarity formula in `src/analogs/similarity.py` with tests in `tests/test_similarity.py`.
 - [ ] **3.14** Fill `configs/variables.yaml` (units, tolerances) and `configs/pruebas.yaml` (weights per test type) with real values.
 - [ ] **3.15** Put every variable on the same scale on all bodies: compute it at the ~10 km site footprint (decision 006) and compare in physical units with tolerances (decision 003, not percentiles or z-scores per body).
-- [ ] **3.16** Export the real index to `app/data/` with `python scripts/run_pipeline.py`.
+- [ ] **3.16** Export the real index to `app/data/` with `python scripts/run_pipeline.py`. **New files for decision 007:** the Mars and Moon card grids at H3 res 5, one file per H3 base cell (e.g. `app/data/marte/<base_cell>.json`, `app/data/luna/<base_cell>.json`, ~600 KB each), in the same column format as `tierra.json`; update the data contract in `app/README.md` and `src/analogs/export.py`. Round values (or use a compact binary) to keep each file small.
 - [ ] **3.17** Validate: known analogs (Atacama, Río Tinto, Devon, Antarctica…) must rank high for their matching sites.
 
 ## Phase 4 · Integration (`app/`)
@@ -84,9 +93,9 @@
 - [ ] **4.4** When a target is chosen: the camera flies there, Earth is colored by index (0–100) and Earth flies to the best match.
 - [ ] **4.5** Match card: index, score per variable (target and Earth values, units and source), "not analog" block (gravity, pressure…) and test validity.
 - [ ] **4.6** Browse the 2nd, 3rd… best matches.
-- [ ] **4.7** Reverse direction: click on Earth → which Moon or Mars site it most resembles.
-  *Clicking any point of Mars (not only the target sites) needs Mars-wide slope: download the 10 remaining MOLA 128 px/deg tiles first (~2 GB more; see 5.6).*
+- [ ] **4.7** Reverse direction: click on Earth → which Moon or Mars place it most resembles.
 - [ ] **4.8** Show a clearly visible warning when the data is mock (`_aviso`).
+- [ ] **4.9** **Main interaction (decision 007): click ANY point of the Moon or Mars** → find its H3 res 5 cell (lat/lon from 2.1 + `h3-js`) → download that region's file if not loaded yet → take its card → compute the index against every Earth cell in the browser → colour Earth, fly to the best match (2.4) and open the match card (4.5). Clicking a target site still uses that site's own footprint card. Needs 3.5, 3.7, 3.16 and 4.2.
 
 ## Phase 5 · Data layers on the globes (`app/`)
 
@@ -95,8 +104,7 @@
 - [ ] **5.3** H3 hexagon layer on Earth colored by index.
 - [ ] **5.4** Legend and color scale for each layer.
 - [ ] **5.5** Moon: Diviner layer (extreme cold, polar ice).
-- [ ] **5.6** (Later) Mars-wide slope/roughness at ~463 m: download the 10 MOLA 128 px/deg tiles not yet downloaded (16 in total, ~3.1 GB with the shots-per-cell tiles) — better outside OneDrive with `ANALOGS_DATA_DIR`. Needed for the global slope layer and for 4.7 on any point of Mars. Poles (|lat| > 88°) need the MOLA polar products.
-
+- [ ] **5.6** (Optional, if time allows) Pixel-level values for the variables that have them (e.g. slope at ~460 m): store them as "data tiles" (like map tiles) and read the exact pixel in the browser on click, on top of the ~9 km card.
 ## Phase 6 · Polish and presentation
 
 - [ ] **6.1** Clean interface: title, short instructions and a guided tour ("try Jezero").

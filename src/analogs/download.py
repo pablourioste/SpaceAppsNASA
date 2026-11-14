@@ -83,6 +83,15 @@ def mola128_tile(lat: float, lon: float) -> str:
     return f"{band}{int(lon_east // 90) * 90:03d}"
 
 
+MOLA128_ALL_TILES = [f"{band}{lon:03d}" for band in ("88n", "44n", "00n", "44s") for lon in (0, 90, 180, 270)]
+
+
+def _mola128_all_files() -> list[str]:
+    """All 16 tiles (whole planet between ±88°): needed to click any point of Mars (decision 007)."""
+    return _with_labels([f"meg{kind}{t}hb" for t in MOLA128_ALL_TILES for kind in ("t", "c")],
+                        "img", ["xml", "lbl", "hdr"])
+
+
 def _mola128_files() -> list[str]:
     """Topography (megt) + shots per cell (megc) tiles for every Mars target site."""
     import pandas as pd  # local import: only needed for this dataset
@@ -117,6 +126,43 @@ DATASETS: dict[str, Dataset] = {
                     "target site. Topography (megt, 130 MB/tile) + shots per cell (megc, 65 MB/tile)",
         base_url=_MOLA128,
         files=[],  # filled lazily from data/catalogs/target_sites.csv (see download())
+    ),
+    "mola128_all": Dataset(
+        key="mola128_all",
+        body="mars",
+        folder="mola_megdr_128ppd",   # same folder as "mola128": tiles already there are skipped
+        description="MGS MOLA MEGDR, 128 px/deg (~463 m): ALL 16 tiles (whole planet between ±88°), "
+                    "~3.1 GB in total. Needed to click any point of Mars (decision 007)",
+        base_url=_MOLA128,
+        files=[],  # filled lazily (see download())
+    ),
+    "mola_polar": Dataset(
+        key="mola_polar",
+        body="mars",
+        folder="mola_megdr_polar128",
+        description="MGS MOLA MEGDR polar maps, 128 px/deg (460 m/px), polar stereographic, north (37.45°N→90°) "
+                    "and south (90°S→37.45°S): topography (megt, 210 MB) + shots per cell (megc, 105 MB). "
+                    "Covers the poles that the 128 px/deg tiles leave out (|lat| > 88°)",
+        base_url=f"{PDS_GEO}/mgs/urn-nasa-pds-mgs_mola_topography_derived/polar",
+        files=_with_labels(["megt_n_128_1", "megt_s_128_1", "megc_n_128", "megc_s_128"], "img", ["lbl", "xml"]),
+    ),
+    "swim": Dataset(
+        key="swim",
+        body="mars",
+        folder="swim2_ice",
+        description="SWIM 2.0 (NASA Mars Exploration Program / PSI) combined ice-consistency maps for "
+                    "ice at 0–1 m, 1–5 m and >5 m depth, ±60° latitude, GeoTIFF (→ ice_depth_m)",
+        base_url="https://swim.psi.edu/output/SWIM2/Global/Composite",
+        files=["SWIM2_c0_1.tif", "SWIM2_c1_5.tif", "SWIM2_c_5.tif"],
+    ),
+    "mcs_tsurf": Dataset(
+        key="mcs_tsurf",
+        body="mars",
+        folder="mcs_tsurf_my31",
+        description="MRO MCS surface temperature day (~15 h) and night (~03 h), Mars Year 31, one Earth "
+                    "day in 10, T_surf columns only (→ t_mean_K). See src/analogs/mcs.py",
+        base_url="https://atmos.nmsu.edu/PDS/data",
+        files=[],  # custom: sampled and reduced by analogs.mcs.download_mcs_tsurf
     ),
     "tes": Dataset(
         key="tes",
@@ -224,7 +270,8 @@ def download(keys: list[str] | None = None) -> None:
     At the end, writes data/raw/<body>/MANIFEST.csv (which file, from which URL, how many
     bytes and when), like scripts/download_moon.py does for the Moon.
     """
-    keys = keys or list(DATASETS)
+    # By default skip "mola128" (only the tiles with target sites): "mola128_all" includes them
+    keys = keys or [k for k in DATASETS if k != "mola128"]
     unknown = [k for k in keys if k not in DATASETS]
     if unknown:
         raise KeyError(f"Unknown dataset(s): {unknown}. Available: {list(DATASETS)}")
@@ -236,8 +283,14 @@ def download(keys: list[str] | None = None) -> None:
             ds = DATASETS[key]
             if key == "mola128" and not ds.files:
                 ds.files = _mola128_files()
+            if key == "mola128_all" and not ds.files:
+                ds.files = _mola128_all_files()
             ds.dest.mkdir(parents=True, exist_ok=True)
             print(f"\n[{ds.key}] {ds.description}\n  → {ds.dest}")
+            if key == "mcs_tsurf":
+                from .mcs import download_mcs_tsurf
+                rows.setdefault(ds.body, []).extend(download_mcs_tsurf(ds.dest, session=session))
+                continue
             for name in ds.files:
                 url = f"{ds.base_url}/{name}"
                 try:
