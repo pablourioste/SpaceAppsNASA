@@ -13,6 +13,7 @@
     "vite-plugin-cesium": "^1.2.23"
   },
   "dependencies": {
-    "cesium": "^1.147.0"
+    "cesium": "^1.147.0",
+    "h3-js": "^4.5.0"
   }
 }

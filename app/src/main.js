@@ -3,6 +3,7 @@ import * as Cesium from 'cesium';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 import { createGlobe } from './globe.js';
 import { loadSites } from './data.js';
+import { CardGrid } from './grid.js';
 
 const reliefBox = document.getElementById('relief');
 const reliefLabel = reliefBox.closest('label');
@@ -60,6 +61,7 @@ loadSites()
 
 // For debugging from the browser console
 window.Cesium = Cesium;
+window.CardGrid = CardGrid;
 window.globes = {
   earth,
   get target() {

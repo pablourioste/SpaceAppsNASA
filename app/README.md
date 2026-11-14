@@ -30,6 +30,9 @@ Lo escribe [`src/analogs/export.py`](../src/analogs/export.py). Para tener ya da
 | `objetivos.json` | `{"objetivos": [{id, name, body, lat, lon, type, features: {slope_deg: …, t_mean_K: …}}]}` |
 | `tierra.json` | `{"n_cells": N, "columns": {"cell_id": […], "lat": […], "lon": […], "slope_deg": […], …}}`, una lista por columna, `null` = sin dato |
 | `analogos_conocidos.json` | `{"analogos": [{name, country, lat, lon, analog_of, environment, notes}]}` |
+| `marte/index.json` + `marte/rNNN.bin.gz` | **Planet-wide card grid** (decision 007): every H3 res-5 cell of Mars, compact binary, one gzip file per H3 base cell (122). Format and how to do it for Earth/Moon: [`docs/07_card_grid_binary_format.md`](../docs/07_card_grid_binary_format.md). Read with `new CardGrid('marte')` → `cardAt(lat, lon)` ([`src/grid.js`](src/grid.js)) |
+
+`marte/objetivos.json`: **real** cards of the 12 Mars target sites (`features` = variables of `configs/variables.yaml`, `extras` = other card columns, `h3` = their cell). `objetivos.json` stays the mock package until the Moon and Earth are real (`scripts/build_comparator_data.py` rejects mixed real/mock files).
 
 Si llevan `"_aviso": "DATOS FALSOS…"`, la app debe enseñarlo bien visible.
 
