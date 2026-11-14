@@ -1,0 +1,6 @@
+cell,lat,lon,in_mask,kept_frac,env,env_name,precip_mm_year,elevation_m,slope_deg,t_mean_K,t_max_K,t_min_K,lst_months,roughness_deg,sun_elev_max_deg,indice,nota_slope_deg,nota_t_mean_K,nota_t_max_K,nota_t_min_K,nota_precip_mm_year
+85f07303fffffff,-78.202,44.987,True,1.0,1,hielo polar,0.0,,,212.043,242.86,197.207,12.0,,35.238,60.678,,0.905,0.095,0.426,1.0
+85f07697fffffff,-80.221,50.741,True,1.0,1,hielo polar,0.0,,,211.633,241.768,197.094,12.0,,33.219,60.374,,0.926,0.059,0.43,1.0
+85f0220ffffffff,-80.808,80.077,True,1.0,1,hielo polar,0.0,,,211.475,239.736,195.88,12.0,,32.632,60.11,,0.934,0.0,0.471,1.0
+85f07003fffffff,-79.312,45.85,True,1.0,1,hielo polar,0.0,,,211.952,242.147,198.126,12.0,,34.128,59.432,,0.91,0.072,0.396,1.0
+85f02ea7fffffff,-81.352,64.025,True,1.0,1,hielo polar,0.0,,,212.371,240.56,196.301,12.0,,32.088,59.106,,0.889,0.019,0.457,1.0

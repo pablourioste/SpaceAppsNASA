@@ -84,6 +84,8 @@ python -m pytest                   # el motor funciona → 8 passed
 python scripts/make_mock_data.py   # datos FALSOS en app/data/ para empezar la app
 ```
 
+**Datos pesados fuera de git y de OneDrive/Dropbox:** van en `C:\Users\<tú>\SpaceAppsData` (`raw/`, `interim/`, `processed/`) y el código la encuentra sola; para otra ruta, `setx ANALOGS_DATA_DIR <ruta>` y terminal nueva. Qué hay, cómo se procesa y cómo se comparte: [`docs/08_datos_LEEME.md`](docs/08_datos_LEEME.md) (se copia como `LEEME.md` dentro de la carpeta de datos con `scripts\inventario.py --leeme`). Índice de scripts: [`scripts/README.md`](scripts/README.md). Los catálogos de sitios siguen en `data/catalogs/` (en git).
+
 ## Cómo trabajamos
 
 - Una rama por tarea → Pull Request a `main`.

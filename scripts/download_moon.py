@@ -25,7 +25,10 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # consolas de Windows (cp1252)
 
 ROOT = Path(__file__).resolve().parents[1]
-DEST = Path(os.environ.get("ANALOGS_DATA_DIR", ROOT / "data")) / "raw" / "moon"
+sys.path.insert(0, str(ROOT / "src"))
+from analogs.paths import RAW  # noqa: E402  (misma carpeta de datos que el resto: ver paths.py)
+
+DEST = RAW / "moon"
 
 PDS = "https://pds-geosciences.wustl.edu"
 DIV = f"{PDS}/lro/urn-nasa-pds-lro_diviner_derived1"

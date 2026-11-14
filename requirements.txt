@@ -12,6 +12,8 @@ rioxarray
 xarray
 geopandas
 h3                 # malla hexagonal de igual área
+pyhdf              # leer HDF4 (MODIS: MCD12C1, MOD11C3…)
+h5py               # leer HDF5 (GPM IMERG, SMAP…)
 
 # --- Descargar de los portales ---
 earthaccess        # NASA Earthdata (con tu Earthdata Login)
