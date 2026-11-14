@@ -1,5 +1,8 @@
 # Challenge brief — Análogos terrestres de la Luna y Marte
 
+> 📌 **Documento de referencia** (brief inicial de Pablo, 13/11/2026). Sigue siendo útil por el glosario, los análogos conocidos y la lista de datasets.
+> El **método actualizado** está en [`../03_enfoque.md`](../03_enfoque.md) y el enunciado completo en [`../02_reto_oficial.md`](../02_reto_oficial.md). Donde no coincidan, mandan esos.
+
 > Documento **preliminar** (13/11/2026). Sirve para llegar al brainstorming con contexto común.
 > Todo lo que hay aquí se puede cambiar. Lo marcado con ⚠️ hay que verificarlo en la web oficial de Space Apps.
 
@@ -61,7 +64,7 @@
 
 ## 3. Análogos conocidos (punto de partida y **set de validación**)
 
-Lista semilla en [`data/external/known_analogs.csv`](../data/external/known_analogs.csv) (coordenadas aproximadas, verificar).
+Lista semilla en [`data/catalogs/known_analogs.csv`](../../data/catalogs/known_analogs.csv) (coordenadas aproximadas, verificar).
 
 | Sitio | País | Análogo de | Por qué |
 |---|---|---|---|
@@ -91,7 +94,7 @@ Lista semilla en [`data/external/known_analogs.csv`](../data/external/known_anal
 
 ## 4. Sitios objetivo en la Luna y Marte (los que el usuario "picaría")
 
-Lista semilla en [`data/external/target_sites.csv`](../data/external/target_sites.csv).
+Lista semilla en [`data/catalogs/target_sites.csv`](../../data/catalogs/target_sites.csv).
 
 **Luna**
 - **Regiones candidatas de Artemis III (polo sur):** Peak near Cabeus B, Haworth, Malapert Massif, Mons Mouton Plateau, Mons Mouton, Nobile Rim 1, Nobile Rim 2, de Gerlache Rim 2, Slater Plain ⚠️ (lista de la actualización de NASA de 2024; comprobar si hay cambios).
@@ -213,7 +216,7 @@ Interfaz con **dos mapas lado a lado**:
 | ¿Cómo comparamos sensores y resoluciones distintas? | Remuestrear a una rejilla común y comparar **distribuciones/percentiles**, no valores absolutos. |
 | ¿Stack? | Python para datos; UI web (React + MapLibre/Leaflet) o **Streamlit** si el equipo es solo Python. Decidir en el brainstorming. |
 | ¿Backend? | Evitarlo en el MVP: precalcular y servir ficheros estáticos. |
-| ¿Dónde guardamos datos pesados? | Fuera de git (Drive compartido). Ver [`data/README.md`](../data/README.md). |
+| ¿Dónde guardamos datos pesados? | Fuera de git (Drive compartido). Ver [`data/README.md`](../../data/README.md). |
 | ¿Y si los datos que nos dan no encajan? | Plan B con datos globales gruesos ya conocidos (MOLA, TES, LOLA, WorldClim, Copernicus DEM). |
 
 ### De mentores / jurado
@@ -254,4 +257,4 @@ Criterios de evaluación habituales: **Impacto · Creatividad · Validez · Rele
 - [ ] Asignación final de roles
 - [ ] Hitos y horas de sincronización
 
-Registrar cada decisión en [`docs/decisions/`](decisions/).
+Registrar cada decisión en [`docs/decisions/`](../decisions/).

@@ -1,15 +1,29 @@
 # Provisional: se ajusta cuando se decida el stack.
+
+# --- Tablas y números ---
 numpy
 pandas
-pyarrow
-geopandas
+pyarrow            # leer/escribir .parquet (las fichas)
+pyyaml             # leer configs/
+
+# --- Datos geográficos (rásters, puntos, malla) ---
 rasterio
 rioxarray
 xarray
+geopandas
+h3                 # malla hexagonal de igual área
+
+# --- Descargar de los portales ---
+earthaccess        # NASA Earthdata (con tu Earthdata Login)
+pystac-client      # Copernicus Data Space (STAC)
+requests
+tqdm
+
+# --- Análisis y gráficos ---
 scikit-learn
 matplotlib
 plotly
-pyyaml
-requests
-tqdm
+
+# --- Trabajo ---
 jupyterlab
+pytest

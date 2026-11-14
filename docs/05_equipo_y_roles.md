@@ -8,7 +8,7 @@
 | # | Rol | Responsable | Apoyo | Carpeta principal |
 |---|---|---|---|---|
 | R1 | Coordinación, producto y pitch | _____ | R2 | `docs/`, `presentation/` |
-| R2 | Ciencia planetaria y validación | _____ | R1, R5 | `docs/`, `data/external/`, `configs/` |
+| R2 | Ciencia planetaria y validación | _____ | R1, R5 | `docs/`, `data/catalogs/`, `configs/` |
 | R3 | Datos de Luna y Marte | _____ | R4 | `data/`, `scripts/`, `src/analogs/ingest.py` |
 | R4 | Datos de la Tierra | _____ | R3 | `data/`, `scripts/`, `src/analogs/ingest.py` |
 | R5 | Motor de similitud / ML | _____ | R2, R3, R4 | `src/analogs/`, `notebooks/`, `outputs/` |
@@ -17,7 +17,7 @@
 ```
             R2 Ciencia ──── define criterios ────┐
                                                  ▼
- R3 Datos Luna/Marte ─┐                    R5 Motor de similitud ──► outputs/results (JSON) ──► R6 UI
+ R3 Datos Luna/Marte ─┐                    R5 Motor de similitud ──► app/data (índice)  ──► R6 UI
  R4 Datos Tierra ─────┴─ features ─────────►                                                    │
                                                                                                 ▼
                                         R1 Coordinación: integra, prioriza, demo, vídeo, entrega
@@ -36,9 +36,9 @@
 
 ## R2 — Ciencia planetaria y validación
 **Misión:** que lo que decimos sea científicamente defendible.
-- Decidir **qué variables** importan para cada perfil de misión y con qué pesos (`configs/mission_profiles.yaml`).
-- Elegir los **sitios objetivo** de Luna/Marte (`data/external/target_sites.csv`).
-- Mantener la lista de **análogos conocidos** (`data/external/known_analogs.csv`) → set de validación.
+- Decidir **qué variables** importan para cada perfil de misión y con qué pesos (`configs/pruebas.yaml` y `configs/variables.yaml`).
+- Elegir los **sitios objetivo** de Luna/Marte (`data/catalogs/target_sites.csv`).
+- Mantener la lista de **análogos conocidos** (`data/catalogs/known_analogs.csv`) → set de validación.
 - Revisar resultados: ¿tienen sentido los top-10? Escribir las fichas de los sitios nuevos.
 - Redactar el apartado de **limitaciones** (qué no es análogo).
 - **Entregables:** criterios, pesos, validación, textos de las fichas.
@@ -65,7 +65,7 @@
 - Normalización entre cuerpos, métrica de similitud, pesos por perfil.
 - Puntuación por variable (para el gráfico radar) + puntuación global.
 - Ejecutar la **validación** con los análogos conocidos (top-N hit rate).
-- Exportar lo que consume la UI: `outputs/results/*.json` / GeoJSON.
+- Exportar el índice que consume la UI: `app/data/*.json` (`src/analogs/export.py`).
 - *Stretch:* embeddings de imágenes/DEM con un modelo preentrenado.
 - **Entregables:** `src/analogs/similarity.py`, notebook de validación, ficheros para la UI.
 
@@ -83,7 +83,7 @@
 
 - **Git:** una rama por tarea (`feat/ui-map`, `data/mola-dem`…), Pull Request a `main`, commits pequeños.
 - **Datos pesados fuera de git** (ver `data/README.md`). En git solo código, configs, CSV pequeños y resultados ligeros.
-- **Contrato entre piezas:** el formato de `outputs/results/*.json` se acuerda pronto y se documenta en `outputs/README.md`. Si cambia, se avisa.
+- **Contrato entre piezas:** el formato de `app/data/*.json` está documentado en `app/README.md`. Si cambia, se avisa.
 - **Decisiones:** una línea en `docs/decisions/README.md` cada vez que se decide algo importante.
 - **Sincronizaciones:** stand-up de 10 min cada ~3 h: qué hice / qué haré / qué me bloquea.
 
@@ -92,7 +92,7 @@
 | Persona | Rol | Disponible | Contacto |
 |---|---|---|---|
 | Pablo | _____ | desde 14:30 | _____ |
-| _____ | _____ | _____ | _____ |
+| Marc | Coordinación por la mañana (hasta las 14:30) | desde el inicio | _____ |
 | _____ | _____ | _____ | _____ |
 | _____ | _____ | _____ | _____ |
 | _____ | _____ | _____ | _____ |

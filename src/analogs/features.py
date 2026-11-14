@@ -1,13 +1,19 @@
-"""Cálculo de la tabla de características por celda/sitio (R3, R4, R5).
+"""PASO 3: construir las FICHAS  →  data/processed/
 
-Esquema provisional de columnas (acordar entre R3, R4 y R5):
+Pendiente (equipos de datos + motor).
 
-    cell_id, body, lat, lon,
-    elevation, slope, roughness, rock_abundance,
-    albedo, thermal_inertia,
-    mean_temperature, temperature_range, aridity, ground_ice, sun_elevation,
-    composition, caves, isolation
+Sale:
+    data/processed/fichas_tierra.parquet     una fila por hexágono de la Tierra
+    data/processed/fichas_objetivos.parquet  una fila por sitio objetivo de la Luna o Marte
 
-Una columna que no exista para un cuerpo se deja vacía (NaN) y no entra en la comparación.
-Salida: data/processed/features_<body>.parquet
+Columnas: cell_id (o id), lat, lon y UNA COLUMNA POR VARIABLE de configs/variables.yaml,
+con el mismo nombre y unidad. Lo que no exista en un cuerpo se deja vacío (NaN).
+La Tierra lleva además las columnas de operabilidad (travel_time_h, protected_area).
+
+Malla de la Tierra: hexágonos H3 de resolución 4 (≈ 1770 km² cada uno, ~8·10⁴ en tierra firme).
+Objetivos: ventana de ~10 km alrededor de cada sitio de data/catalogs/target_sites.csv.
 """
+
+
+def build_all() -> None:
+    raise NotImplementedError("Paso 3 pendiente: ver la explicación en src/analogs/features.py")

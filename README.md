@@ -1,65 +1,102 @@
 # 🌍🌕🔴 Earth Analogs for Moon & Mars — NASA Space Apps 2026
 
-> **Estado: PROVISIONAL.** Estructura y nombre de trabajo; se cierran en el brainstorming.
+> **Estado: PROPUESTA** (14/11/2026). Se confirma en el brainstorming del sábado.
 
-**Reto:** *Identify Earth Locations that Analog the Permanent Moon Base Locations and Mars.*
-Usar datos abiertos de la Tierra, la Luna y Marte para encontrar y caracterizar **nuevos análogos terrestres** de futuras bases y zonas de aterrizaje, y presentarlos en un mapa/herramienta.
+**Reto:** *Identify Earth Locations that Analog the Permanent Moon Base Locations and Mars.* Enunciado completo en [`docs/02_reto_oficial.md`](docs/02_reto_oficial.md).
 
-**Idea de partida:** una interfaz donde pinchas un sitio de la Luna o Marte, eliges qué quieres probar (rover, hielo, hábitat…) y obtienes los lugares de la Tierra más parecidos, con una ficha que explica por qué.
+**Qué hacemos:** un **buscador de *matches***. Eliges **qué quieres probar** (ruedas, perforación, navegación…) y **para dónde** (un sitio de la Luna o de Marte). El globo vuela hasta los sitios de la Tierra que más se parecen y los enseña con un **índice de 0 a 100** y una ficha que explica qué se parece, qué no y qué validez tiene la prueba.
 
-## 👉 Empieza aquí
-1. [`docs/01_challenge_brief.md`](docs/01_challenge_brief.md) — el reto, datos, ideas y preguntas probables.
-2. [`docs/02_equipo_y_roles.md`](docs/02_equipo_y_roles.md) — los 6 roles y normas de trabajo.
-3. [`docs/03_plan_manana.md`](docs/03_plan_manana.md) — qué hacer en la primera mañana.
+## Cómo funciona
 
-## Estructura
+```
+ 1. DATOS (Python, una vez)            2. MOTOR                       3. APP (navegador)
+    satélites → fichas de números  →   fórmula de parecido       →   globo 3D: filtros, vuelo, ficha
+    data/  ·  src/analogs/             src/analogs/similarity.py      app/  (lee app/data/)
+```
+
+Los datos de NASA se descargan y procesan **una vez** y se convierten en un **índice de fichas** de pocos MB (`app/data/`). La app calcula los *matches* al momento sobre ese índice, con cualquier filtro. Lo único que pide en vivo a NASA son los mapas y las fotos. Si aparece un sitio o una variable nueva, se vuelve a ejecutar el script y **la app no se toca**.
+
+## 👉 Empieza aquí (en este orden)
+
+1. [`docs/01_como_funciona.md`](docs/01_como_funciona.md): para quien no ha tocado nunca datos de satélite.
+2. [`docs/02_reto_oficial.md`](docs/02_reto_oficial.md): el enunciado completo y los recursos oficiales.
+3. [`docs/03_enfoque.md`](docs/03_enfoque.md): el método y por qué.
+4. [`docs/04_plan_sabado.md`](docs/04_plan_sabado.md): qué hacemos el sábado por la mañana.
+5. [`docs/05_equipo_y_roles.md`](docs/05_equipo_y_roles.md): quién hace qué.
+
+## Dónde va cada cosa
 
 ```
 SpaceAppsNASA/
-├── docs/                  # Documentación del equipo
-│   ├── 01_challenge_brief.md
-│   ├── 02_equipo_y_roles.md
-│   ├── 03_plan_manana.md
-│   ├── decisions/         # Registro de decisiones
-│   └── meetings/          # Actas (plantilla de brainstorming)
-├── data/                  # ENTRADA (input) — ver data/README.md
-│   ├── raw/               #   datos originales: provided/, earth/, moon/, mars/  (no van a git)
-│   ├── external/          #   catálogos pequeños: análogos conocidos, sitios objetivo (sí van a git)
-│   ├── interim/           #   pasos intermedios (no van a git)
-│   └── processed/         #   tablas de características finales (no van a git)
-├── notebooks/             # Exploración (NN_iniciales_tema.ipynb)
-├── src/analogs/           # Código Python del pipeline: ingest → features → similarity → export
-├── scripts/               # Scripts sueltos: descargas, ejecución del pipeline
-├── configs/               # Parámetros: perfiles de misión y pesos
-├── app/                   # Interfaz de usuario (stack por decidir)
-├── outputs/               # SALIDA (output)
-│   ├── results/           #   JSON/GeoJSON que consume la app
-│   ├── figures/           #   gráficos
-│   └── maps/              #   mapas exportados
-├── presentation/          # Slides, guion y vídeo de la entrega
-└── tests/
+├── README.md                ← estás aquí
+├── docs/                    LEER: documentación, numerada en orden de lectura
+│   ├── decisions/           registro de decisiones
+│   ├── meetings/            actas (plantilla de brainstorming)
+│   └── referencia/          brief inicial (contexto, glosario, datasets)
+├── configs/                 QUÉ SE COMPARA
+│   ├── variables.yaml       la ficha: variables, unidades, tolerancias y fuentes
+│   └── pruebas.yaml         "¿qué quieres probar?" = pesos de cada variable
+├── data/                    DATOS (ver data/README.md)
+│   ├── catalogs/            sitios objetivo (Luna/Marte) y análogos conocidos   [en git]
+│   ├── raw/                 paso 1: tal cual se descarga (earth/, moon/, mars/)  [NO git]
+│   ├── interim/             paso 2: recortado y en malla común                   [NO git]
+│   └── processed/           paso 3: fichas, una fila por sitio o hexágono        [NO git]
+├── src/analogs/             CÓDIGO: un fichero por paso (ver src/analogs/__init__.py)
+├── scripts/                 LO QUE SE EJECUTA: run_pipeline.py, make_mock_data.py
+├── app/                     LA APP · app/data/ = el índice que lee (paso 4)
+├── outputs/                 PARA PERSONAS: figures/, maps/, validation/
+├── notebooks/               pruebas y exploración
+├── presentation/            slides, vídeo, imágenes
+└── tests/                   pruebas automáticas (el ejemplo de juguete del motor)
 ```
 
-**Flujo:** `data/raw` → `src/analogs` → `data/processed` → `outputs/results` → `app/`
+## El flujo de los datos
 
-## Puesta en marcha (Python)
+```
+  APIs de NASA/ESA/CSA/JAXA
+        │  paso 1  src/analogs/download.py
+        ▼
+  data/raw/          tal cual
+        │  paso 2  src/analogs/ingest.py
+        ▼
+  data/interim/      recortado, malla común
+        │  paso 3  src/analogs/features.py
+        ▼
+  data/processed/    FICHAS  (fichas_tierra.parquet, fichas_objetivos.parquet)
+        │  paso 4  src/analogs/export.py
+        ▼
+  app/data/          ÍNDICE  (config.json, objetivos.json, tierra.json, analogos_conocidos.json)
+        │
+        ▼
+  app/               el navegador calcula los matches con la fórmula de src/analogs/similarity.py
+```
+
+Todo el flujo se lanza con `python scripts/run_pipeline.py`. Hoy se para en el paso 1, que está pendiente. Mientras tanto, `python scripts/make_mock_data.py` llena `app/data/` con **datos falsos** en el mismo formato, para que la app pueda avanzar.
+
+## Puesta en marcha
+
 ```bash
 python -m venv .venv
-# Windows: .venv\Scripts\activate   ·   Linux/Mac: source .venv/bin/activate
+.venv\Scripts\activate             # Windows   (Linux/Mac: source .venv/bin/activate)
 pip install -r requirements.txt
+python -m pytest                   # el motor funciona → 8 passed
+python scripts/make_mock_data.py   # datos FALSOS en app/data/ para empezar la app
 ```
 
 ## Cómo trabajamos
+
 - Una rama por tarea → Pull Request a `main`.
-- Datos pesados **fuera de git** (Drive compartido).
+- Datos pesados **fuera de git** (Drive compartido). En git: código, configs, catálogos e índice.
 - Decisiones importantes en [`docs/decisions/`](docs/decisions/README.md).
+- **[verificar]** = no comprobado · **[supuesto]** = valor elegido por nosotros, a revisar.
 
 ## Equipo
+
 | Rol | Persona |
 |---|---|
-| R1 Coordinación y pitch | |
-| R2 Ciencia y validación | |
-| R3 Datos Luna/Marte | |
-| R4 Datos Tierra | |
-| R5 Motor de similitud | |
-| R6 Interfaz | |
+| Coordinación y presentación | |
+| Ciencia y validación | |
+| Datos de la Luna y Marte | |
+| Datos de la Tierra | |
+| Motor | |
+| App | |

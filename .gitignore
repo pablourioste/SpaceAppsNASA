@@ -25,6 +25,10 @@ __pycache__/
 venv/
 .ipynb_checkpoints/
 *.egg-info/
+.pytest_cache/
+
+# --- HTML generado al previsualizar los .md con LaTeX ---
+docs/**/*.html
 
 # --- Node / frontend ---
 node_modules/

@@ -1,0 +1,158 @@
+# =============================================================================
+# VARIABLES: la "ficha técnica" de cada sitio
+# =============================================================================
+# Lista ÚNICA de columnas que comparten las fichas de la Tierra, la Luna y Marte.
+# Si una variable se añade aquí, el resto del código la recoge sola.
+#
+#   type       numeric  → nota = 1 − |x_objetivo − x_tierra| / tolerance   (mínimo 0)
+#              categorical → nota = matrix[objetivo][tierra]; si no hay matriz: igual = 1, distinto = 0
+#   tolerance  diferencia a partir de la cual la nota de esa variable es 0
+#   sources    de dónde sale el número en cada cuerpo (null = no existe o no aplica)
+#
+# ⚠️ TODAS las tolerancias son [supuesto]: las fija el equipo de Ciencia.
+# ⚠️ Las fuentes marcadas [verificar] están identificadas pero no descargadas ni comprobadas.
+# Ver docs/03_enfoque.md §2 para los cuidados de cada variable.
+# =============================================================================
+
+variables:
+
+  slope_deg:
+    label: "Pendiente"
+    unit: "°"
+    type: numeric
+    tolerance: 5                     # [supuesto]
+    note: "Calcular a la MISMA resolución en los tres cuerpos (enfoque §2.2)"
+    sources:
+      moon:  "LOLA (PDS Geosciences / LOLA Data Node)"
+      mars:  "MOLA / MOLA-HRSC blend (PDS) [verificar]"
+      earth: "NASADEM_HGT (Earthdata) o Copernicus DEM GLO-30 (Copernicus Data Space)"
+
+  roughness_deg:
+    label: "Rugosidad (RMS de la pendiente)"
+    unit: "°"
+    type: numeric
+    tolerance: 3                     # [supuesto]
+    note: "Misma resolución que la pendiente"
+    sources:
+      moon:  "LOLA"
+      mars:  "MOLA [verificar]"
+      earth: "NASADEM / Copernicus DEM"
+
+  rock_abundance_pct:
+    label: "Abundancia de rocas"
+    unit: "%"
+    type: numeric
+    tolerance: 10                    # [supuesto]
+    note: "Mejor que la inercia térmica, que depende de la presión del gas (enfoque §2.3)"
+    sources:
+      moon:  "Diviner rock abundance [verificar]"
+      mars:  "THEMIS / TES rock abundance [verificar]"
+      earth: "SoilGrids, fragmentos gruesos [verificar]"
+
+  lithology:
+    label: "Tipo de roca"
+    unit: ""
+    type: categorical
+    categories: [basalt, anorthosite, other_igneous, sedimentary, evaporite, ice]
+    matrix: {}                       # [supuesto] vacía → igual = 1, distinto = 0. La rellena Ciencia.
+    sources:
+      moon:  "USGS Unified Geologic Map of the Moon [verificar]"
+      mars:  "USGS Global Geologic Map of Mars (Tanaka et al., 2014) [verificar]"
+      earth: "GLiM (Global Lithological Map) [verificar]"
+
+  sun_elev_max_deg:
+    label: "Elevación máxima del Sol"
+    unit: "°"
+    type: numeric
+    tolerance: 3                     # [supuesto]
+    note: "Calculada con geometría solar; definición exacta (qué periodo) a cerrar (enfoque §2.4)"
+    sources:
+      moon:  "calculada (geometría)"
+      mars:  "calculada (geometría)"
+      earth: "calculada (geometría)"
+
+  t_mean_K:
+    label: "Temperatura media anual"
+    unit: "K"
+    type: numeric
+    tolerance: 20                    # [supuesto]
+    note: "Diviner PRP da la media a 2 cm de profundidad; MODIS da la superficie: no es exactamente la misma magnitud [verificar]"
+    sources:
+      moon:  "Diviner PRP, columna temp_avg (PDS Geosciences)"
+      mars:  "Mars Climate Database [verificar]"
+      earth: "MODIS LST, MOD11C3 (Earthdata)"
+
+  t_max_K:
+    label: "Temperatura máxima anual"
+    unit: "K"
+    type: numeric
+    tolerance: 30                    # [supuesto]
+    sources:
+      moon:  "Diviner PRP, columna temp_max (PDS Geosciences)"
+      mars:  "Mars Climate Database [verificar]"
+      earth: "MODIS LST, MOD11C3 / MOD21A2 (Earthdata)"
+
+  ice_depth_m:
+    label: "Profundidad del hielo"
+    unit: "m"
+    type: numeric
+    tolerance: 0.5                   # [supuesto]
+    note: "Analogía PARCIAL: en la Luna el hielo sublima al vacío; en la Tierra hay atmósfera"
+    sources:
+      moon:  "Diviner PRP, columna ice_depth (PDS Geosciences)"
+      mars:  "SWIM (Subsurface Water Ice Mapping) [verificar]"
+      earth: "ESA CCI Permafrost, espesor de la capa activa [verificar]"
+
+  dust_aod:
+    label: "Polvo en suspensión (espesor óptico)"
+    unit: ""
+    type: numeric
+    tolerance: 0.2                   # [supuesto]
+    sources:
+      moon:  null
+      mars:  "TES / Mars Climate Database, opacidad del polvo [verificar]"
+      earth: "MCD19A2CMG, MODIS MAIAC AOD (Earthdata)"
+
+  caves:
+    label: "Cuevas o tubos de lava (0 = no, 1 = sí)"
+    unit: ""
+    type: numeric
+    tolerance: 1                     # igual → 1, distinto → 0
+    sources:
+      moon:  "LROC Lunar Pit Atlas [verificar]"
+      mars:  "Mars Global Cave Candidate Catalog, MGC³ (USGS) [verificar]"
+      earth: "Proxy: campos volcánicos basálticos (Smithsonian GVP + GLiM) [verificar]"
+
+# -----------------------------------------------------------------------------
+# OPERABILIDAD: solo existe en la Tierra. NO entra en el parecido; sirve de filtro
+# ("enséñame solo sitios accesibles") y para el gráfico parecido vs. accesibilidad.
+# -----------------------------------------------------------------------------
+operability:
+  travel_time_h:
+    label: "Tiempo de viaje a la ciudad más cercana"
+    unit: "h"
+    source: "Weiss et al. (2018), Nature [verificar]"
+  protected_area:
+    label: "Zona protegida (0 = no, 1 = sí)"
+    unit: ""
+    source: "WDPA (World Database on Protected Areas) [verificar]"
+
+# -----------------------------------------------------------------------------
+# LO QUE LA TIERRA NO PUEDE REPRODUCIR: bloque fijo en cada ficha (enfoque §5)
+# -----------------------------------------------------------------------------
+bodies:
+  moon:
+    label: "Luna"
+    gravity_m_s2: 1.62
+    surface_pressure_Pa: 0           # ~vacío (exosfera)
+    solar_day_h: 708.7               # 29,53 días
+  mars:
+    label: "Marte"
+    gravity_m_s2: 3.71
+    surface_pressure_Pa: 610         # media; varía con la estación
+    solar_day_h: 24.66               # 1 sol
+  earth:
+    label: "Tierra"
+    gravity_m_s2: 9.81
+    surface_pressure_Pa: 101325
+    solar_day_h: 24.0

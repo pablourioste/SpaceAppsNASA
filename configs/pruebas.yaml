@@ -1,0 +1,57 @@
+# =============================================================================
+# PRUEBAS: "¿Qué quieres probar?"
+# =============================================================================
+# Cada prueba es SOLO una lista de pesos (0–1) sobre las variables de configs/variables.yaml.
+#   peso 1   → esa variable cuenta mucho
+#   peso 0 o ausente → esa variable no cuenta para esta prueba
+#
+# Añadir una prueba nueva = añadir un bloque aquí. No hay que tocar código.
+# En la app, el usuario también puede mover los pesos a mano (combinaciones libres).
+#
+#   test_validity  frase para la ficha: qué NO reproduce la Tierra en esta prueba
+#
+# ⚠️ TODOS los pesos son [supuesto]: los fija el equipo de Ciencia.
+#    Borrador razonado en docs/01_como_funciona.md §5.
+# =============================================================================
+
+pruebas:
+
+  ruedas:
+    label: "Ruedas / movilidad"
+    weights: {slope_deg: 1.0, roughness_deg: 1.0, rock_abundance_pct: 0.8}
+    test_validity: "La carga por rueda es ∝ m·g: probar con un vehículo aligerado (g_destino / g_Tierra)"
+
+  navegacion:
+    label: "Navegación autónoma / cámaras"
+    weights: {sun_elev_max_deg: 1.0, slope_deg: 0.5, roughness_deg: 0.5}
+    test_validity: "En la Tierra las sombras se mueven ~30 veces más rápido y el cielo las rellena de luz difusa"
+
+  perforacion:
+    label: "Perforación / toma de muestras"
+    weights: {lithology: 1.0, ice_depth_m: 0.7}
+    test_validity: "El material se reproduce; la temperatura del subsuelo no"
+
+  hielo:
+    label: "Detección de hielo"
+    weights: {ice_depth_m: 1.0, t_mean_K: 0.5}
+    test_validity: "El hielo lunar está en vacío; el terrestre, bajo atmósfera: la sublimación es distinta"
+
+  energia_termica:
+    label: "Energía solar y control térmico"
+    weights: {sun_elev_max_deg: 0.8, t_mean_K: 1.0, t_max_K: 0.6}
+    test_validity: "La Tierra no baja de ≈ −90 °C ni llega al mediodía lunar (≈ +120 °C)"
+
+  polvo:
+    label: "Polvo, juntas y mecanismos (Marte)"
+    weights: {dust_aod: 1.0}
+    test_validity: "El aire de Marte es ~60 veces menos denso: el polvo se levanta de otra forma"
+
+  habitat:
+    label: "Hábitat / operaciones humanas"
+    weights: {t_mean_K: 0.6, caves: 0.4}
+    test_validity: "Ni la gravedad reducida ni la radiación se reproducen"
+
+  comunicaciones:
+    label: "Comunicaciones (línea de visión)"
+    weights: {roughness_deg: 1.0, slope_deg: 0.5}
+    test_validity: "La geometría del relieve sí se reproduce"

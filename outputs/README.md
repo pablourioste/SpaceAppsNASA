@@ -1,17 +1,11 @@
-# outputs/ — resultados (salida)
+# outputs/ — resultados para PERSONAS
 
-- `results/` — ficheros que consume la app (contrato R5 ↔ R6). Ligeros → sí van a git.
-- `figures/` — gráficos para docs y presentación.
-- `maps/` — mapas exportados (PNG/HTML).
+Lo que se enseña en la presentación, las fichas y la validación. Ficheros ligeros → sí van a git.
 
-## Formato de `results/` (provisional, acordar)
-```json
-{
-  "target": {"name": "Jezero", "body": "mars", "lat": 18.44, "lon": 77.45},
-  "profile": "rover_mobility",
-  "matches": [
-    {"name": "…", "lat": 0.0, "lon": 0.0, "score": 0.87, "known_analog": false,
-     "per_variable": {"slope": 0.9, "roughness": 0.8, "albedo": 0.6}}
-  ]
-}
-```
+| Carpeta | Qué va | Ejemplo |
+|---|---|---|
+| `figures/` | Gráficos (mejor en PDF o SVG) | radar de un sitio, similitud vs. accesibilidad |
+| `maps/` | Mapas exportados | mapa mundial del índice para "ruedas en Jezero" |
+| `validation/` | Resultados de la validación | aciertos con análogos conocidos vs. modelo nulo |
+
+⚠️ **Lo que lee la app NO va aquí**: va en [`app/data/`](../app/README.md).

@@ -1,30 +1,64 @@
-# data/ — datos de entrada
+# data/ — los datos
 
 ```
 data/
-├── raw/          # Datos tal cual se descargan o nos dan. NUNCA se modifican.
-│   ├── provided/ #   lo que nos entregue la organización
+├── catalogs/    pequeños, hechos a mano. SÍ van a git.
+│   ├── target_sites.csv     sitios OBJETIVO de la Luna y Marte (lo que buscas)
+│   └── known_analogs.csv    análogos terrestres YA conocidos (para validar y marcarlos)
+├── raw/         PASO 1: tal cual se descargan. NUNCA se modifican.  NO van a git.
 │   ├── earth/
 │   ├── moon/
 │   └── mars/
-├── external/     # Catálogos pequeños hechos a mano o de terceros (CSV, GeoJSON). SÍ van a git.
-├── interim/      # Pasos intermedios (recortes, reproyecciones). Se pueden borrar y regenerar.
-└── processed/    # Tablas de características finales que usa el motor de similitud.
+├── interim/     PASO 2: recortados y en malla común. Se pueden borrar y regenerar.  NO van a git.
+└── processed/   PASO 3: las FICHAS, una fila por sitio o hexágono.  NO van a git.
+                 fichas_tierra.parquet · fichas_objetivos.parquet
 ```
 
-## Reglas
-1. **Los rásters y ficheros grandes NO se suben a git** (`.gitignore` ya ignora `raw/`, `interim/` y `processed/`). Se comparten por el Drive del equipo: _[enlace aquí]_.
-2. El repo está en OneDrive en algún ordenador: **no meter GBs de datos dentro de la carpeta sincronizada**; mejor una carpeta local fuera y apuntar a ella (ver `src/analogs/paths.py`, variable de entorno `ANALOGS_DATA_DIR`).
-3. Todo dataset descargado se apunta en la tabla de abajo (para reproducibilidad y para la entrega: hay que citar los datos de NASA usados).
-4. Si un script descarga datos, va en `scripts/` y se indica aquí.
+El paso 4 (el índice para la app) no está aquí: va a [`app/data/`](../app/README.md).
 
-## Catálogos incluidos (`external/`)
+## Reglas
+
+1. **Los ficheros grandes NO se suben a git.** El `.gitignore` ya ignora `raw/`, `interim/` y `processed/`. Se comparten por el Drive del equipo: _[enlace aquí]_.
+2. Si el repo está en OneDrive, **no metas GBs dentro de la carpeta sincronizada**. Mejor una carpeta local fuera del repo, definiendo la variable de entorno `ANALOGS_DATA_DIR` (ver [`src/analogs/paths.py`](../src/analogs/paths.py)).
+3. **Todo dataset descargado se apunta en el inventario de abajo.** Hace falta para reproducir el trabajo y para la entrega, que pide citar los datos usados.
+4. Unidades SI y nombres de columna **exactamente** como en [`configs/variables.yaml`](../configs/variables.yaml).
+5. Longitudes en −180..180 este; latitudes planetocéntricas.
+
+## Catálogos
+
 | Fichero | Contenido | Estado |
 |---|---|---|
-| `known_analogs.csv` | Análogos terrestres conocidos → set de validación | Coordenadas aproximadas, **verificar** |
-| `target_sites.csv` | Sitios objetivo en Luna/Marte (lon este, −180..180, planetocéntrico) | Aproximadas; faltan coords de Artemis III |
+| `target_sites.csv` | 30 sitios: 9 regiones candidatas del polo sur lunar (NASA 2024), aterrizajes de Apolo, Chang'e 4, Chandrayaan-3, Shackleton y 12 sitios de Marte | Coordenadas aproximadas; **faltan las de las 9 regiones lunares** (sacarlas de los polígonos oficiales de NASA) |
+| `known_analogs.csv` | 20 análogos terrestres conocidos | Coordenadas aproximadas [verificar]; falta la columna `dimension` (qué reproduce cada uno) |
+
+## Cuentas necesarias (gratuitas, cada uno la suya)
+
+| Portal | Para descargar | Cuenta |
+|---|---|---|
+| NASA Earthdata | Datos de la Tierra (MODIS, ASTER, EMIT, NASADEM…) | Earthdata Login |
+| Copernicus Data Space | Sentinel-1/2, Copernicus DEM | Sí |
+| EODMS (CSA) | RADARSAT-1, RCM | Sí |
+| JAXA G-Portal | Nieve, precipitación, temperatura | Sí |
+| PDS (NASA) | Luna y Marte (Diviner, LOLA, Mini-RF, MOLA…) | **No** |
+
+**Las contraseñas nunca van en el código ni en git.**
 
 ## Inventario de datasets
-| Dataset | Cuerpo | Variable(s) | Resolución | Formato | Fuente / URL | Ubicación | Quién |
+
+Estado: **identificado** = existe y sabemos dónde está · **descargado** · **procesado** (ya está en las fichas).
+
+| Dataset | Cuerpo | Variable | Resolución | Formato | Dónde | Estado | Quién |
 |---|---|---|---|---|---|---|---|
-| | | | | | | | |
+| Diviner PRP sur (`dlre_prp_south.tab`) | Luna | `temp_avg` (K, 2 cm), `temp_max` (K), `ice_depth` (m) | malla triangular, 2,88 M triángulos | tabla de texto, ~605 MB | PDS Geosciences → LRO → Diviner → PRP | identificado | |
+| Diviner PCP (diurnal / seasonal) | Luna | temperaturas polares | [verificar] | [verificar] | PDS Geosciences → Diviner → PCP | identificado | |
+| LOLA GDR / SLDEM | Luna | relieve → pendiente, rugosidad | según producto | [verificar] | PDS Geosciences / Lunar ODE | identificado | |
+| Mini-RF | Luna | radar (CPR) | [verificar] | [verificar] | PDS Geosciences (página caída el 13/11) | por comprobar | |
+| MOLA / MOLA-HRSC | Marte | relieve | 463 m / ~200 m [verificar] | [verificar] | PDS / Mars ODE | identificado | |
+| `NASADEM_HGT` v001 | Tierra | relieve | 1″ (~30 m) | [verificar] | Earthdata (LP DAAC) | identificado | |
+| `MOD11C3` v061 | Tierra | temperatura de superficie mensual | 0,05° | HDF | Earthdata (LP DAAC) | identificado | |
+| `MOD21A2` v061 | Tierra | temperatura de superficie, 8 días | 1 km | HDF | Earthdata (LP DAAC) | identificado | |
+| `AG100` v003 | Tierra | emisividad ASTER (aproximación de la mineralogía) | 100 m | HDF5 | Earthdata (LP DAAC) | identificado | |
+| `EMITL2BMIN` v001 | Tierra | minerales (zonas áridas) | 60 m | [verificar] | Earthdata (LP DAAC) | identificado | |
+| `MCD19A2CMG` v061 | Tierra | aerosoles / polvo | 0,05°, diario | HDF | Earthdata (LP DAAC) | identificado | |
+| Sentinel-1 GRD | Tierra | radar en banda C | ~10 m | [verificar] | Earthdata (ASF) / Copernicus Data Space | identificado | |
+| ESA CCI Permafrost | Tierra | permafrost, capa activa | ~1 km [verificar] | [verificar] | ESA Open Science Catalog [verificar] | por buscar | |
