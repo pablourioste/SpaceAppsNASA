@@ -56,6 +56,21 @@
 - [ ] **3.5** Build the **Mars card grid for the whole planet** (decision 007) and the cards of the 12 Mars target sites: slope, roughness, thermal inertia, hydrogen/ice, temperature and dust.
   - Grid (decided): **H3 resolution 5** (~9 km hexagons on Mars and the Moon ≈ the ~10 km footprint of decision 006; ~2 M cells per body, H3 treats the body as a sphere with planetocentric lat/lon) → one row per cell with every variable. Exported **split by the 122 H3 base cells** so the app only downloads the region that was clicked (~600 KB each). Two clicks less than ~9 km apart give the same answer: that is the scale the data support (GRS is ~300 km, TES/MCS atmosphere tens of km). Target sites: their own ~10 km footprint card, as planned.
   - Coverage gaps are fine: a variable missing in a cell (SWIM beyond ±60°, GRS elements beyond ~±45°) is left empty and the formula skips it.
+  - **Method (decided, 2026-11-14) — raster/points → H3 cell.** Going from fine pixels to ~9 km cells is a **low-pass** (averaging, avoids aliasing); a **high-pass** is used **only for roughness**. Every average is **area-weighted**. The same method must be used for Earth (3.9–3.12) so both sides are comparable (decision 006).
+
+    | Variable | Source | Method |
+    |---|---|---|
+    | `slope_deg` | MOLA 128 ppd (~463 m) | slope at every pixel (true metric spacing per latitude) → **weighted median** inside the hexagon, weight = pixel area (∝ cos lat; polar maps: projection scale factor) |
+    | `roughness_deg` | MOLA 128 ppd | **high-pass**: subtract a plane fitted to the hexagon's elevations (removes the regional tilt) → slope of the residual surface → **weighted RMS** inside the hexagon |
+    | `mola_measured_frac` (QC) | MOLA `megc` | area-weighted fraction of pixels with ≥ 1 laser shot |
+    | `thermal_inertia_{day,night}_SI` | TES TI (~3 km) | **area-of-intersection weighted mean** (only ~9 pixels per hexagon: pixel-centre assignment is not accurate enough; subdivide pixels or intersect polygons); interpolated pixels (mask = 0) dropped when measured ones exist |
+    | `ice_depth_m` | SWIM 2.0 (~3 km) | area-of-intersection weighted mean of each consistency map → depth class (0.5 / 3 / 5 m / no ice) |
+    | `grs_*`, `ns_epithermal_cps` | GRS 5° / 0.5° | value of the coarse cell that contains the hexagon centre (cells ≫ 9 km) |
+    | `t_max_K`, `dust_aod` | TES MY26 (points, day) | bin to 5° cells (mean, P95 for t_max) → value of the 5° cell that contains the hexagon centre |
+    | `t_mean_K` | TES day + MCS night | (5° day mean + 5° night mean) / 2, same lookup |
+    | `sun_elev_max_deg` | geometry | formula with the hexagon centre latitude |
+
+    Implementation notes: assign each pixel to its H3 cell (`h3` vectorised on pixel centres) and `groupby`; process MOLA **tile by tile** (16 tiles + 2 polar maps, ~10⁹ pixels in total) to fit in memory; cells that straddle two tiles are merged after accumulating weighted sums.
   *Draft code in `src/analogs/mars.py` + `scripts/build_mars_features.py` (readers checked on MOLA, TES TI and GRS; written for the sites only, not run end-to-end yet; extend to the grid).*
   **Slope and roughness at ~463 m (decided):** use MOLA MEGDR 128 px/deg instead of the 16 px/deg global map (3.7 km). The ~10 km site footprint then holds ~20×20 pixels instead of 3×3, and the baseline matches the Moon (LOLA `ldem_64`, ~474 m) and Earth (Copernicus DEM resampled to ~460 m), as decision 006 requires. Tiles in `data/raw/mars/mola_megdr_128ppd/` (`python scripts/download_data.py mola128`; today only the 6 tiles that contain a target site, the rest in 3.4b).
   > ⚠️ **Warning: interpolated cells.** MOLA measures along the spacecraft ground tracks; near the equator the gaps between tracks can be several km wide, so at 128 px/deg many cells have **no laser shot and are interpolated**. In those cells the slope comes out **smoother than reality**. For every site, use the shots-per-cell tile (`megc…hb`) to report the **fraction of measured cells** in the footprint, store it as a QC column (e.g. `mola_measured_frac`) and flag sites where it is low (threshold to decide).
