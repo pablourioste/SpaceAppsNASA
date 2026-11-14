@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Earth Analogs — Moon & Mars</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="toolbar">
+      <h1>Earth Analogs</h1>
+      <div class="switch" role="group" aria-label="Target body">
+        <button type="button" data-body="mars" class="active">Mars</button>
+        <button type="button" data-body="moon">Moon</button>
+      </div>
+      <label class="relief">
+        <input type="checkbox" id="relief" />
+        Relief
+      </label>
+    </header>
+
+    <main class="panes">
+      <section class="pane">
+        <span class="pane-label" id="target-label">Mars</span>
+        <div id="target" class="globe"></div>
+      </section>
+      <section class="pane">
+        <span class="pane-label">Earth</span>
+        <div id="earth" class="globe"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
