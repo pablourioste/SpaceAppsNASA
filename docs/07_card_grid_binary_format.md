@@ -137,6 +137,34 @@ Pentagon base cells have fewer children (e.g. 16,807 vs 16,807 − …): always 
 Checked 2026-11-14: Python round trip (`check_grid_binary.py`) and browser (`CardGrid`) give the
 same cells, the same order and values within `scale/2` (Jezero, Gale, Hellas, north pole).
 
+## 4b. Moon encoding (done 2026-11-14)
+
+`python scripts/build_moon_grid.py` (~3 min, `src/analogs/moon.py`) → `python scripts/export_moon_web.py` →
+`app/data/luna/`: **H3 res 4** (~131.7 km², ~12.3 km on the Moon: the level closest to the Mars res-5 cells;
+res 5 would be only ~4.7 km), 288,122 cells, 20 columns, **2.9 MB** in 122 files of 18–27 KB.
+`index.json` carries `"cell_size_km": 12.3` (new optional key; the card shows it instead of "~9 km").
+Checked with `python scripts/check_grid_binary.py luna data/processed/luna_h3r4.parquet`: no-data mismatches 0,
+every column within scale/2.
+
+| Column | dtype | scale | offset | Range | Note |
+|---|---|---|---|---|---|
+| `slope_deg`, `roughness_deg` | u1 | 0.25 | 0 | 0–63.5° | same as Mars (LOLA 474 m, baseline ~950 m) |
+| `t_mean_K`, `t_max_K`, `t_min_K` | u1 | **2** | **0** | 0–508 K | the Moon spans ~40–400 K: the Mars encoding (100–354 K) would clip both ends |
+| `sun_elev_max_deg` | u1 | 0.5 | 0 | 0–127° | **empty for \|lat\| ≥ 80°** (the warning above): use `psr_frac` there |
+| `psr_frac`, `ice_frac_1m`, `lola_measured_frac` | u1 | 0.005 | 0 | 0–1.27 | PGDA permanent shadow / Diviner PRP / LOLA shots |
+| `ice_depth_m` | u1 | 0.05 | 0 | 0–12.7 m | continuous (Diviner PRP), 0 = at the surface, **10 = none found** (Mars convention) |
+| `ice_depth_source` | u1 | 1 | 0 | 1 Diviner PRP · 3 assumed (\|lat\| < 60°) | 60–80° and the north pole: no data |
+| `precip_mm_year` | u1 | 1 | 0 | 0 | 0 by definition (variables.yaml) |
+| `silica_wt_pct` | u1 | 0.25 | 0 | 0–63.5 % | Lunar Prospector; **22 cells clipped**: one LP 2° cell at ~26° S reads 66 % SiO₂ (unrealistic, product artefact) |
+| `feo_wt_pct`, `tio2_wt_pct`, `th_ppm` | u1 | 0.15 / 0.05 / 0.1 | 0 | 0–38 % / 0–12.7 % / 0–25 ppm | Lunar Prospector GRS, 2° cells |
+| `rock_abundance_pct` | u1 | 0.05 | 0 | 0–12.7 % | Diviner, ±60°; 2 cells clipped (max 14.8 % at Tycho) |
+| `caves` | u1 | 1 | 0 | 0/1 | LROC pit atlas |
+| `pit_dist_km`, `elevation_m` | u2 | 1 | 0 / −20000 | km / m | |
+
+Moon card in the app: `app/src/card.js` shows the Moon-only rows (min temperature, permanent shadow,
+iron, titanium, silica, thorium, rocks, pits) and Moon texts for ice ("stable at the surface",
+"none within ~2.9 m") and for the Sun at the poles; Mars is unchanged (rows that a grid lacks are skipped).
+
 ## 5. Where the source of each value comes from
 
 The binary holds **only numbers**. Everything the card says about a value's origin comes from

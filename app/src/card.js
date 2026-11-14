@@ -3,10 +3,13 @@ import { formatLatLon } from './coords.js';
 
 // Sections of the card and the columns they show (columns not in the grid are skipped)
 const SECTIONS = [
-  ['Terrain', ['elevation_m', 'slope_deg', 'roughness_deg', 'mola_measured_frac']],
-  ['Climate', ['t_mean_K', 't_max_K', 't_night_K', 'dust_aod', 'p_surf_Pa', 'sun_elev_max_deg']],
-  ['Ice & composition', ['ice_depth_m', 'grs_h2o_wt_pct', 'ns_epithermal_cps', 'grs_cl_wt_pct',
-    'thermal_inertia_day_SI']],
+  ['Terrain', ['elevation_m', 'slope_deg', 'roughness_deg', 'mola_measured_frac', 'lola_measured_frac',
+    'rock_abundance_pct']],
+  ['Climate & light', ['t_mean_K', 't_max_K', 't_min_K', 't_night_K', 'dust_aod', 'p_surf_Pa',
+    'sun_elev_max_deg', 'psr_frac']],
+  ['Ice & composition', ['ice_depth_m', 'ice_frac_1m', 'grs_h2o_wt_pct', 'ns_epithermal_cps', 'grs_cl_wt_pct',
+    'thermal_inertia_day_SI', 'feo_wt_pct', 'tio2_wt_pct', 'silica_wt_pct', 'th_ppm']],
+  ['Subsurface', ['caves', 'pit_dist_km']],
 ];
 
 // Where each value's source comes from (docs/07, "Where the source of each value comes from"):
@@ -31,6 +34,18 @@ const SHORT = {
   grs_cl_wt_pct: 'Chlorine',
   ns_epithermal_cps: 'Neutrons (low = more H)',
   thermal_inertia_day_SI: 'Thermal inertia',
+  // Moon
+  lola_measured_frac: 'Laser coverage (QC)',
+  t_min_K: 'Min temperature',
+  psr_frac: 'Permanent shadow',
+  ice_frac_1m: 'Ice within 1 m (area)',
+  feo_wt_pct: 'Iron (FeO)',
+  tio2_wt_pct: 'Titanium (TiO₂)',
+  silica_wt_pct: 'Silica (SiO₂)',
+  th_ppm: 'Thorium',
+  rock_abundance_pct: 'Rocks',
+  caves: 'Cave entrance (pit)',
+  pit_dist_km: 'Nearest known pit',
 };
 
 const ICE_CLASSES = { 0.5: 'within 1 m', 3: '1–5 m deep', 5: 'deeper than 5 m', 10: 'none (top 5 m)' };
@@ -64,6 +79,27 @@ function formatValue(col, v, values, cols) {
 
 function valueText(col, v, values, cols) {
   const iceSrc = cols.ice_depth_m ? sourceOf(cols.ice_depth_m, values, cols) : '';
+  const moon = Boolean(cols.psr_frac); // only the Moon grid has a permanent-shadow column
+  if (moon) {
+    const lat = Math.abs(values._lat);
+    if (col.name === 'ice_depth_m') {
+      if (!Number.isFinite(v)) return '<span class="nodata">no data (no product for 60–80° or the north pole)</span>';
+      if (v === 0) return 'stable at the surface';
+      if (v >= 10) return iceSrc === 'assumed' ? 'none (not stable away from the poles)' : 'none within ~2.9 m';
+      return `${v.toFixed(2)} m deep`;
+    }
+    if (col.name === 'sun_elev_max_deg' && !Number.isFinite(v) && lat >= 80) {
+      return '<span class="nodata">relief decides the light here: see permanent shadow</span>';
+    }
+    if ((col.name === 'psr_frac' || col.name === 'ice_frac_1m') && !Number.isFinite(v)) {
+      return '<span class="nodata">only mapped at 80–90° S</span>';
+    }
+    if (col.name === 'rock_abundance_pct' && !Number.isFinite(v)) {
+      return '<span class="nodata">not mapped beyond ±60°</span>';
+    }
+    if (col.name === 'psr_frac' || col.name === 'ice_frac_1m') return `${Math.round(v * 100)} % of the cell`;
+    if (col.name === 'caves' && Number.isFinite(v)) return v >= 1 ? 'yes' : 'none known';
+  }
   if (col.name === 'ice_depth_m') {
     if (!Number.isFinite(v)) {
       return iceSrc === 'neutrons' ? 'not detected in top ~1 m' : '<span class="nodata">no data</span>';
@@ -85,7 +121,7 @@ function valueText(col, v, values, cols) {
     return '<span class="nodata">polar map, other height reference (not shown)</span>';
   }
   if (!Number.isFinite(v)) return '<span class="nodata">no data</span>';
-  if (col.name === 'mola_measured_frac') return `${Math.round(v * 100)} % measured`;
+  if (col.name.endsWith('_measured_frac')) return `${Math.round(v * 100)} % measured`;
   const shown = col.short_unit ?? col.unit;   // short unit from index.json when the full one is long
   const unit = shown ? ` ${shown}` : '';
   return `${v.toFixed(decimals(col.scale))}${unit}`;
@@ -125,7 +161,7 @@ export function createCardPanel(el, { onClose } = {}) {
       }).join('');
       el.hidden = false;
       el.innerHTML = `<header><h2>${esc(title)}</h2><button data-close aria-label="Close">×</button></header>
-        <p class="where">${formatLatLon({ lat, lon })} · cell <code>${card.h3}</code> (~9 km)</p>
+        <p class="where">${formatLatLon({ lat, lon })} · cell <code>${card.h3}</code> (~${card.cellSizeKm ?? 9} km)</p>
         ${sections}
         <footer>Earth match: next step — needs the Earth card grid in the app (ROADMAP 3.16, Earth).
         Hover a value to see its source.</footer>`;

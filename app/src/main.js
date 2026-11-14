@@ -18,8 +18,8 @@ let target = null;
 let sites = { targets: [], analogs: [] };
 
 // --- 4.9 Click any point of the target body → card of its H3 cell ---
-// Planet-wide card grids available in app/data/ (the Moon comes with ROADMAP 3.7 + 3.16)
-const GRIDS = { mars: new CardGrid('marte') };
+// Planet-wide card grids available in app/data/ (Mars: H3 res 5, ~9 km; Moon: H3 res 4, ~12 km)
+const GRIDS = { mars: new CardGrid('marte'), moon: new CardGrid('luna') };
 const card = createCardPanel(document.getElementById('card'), { onClose: clearAll });
 let cardRequest = 0; // ignore answers to older clicks
 

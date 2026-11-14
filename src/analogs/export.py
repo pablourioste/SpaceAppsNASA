@@ -153,11 +153,12 @@ MARS_DISPLAY: dict[str, dict] = {
 
 
 def write_grid_binary(df: pd.DataFrame, body: str, columns: dict, sources: dict,
-                      display: dict | None = None) -> dict:
+                      display: dict | None = None, extra: dict | None = None) -> dict:
     """Write app/data/<body>/ from a card grid (one row per H3 cell, column `h3`).
 
     `display` (optional, like MARS_DISPLAY) adds short_source / short_unit / source_column /
-    codes to each column entry of index.json.
+    codes to each column entry of index.json. `extra` (optional) adds top-level keys to
+    index.json, e.g. {"cell_size_km": 12.3} so the card can say how big a cell is on that body.
     """
     import datetime as dt
     import gzip
@@ -196,6 +197,7 @@ def write_grid_binary(df: pd.DataFrame, body: str, columns: dict, sources: dict,
                      "source": sources.get(n, ""), **(display or {}).get(n, {})}
                     for n, (d, s, o, u, lab) in columns.items()],
         "regions": regions,
+        **(extra or {}),
     }
     with open(out / "index.json", "w", encoding="utf-8") as f:
         json.dump(index, f, ensure_ascii=False, indent=1)
@@ -217,3 +219,98 @@ def write_mars_targets(targets: pd.DataFrame, variables_cfg: dict) -> None:
              "extras": {v: _clean(r.get(v, np.nan)) for v in extras}}
             for r in targets.to_dict("records")]
     _write("marte/objetivos.json", {"_aviso": "", "objetivos": mars})
+
+
+# --------------------------------------------------------------------------------------
+# Moon (ROADMAP 3.7 + 3.16, Moon part): H3 res 4 (~12.3 km, the level closest to Mars res 5)
+# --------------------------------------------------------------------------------------
+# Shared variables keep the Mars name and unit. Temperatures use scale 2 / offset 0 (0–508 K,
+# error 1 K, tolerance 20–30 K) because the Moon spans ~40 K (shadowed craters) to ~400 K (noon);
+# the Mars encoding (100–354 K) would clip both ends.
+MOON_WEB_COLUMNS: dict[str, tuple[str, float, float, str, str]] = {
+    "slope_deg":          ("u1", 0.25, 0.0, "°", "Slope (median, ~950 m baseline)"),
+    "roughness_deg":      ("u1", 0.25, 0.0, "°", "Roughness (RMS slope after removing the mean gradient)"),
+    "t_mean_K":           ("u1", 2.0, 0.0, "K", "Mean surface temperature ((day + night) / 2)"),
+    "t_max_K":            ("u1", 2.0, 0.0, "K", "Max surface temperature (diurnal cycle)"),
+    "t_min_K":            ("u1", 2.0, 0.0, "K", "Min surface temperature (diurnal cycle)"),
+    "sun_elev_max_deg":   ("u1", 0.5, 0.0, "°", "Highest noon Sun elevation over a year (|lat| < 80° only)"),
+    "psr_frac":           ("u1", 0.005, 0.0, "", "Fraction of the cell in permanent shadow (80–90° S)"),
+    "ice_depth_m":        ("u1", 0.05, 0.0, "m", "Depth to stable water ice (0 = surface; 10 = none found)"),
+    "ice_depth_source":   ("u1", 1.0, 0.0, "", "Source of ice_depth_m: 1 Diviner PRP, 3 assumed"),
+    "ice_frac_1m":        ("u1", 0.005, 0.0, "", "Fraction of the cell with stable ice within 1 m"),
+    "precip_mm_year":     ("u1", 1.0, 0.0, "mm/year", "Rainfall (0 on the Moon)"),
+    "silica_wt_pct":      ("u1", 0.25, 0.0, "wt%", "Silica, SiO2 (Lunar Prospector, 2°)"),
+    "feo_wt_pct":         ("u1", 0.15, 0.0, "wt%", "Iron, FeO (Lunar Prospector, 2°)"),
+    "tio2_wt_pct":        ("u1", 0.05, 0.0, "wt%", "Titanium, TiO2 (Lunar Prospector, 2°)"),
+    "th_ppm":             ("u1", 0.1, 0.0, "ppm", "Thorium (Lunar Prospector, 2°)"),
+    "rock_abundance_pct": ("u1", 0.05, 0.0, "%", "Rock abundance (Diviner, ±60°)"),
+    "caves":              ("u1", 1.0, 0.0, "", "Pit (cave entrance) in the cell: 1 yes, 0 no"),
+    "lola_measured_frac": ("u1", 0.005, 0.0, "", "Fraction of LOLA cells with a laser shot (QC)"),
+    "pit_dist_km":        ("u2", 1.0, 0.0, "km", "Distance to the nearest known pit"),
+    "elevation_m":        ("u2", 1.0, -20000.0, "m", "Elevation above the 1,737.4 km sphere (LOLA)"),
+}
+
+MOON_SOURCES = {
+    "slope_deg": "LRO LOLA GDR ldem_64, 64 px/deg (PDS Geosciences)",
+    "roughness_deg": "LRO LOLA GDR ldem_64, 64 px/deg (PDS Geosciences)",
+    "elevation_m": "LRO LOLA GDR ldem_64, 64 px/deg (PDS Geosciences)",
+    "lola_measured_frac": "LRO LOLA GDR ldec_128, shots per cell (PDS Geosciences)",
+    "t_mean_K": "LRO Diviner GCP global cumulative products, 0.5° tiles × 96 local times (PDS Geosciences)",
+    "t_max_K": "LRO Diviner GCP global cumulative products (PDS Geosciences)",
+    "t_min_K": "LRO Diviner GCP global cumulative products (PDS Geosciences)",
+    "sun_elev_max_deg": "calculated, not measured: 90° − max(0, |lat| − 1.54°) (noon, whole year, flat horizon); "
+                        "empty for |lat| ≥ 80°, where relief decides the light: see psr_frac (docs/07)",
+    "psr_frac": "LOLA permanently shadowed regions LPSR_80S_20MPP_ADJ, 20 m (NASA GSFC PGDA, product 90)",
+    "ice_depth_m": "LRO Diviner Polar Resource Product, ice-stability depth (Paige et al. 2010), south pole ≤ −80°; "
+                   "away from the poles (|lat| < 60°) assumed: ice not stable near the surface; "
+                   "60–80° and north pole: no data",
+    "ice_depth_source": "1 = Diviner PRP model, 3 = assumption (|lat| < 60°)",
+    "ice_frac_1m": "LRO Diviner Polar Resource Product (south pole ≤ −80°); 0 for |lat| < 60° (assumption)",
+    "precip_mm_year": "0 by definition (no atmosphere, no rain), as in configs/variables.yaml",
+    "silica_wt_pct": "Lunar Prospector GRS elemental abundances, 2° equal-area cells (PDS Geosciences) [units: verify]",
+    "feo_wt_pct": "Lunar Prospector GRS elemental abundances, 2° equal-area cells (PDS Geosciences) [units: verify]",
+    "tio2_wt_pct": "Lunar Prospector GRS elemental abundances, 2° equal-area cells (PDS Geosciences) [units: verify]",
+    "th_ppm": "Lunar Prospector GRS elemental abundances, 2° equal-area cells (PDS Geosciences) [units: verify]",
+    "rock_abundance_pct": "LRO Diviner GDR L3 rock abundance, 32 px/deg, 60° N–60° S (PDS Geosciences)",
+    "caves": "LROC Lunar Pit Atlas, 278 pits (lroc.im-ldi.com)",
+    "pit_dist_km": "LROC Lunar Pit Atlas, 278 pits (lroc.im-ldi.com)",
+}
+
+MOON_DISPLAY: dict[str, dict] = {
+    "slope_deg": {"short_source": "LOLA"},
+    "roughness_deg": {"short_source": "LOLA"},
+    "elevation_m": {"short_source": "LOLA"},
+    "lola_measured_frac": {"short_source": "LOLA"},
+    "t_mean_K": {"short_source": "Diviner"},
+    "t_max_K": {"short_source": "Diviner"},
+    "t_min_K": {"short_source": "Diviner"},
+    "sun_elev_max_deg": {"short_source": "calc."},
+    "psr_frac": {"short_source": "PGDA"},
+    "ice_depth_m": {"source_column": "ice_depth_source"},
+    "ice_depth_source": {"codes": {"1": "Diviner PRP", "3": "assumed"}},
+    "ice_frac_1m": {"short_source": "Diviner PRP"},
+    "precip_mm_year": {"short_source": "none"},
+    "silica_wt_pct": {"short_source": "LP GRS"},
+    "feo_wt_pct": {"short_source": "LP GRS"},
+    "tio2_wt_pct": {"short_source": "LP GRS"},
+    "th_ppm": {"short_source": "LP GRS"},
+    "rock_abundance_pct": {"short_source": "Diviner"},
+    "caves": {"short_source": "LROC"},
+    "pit_dist_km": {"short_source": "LROC"},
+}
+
+
+def write_body_targets(targets: pd.DataFrame, folder: str, web_columns: dict, variables_cfg: dict) -> None:
+    """Real cards of a body's target sites → app/data/<folder>/objetivos.json.
+
+    Same shape as write_mars_targets (left as it is for Mars): features = variables of
+    configs/variables.yaml, extras = the other card columns, h3 = the cell of the site.
+    """
+    var_names = list(variables_cfg["variables"])
+    extras = [c for c in web_columns if c not in var_names]
+    meta = ["id", "name", "body", "lat", "lon", "type", "h3"]
+    cards = [{**{k: _clean(r[k]) for k in meta if k in r},
+              "features": {v: _clean(r.get(v, np.nan)) for v in var_names},
+              "extras": {v: _clean(r.get(v, np.nan)) for v in extras}}
+             for r in targets.to_dict("records")]
+    _write(f"{folder}/objetivos.json", {"_aviso": "", "objetivos": cards})

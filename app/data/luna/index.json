@@ -1,0 +1,827 @@
+{
+ "_aviso": "",
+ "body": "luna",
+ "h3_resolution": 4,
+ "generated": "2026-11-14",
+ "n_cells": 288122,
+ "encoding": "gzip; column blocks in the order of `columns`; little-endian unsigned ints; value = stored*scale + offset; stored = max of dtype means no data",
+ "cell_order": "ascending H3 index among the res-4 children of each base cell (region)",
+ "columns": [
+  {
+   "name": "slope_deg",
+   "dtype": "u1",
+   "scale": 0.25,
+   "offset": 0.0,
+   "unit": "°",
+   "label": "Slope (median, ~950 m baseline)",
+   "source": "LRO LOLA GDR ldem_64, 64 px/deg (PDS Geosciences)",
+   "short_source": "LOLA"
+  },
+  {
+   "name": "roughness_deg",
+   "dtype": "u1",
+   "scale": 0.25,
+   "offset": 0.0,
+   "unit": "°",
+   "label": "Roughness (RMS slope after removing the mean gradient)",
+   "source": "LRO LOLA GDR ldem_64, 64 px/deg (PDS Geosciences)",
+   "short_source": "LOLA"
+  },
+  {
+   "name": "t_mean_K",
+   "dtype": "u1",
+   "scale": 2.0,
+   "offset": 0.0,
+   "unit": "K",
+   "label": "Mean surface temperature ((day + night) / 2)",
+   "source": "LRO Diviner GCP global cumulative products, 0.5° tiles × 96 local times (PDS Geosciences)",
+   "short_source": "Diviner"
+  },
+  {
+   "name": "t_max_K",
+   "dtype": "u1",
+   "scale": 2.0,
+   "offset": 0.0,
+   "unit": "K",
+   "label": "Max surface temperature (diurnal cycle)",
+   "source": "LRO Diviner GCP global cumulative products (PDS Geosciences)",
+   "short_source": "Diviner"
+  },
+  {
+   "name": "t_min_K",
+   "dtype": "u1",
+   "scale": 2.0,
+   "offset": 0.0,
+   "unit": "K",
+   "label": "Min surface temperature (diurnal cycle)",
+   "source": "LRO Diviner GCP global cumulative products (PDS Geosciences)",
+   "short_source": "Diviner"
+  },
+  {
+   "name": "sun_elev_max_deg",
+   "dtype": "u1",
+   "scale": 0.5,
+   "offset": 0.0,
+   "unit": "°",
+   "label": "Highest noon Sun elevation over a year (|lat| < 80° only)",
+   "source": "calculated, not measured: 90° − max(0, |lat| − 1.54°) (noon, whole year, flat horizon); empty for |lat| ≥ 80°, where relief decides the light: see psr_frac (docs/07)",
+   "short_source": "calc."
+  },
+  {
+   "name": "psr_frac",
+   "dtype": "u1",
+   "scale": 0.005,
+   "offset": 0.0,
+   "unit": "",
+   "label": "Fraction of the cell in permanent shadow (80–90° S)",
+   "source": "LOLA permanently shadowed regions LPSR_80S_20MPP_ADJ, 20 m (NASA GSFC PGDA, product 90)",
+   "short_source": "PGDA"
+  },
+  {
+   "name": "ice_depth_m",
+   "dtype": "u1",
+   "scale": 0.05,
+   "offset": 0.0,
+   "unit": "m",
+   "label": "Depth to stable water ice (0 = surface; 10 = none found)",
+   "source": "LRO Diviner Polar Resource Product, ice-stability depth (Paige et al. 2010), south pole ≤ −80°; away from the poles (|lat| < 60°) assumed: ice not stable near the surface; 60–80° and north pole: no data",
+   "source_column": "ice_depth_source"
+  },
+  {
+   "name": "ice_depth_source",
+   "dtype": "u1",
+   "scale": 1.0,
+   "offset": 0.0,
+   "unit": "",
+   "label": "Source of ice_depth_m: 1 Diviner PRP, 3 assumed",
+   "source": "1 = Diviner PRP model, 3 = assumption (|lat| < 60°)",
+   "codes": {
+    "1": "Diviner PRP",
+    "3": "assumed"
+   }
+  },
+  {
+   "name": "ice_frac_1m",
+   "dtype": "u1",
+   "scale": 0.005,
+   "offset": 0.0,
+   "unit": "",
+   "label": "Fraction of the cell with stable ice within 1 m",
+   "source": "LRO Diviner Polar Resource Product (south pole ≤ −80°); 0 for |lat| < 60° (assumption)",
+   "short_source": "Diviner PRP"
+  },
+  {
+   "name": "precip_mm_year",
+   "dtype": "u1",
+   "scale": 1.0,
+   "offset": 0.0,
+   "unit": "mm/year",
+   "label": "Rainfall (0 on the Moon)",
+   "source": "0 by definition (no atmosphere, no rain), as in configs/variables.yaml",
+   "short_source": "none"
+  },
+  {
+   "name": "silica_wt_pct",
+   "dtype": "u1",
+   "scale": 0.25,
+   "offset": 0.0,
+   "unit": "wt%",
+   "label": "Silica, SiO2 (Lunar Prospector, 2°)",
+   "source": "Lunar Prospector GRS elemental abundances, 2° equal-area cells (PDS Geosciences) [units: verify]",
+   "short_source": "LP GRS"
+  },
+  {
+   "name": "feo_wt_pct",
+   "dtype": "u1",
+   "scale": 0.15,
+   "offset": 0.0,
+   "unit": "wt%",
+   "label": "Iron, FeO (Lunar Prospector, 2°)",
+   "source": "Lunar Prospector GRS elemental abundances, 2° equal-area cells (PDS Geosciences) [units: verify]",
+   "short_source": "LP GRS"
+  },
+  {
+   "name": "tio2_wt_pct",
+   "dtype": "u1",
+   "scale": 0.05,
+   "offset": 0.0,
+   "unit": "wt%",
+   "label": "Titanium, TiO2 (Lunar Prospector, 2°)",
+   "source": "Lunar Prospector GRS elemental abundances, 2° equal-area cells (PDS Geosciences) [units: verify]",
+   "short_source": "LP GRS"
+  },
+  {
+   "name": "th_ppm",
+   "dtype": "u1",
+   "scale": 0.1,
+   "offset": 0.0,
+   "unit": "ppm",
+   "label": "Thorium (Lunar Prospector, 2°)",
+   "source": "Lunar Prospector GRS elemental abundances, 2° equal-area cells (PDS Geosciences) [units: verify]",
+   "short_source": "LP GRS"
+  },
+  {
+   "name": "rock_abundance_pct",
+   "dtype": "u1",
+   "scale": 0.05,
+   "offset": 0.0,
+   "unit": "%",
+   "label": "Rock abundance (Diviner, ±60°)",
+   "source": "LRO Diviner GDR L3 rock abundance, 32 px/deg, 60° N–60° S (PDS Geosciences)",
+   "short_source": "Diviner"
+  },
+  {
+   "name": "caves",
+   "dtype": "u1",
+   "scale": 1.0,
+   "offset": 0.0,
+   "unit": "",
+   "label": "Pit (cave entrance) in the cell: 1 yes, 0 no",
+   "source": "LROC Lunar Pit Atlas, 278 pits (lroc.im-ldi.com)",
+   "short_source": "LROC"
+  },
+  {
+   "name": "lola_measured_frac",
+   "dtype": "u1",
+   "scale": 0.005,
+   "offset": 0.0,
+   "unit": "",
+   "label": "Fraction of LOLA cells with a laser shot (QC)",
+   "source": "LRO LOLA GDR ldec_128, shots per cell (PDS Geosciences)",
+   "short_source": "LOLA"
+  },
+  {
+   "name": "pit_dist_km",
+   "dtype": "u2",
+   "scale": 1.0,
+   "offset": 0.0,
+   "unit": "km",
+   "label": "Distance to the nearest known pit",
+   "source": "LROC Lunar Pit Atlas, 278 pits (lroc.im-ldi.com)",
+   "short_source": "LROC"
+  },
+  {
+   "name": "elevation_m",
+   "dtype": "u2",
+   "scale": 1.0,
+   "offset": -20000.0,
+   "unit": "m",
+   "label": "Elevation above the 1,737.4 km sphere (LOLA)",
+   "source": "LRO LOLA GDR ldem_64, 64 px/deg (PDS Geosciences)",
+   "short_source": "LOLA"
+  }
+ ],
+ "regions": {
+  "0": {
+   "file": "r000.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24550
+  },
+  "1": {
+   "file": "r001.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25236
+  },
+  "2": {
+   "file": "r002.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25208
+  },
+  "3": {
+   "file": "r003.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24192
+  },
+  "4": {
+   "file": "r004.bin.gz",
+   "n_cells": 2001,
+   "bytes": 20225
+  },
+  "5": {
+   "file": "r005.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25357
+  },
+  "6": {
+   "file": "r006.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25143
+  },
+  "7": {
+   "file": "r007.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25522
+  },
+  "8": {
+   "file": "r008.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24477
+  },
+  "9": {
+   "file": "r009.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25115
+  },
+  "10": {
+   "file": "r010.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25381
+  },
+  "11": {
+   "file": "r011.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25744
+  },
+  "12": {
+   "file": "r012.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24122
+  },
+  "13": {
+   "file": "r013.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24378
+  },
+  "14": {
+   "file": "r014.bin.gz",
+   "n_cells": 2001,
+   "bytes": 21062
+  },
+  "15": {
+   "file": "r015.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24116
+  },
+  "16": {
+   "file": "r016.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25015
+  },
+  "17": {
+   "file": "r017.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25069
+  },
+  "18": {
+   "file": "r018.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24979
+  },
+  "19": {
+   "file": "r019.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24988
+  },
+  "20": {
+   "file": "r020.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24778
+  },
+  "21": {
+   "file": "r021.bin.gz",
+   "n_cells": 2401,
+   "bytes": 22554
+  },
+  "22": {
+   "file": "r022.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24563
+  },
+  "23": {
+   "file": "r023.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24455
+  },
+  "24": {
+   "file": "r024.bin.gz",
+   "n_cells": 2001,
+   "bytes": 20591
+  },
+  "25": {
+   "file": "r025.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25013
+  },
+  "26": {
+   "file": "r026.bin.gz",
+   "n_cells": 2401,
+   "bytes": 22572
+  },
+  "27": {
+   "file": "r027.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24734
+  },
+  "28": {
+   "file": "r028.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23629
+  },
+  "29": {
+   "file": "r029.bin.gz",
+   "n_cells": 2401,
+   "bytes": 22822
+  },
+  "30": {
+   "file": "r030.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23981
+  },
+  "31": {
+   "file": "r031.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23149
+  },
+  "32": {
+   "file": "r032.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24062
+  },
+  "33": {
+   "file": "r033.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24094
+  },
+  "34": {
+   "file": "r034.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23902
+  },
+  "35": {
+   "file": "r035.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24408
+  },
+  "36": {
+   "file": "r036.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24678
+  },
+  "37": {
+   "file": "r037.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23835
+  },
+  "38": {
+   "file": "r038.bin.gz",
+   "n_cells": 2001,
+   "bytes": 17734
+  },
+  "39": {
+   "file": "r039.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24163
+  },
+  "40": {
+   "file": "r040.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24486
+  },
+  "41": {
+   "file": "r041.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23672
+  },
+  "42": {
+   "file": "r042.bin.gz",
+   "n_cells": 2401,
+   "bytes": 22609
+  },
+  "43": {
+   "file": "r043.bin.gz",
+   "n_cells": 2401,
+   "bytes": 22551
+  },
+  "44": {
+   "file": "r044.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23149
+  },
+  "45": {
+   "file": "r045.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23742
+  },
+  "46": {
+   "file": "r046.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24089
+  },
+  "47": {
+   "file": "r047.bin.gz",
+   "n_cells": 2401,
+   "bytes": 21631
+  },
+  "48": {
+   "file": "r048.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23517
+  },
+  "49": {
+   "file": "r049.bin.gz",
+   "n_cells": 2001,
+   "bytes": 19370
+  },
+  "50": {
+   "file": "r050.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24107
+  },
+  "51": {
+   "file": "r051.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23284
+  },
+  "52": {
+   "file": "r052.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23887
+  },
+  "53": {
+   "file": "r053.bin.gz",
+   "n_cells": 2401,
+   "bytes": 22631
+  },
+  "54": {
+   "file": "r054.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23590
+  },
+  "55": {
+   "file": "r055.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23588
+  },
+  "56": {
+   "file": "r056.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23583
+  },
+  "57": {
+   "file": "r057.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23504
+  },
+  "58": {
+   "file": "r058.bin.gz",
+   "n_cells": 2001,
+   "bytes": 18485
+  },
+  "59": {
+   "file": "r059.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23363
+  },
+  "60": {
+   "file": "r060.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23646
+  },
+  "61": {
+   "file": "r061.bin.gz",
+   "n_cells": 2401,
+   "bytes": 22340
+  },
+  "62": {
+   "file": "r062.bin.gz",
+   "n_cells": 2401,
+   "bytes": 22553
+  },
+  "63": {
+   "file": "r063.bin.gz",
+   "n_cells": 2001,
+   "bytes": 19378
+  },
+  "64": {
+   "file": "r064.bin.gz",
+   "n_cells": 2401,
+   "bytes": 22892
+  },
+  "65": {
+   "file": "r065.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23252
+  },
+  "66": {
+   "file": "r066.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23359
+  },
+  "67": {
+   "file": "r067.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23765
+  },
+  "68": {
+   "file": "r068.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23662
+  },
+  "69": {
+   "file": "r069.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23428
+  },
+  "70": {
+   "file": "r070.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23441
+  },
+  "71": {
+   "file": "r071.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24094
+  },
+  "72": {
+   "file": "r072.bin.gz",
+   "n_cells": 2001,
+   "bytes": 19758
+  },
+  "73": {
+   "file": "r073.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23682
+  },
+  "74": {
+   "file": "r074.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23748
+  },
+  "75": {
+   "file": "r075.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23876
+  },
+  "76": {
+   "file": "r076.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23423
+  },
+  "77": {
+   "file": "r077.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24334
+  },
+  "78": {
+   "file": "r078.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23931
+  },
+  "79": {
+   "file": "r079.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23802
+  },
+  "80": {
+   "file": "r080.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24078
+  },
+  "81": {
+   "file": "r081.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23738
+  },
+  "82": {
+   "file": "r082.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23705
+  },
+  "83": {
+   "file": "r083.bin.gz",
+   "n_cells": 2001,
+   "bytes": 19847
+  },
+  "84": {
+   "file": "r084.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24084
+  },
+  "85": {
+   "file": "r085.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24679
+  },
+  "86": {
+   "file": "r086.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24028
+  },
+  "87": {
+   "file": "r087.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23985
+  },
+  "88": {
+   "file": "r088.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24338
+  },
+  "89": {
+   "file": "r089.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23796
+  },
+  "90": {
+   "file": "r090.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25370
+  },
+  "91": {
+   "file": "r091.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24388
+  },
+  "92": {
+   "file": "r092.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24587
+  },
+  "93": {
+   "file": "r093.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25048
+  },
+  "94": {
+   "file": "r094.bin.gz",
+   "n_cells": 2401,
+   "bytes": 23769
+  },
+  "95": {
+   "file": "r095.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24873
+  },
+  "96": {
+   "file": "r096.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25281
+  },
+  "97": {
+   "file": "r097.bin.gz",
+   "n_cells": 2001,
+   "bytes": 20449
+  },
+  "98": {
+   "file": "r098.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24198
+  },
+  "99": {
+   "file": "r099.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25140
+  },
+  "100": {
+   "file": "r100.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24133
+  },
+  "101": {
+   "file": "r101.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24023
+  },
+  "102": {
+   "file": "r102.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24168
+  },
+  "103": {
+   "file": "r103.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24563
+  },
+  "104": {
+   "file": "r104.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24298
+  },
+  "105": {
+   "file": "r105.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25209
+  },
+  "106": {
+   "file": "r106.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24446
+  },
+  "107": {
+   "file": "r107.bin.gz",
+   "n_cells": 2001,
+   "bytes": 20353
+  },
+  "108": {
+   "file": "r108.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25052
+  },
+  "109": {
+   "file": "r109.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24914
+  },
+  "110": {
+   "file": "r110.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25081
+  },
+  "111": {
+   "file": "r111.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24691
+  },
+  "112": {
+   "file": "r112.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24859
+  },
+  "113": {
+   "file": "r113.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25201
+  },
+  "114": {
+   "file": "r114.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25334
+  },
+  "115": {
+   "file": "r115.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24541
+  },
+  "116": {
+   "file": "r116.bin.gz",
+   "n_cells": 2401,
+   "bytes": 25242
+  },
+  "117": {
+   "file": "r117.bin.gz",
+   "n_cells": 2001,
+   "bytes": 20504
+  },
+  "118": {
+   "file": "r118.bin.gz",
+   "n_cells": 2401,
+   "bytes": 24594
+  },
+  "119": {
+   "file": "r119.bin.gz",
+   "n_cells": 2401,
+   "bytes": 26056
+  },
+  "120": {
+   "file": "r120.bin.gz",
+   "n_cells": 2401,
+   "bytes": 27027
+  },
+  "121": {
+   "file": "r121.bin.gz",
+   "n_cells": 2401,
+   "bytes": 27022
+  }
+ },
+ "cell_size_km": 12.3
+}

@@ -60,6 +60,9 @@ DATASETS: dict[str, list[str]] = {
     "diviner_rocks": with_labels(f"{DIV}/data_derived_gdr_l3/cylindrical/img/dgdr_ra_avg_cyl_032_img.img"),
     # Relieve global de LOLA, 64 px/° (~470 m) → pendiente y rugosidad fuera del polo. 531 MB
     "lola_ldem64": with_labels(f"{PDS}/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_64.img", (".lbl",)),
+    # Disparos LOLA por celda, 128 px/° (~237 m), toda la Luna → % de celdas MEDIDAS (no interpoladas)
+    # de cada hexágono, igual que el control de calidad de MOLA en Marte. 2,1 GB
+    "lola_ldec128": with_labels(f"{PDS}/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldec_128.img", (".lbl",)),
     # Mapa geológico unificado (detalle para las fichas finales). 224 MB
     "usgs_geology": ["https://asc-astropedia.s3.us-west-2.amazonaws.com/Moon/Geology/Unified_Geologic_Map_of_the_Moon_GIS_v2.zip"],
     # Temperatura de TODA la Luna por casilla de 0,5° y hora local: 18 bandas de 10°. 156 MB c/u (~2,8 GB)

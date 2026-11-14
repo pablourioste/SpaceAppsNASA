@@ -8,6 +8,8 @@ data/processed/**
 # Las LISTAS de lo descargado sí van a git (para reproducir y comparar), los datos no
 !data/raw/**/MANIFEST.csv
 !data/raw/**/LISTADO_*.csv
+# Las FICHAS (resúmenes por sitio, KB) sí van a git; los intermedios grandes (parquet) van por el Drive
+!data/processed/*.csv
 
 # Formatos ráster/científicos grandes en cualquier sitio
 *.tif

@@ -14,6 +14,7 @@ geopandas
 h3                 # malla hexagonal de igual área
 pyhdf              # leer HDF4 (MODIS: MCD12C1, MOD11C3…)
 h5py               # leer HDF5 (GPM IMERG, SMAP…)
+h3ronpy            # opcional: asigna millones de píxeles a hexágonos ~3× más rápido (moon.py lo usa si está)
 
 # --- Descargar de los portales ---
 earthaccess        # NASA Earthdata (con tu Earthdata Login)

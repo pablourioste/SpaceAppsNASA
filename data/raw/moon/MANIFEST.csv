@@ -1,89 +1,91 @@
 dataset,file,url,bytes,status,downloaded
-diviner_gcp,global_cumul_avg_cyl_00n10n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_00n10n_002.lbl,3461,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_00n10n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_00n10n_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_00n10n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_00n10n_002.xml,16002,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_10n20n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10n20n_002.lbl,3462,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_10n20n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10n20n_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_10n20n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10n20n_002.xml,16003,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_10s00s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10s00s_002.lbl,3462,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_10s00s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10s00s_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_10s00s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10s00s_002.xml,16003,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_20n30n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20n30n_002.lbl,3462,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_20n30n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20n30n_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_20n30n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20n30n_002.xml,16003,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_20s10s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20s10s_002.lbl,3464,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_20s10s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20s10s_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_20s10s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20s10s_002.xml,16005,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_30n40n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30n40n_002.lbl,3462,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_30n40n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30n40n_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_30n40n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30n40n_002.xml,16003,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_30s20s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30s20s_002.lbl,3464,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_30s20s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30s20s_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_30s20s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30s20s_002.xml,16005,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_40n50n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40n50n_002.lbl,3462,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_40n50n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40n50n_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_40n50n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40n50n_002.xml,16003,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_40s30s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40s30s_002.lbl,3464,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_40s30s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40s30s_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_40s30s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40s30s_002.xml,16005,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_50n60n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50n60n_002.lbl,3462,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_50n60n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50n60n_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_50n60n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50n60n_002.xml,16003,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_50s40s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50s40s_002.lbl,3464,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_50s40s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50s40s_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_50s40s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50s40s_002.xml,16005,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_60n70n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60n70n_002.lbl,3462,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_60n70n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60n70n_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_60n70n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60n70n_002.xml,16003,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_60s50s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60s50s_002.lbl,3464,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_60s50s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60s50s_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_60s50s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60s50s_002.xml,16005,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_70n80n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70n80n_002.lbl,3462,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_70n80n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70n80n_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_70n80n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70n80n_002.xml,16003,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_70s60s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70s60s_002.lbl,3464,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_70s60s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70s60s_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_70s60s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70s60s_002.xml,16005,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_80n90n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80n90n_002.lbl,3462,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_80n90n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80n90n_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_80n90n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80n90n_002.xml,16003,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_80s70s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80s70s_002.lbl,3464,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_80s70s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80s70s_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_80s70s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80s70s_002.xml,16005,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_90s80s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_90s80s_002.lbl,3413,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_90s80s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_90s80s_002.tab,156211313,ok,2026-11-14T11:52:51
-diviner_gcp,global_cumul_avg_cyl_90s80s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_90s80s_002.xml,16005,ok,2026-11-14T11:52:51
-diviner_prp,dlre_prp_south.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_prp/dlre_prp_south.lbl,2167,ok,2026-11-14T11:52:51
-diviner_prp,dlre_prp_south.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_prp/dlre_prp_south.tab,604800210,ok,2026-11-14T11:52:51
-diviner_prp,dlre_prp_south.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_prp/dlre_prp_south.xml,14561,ok,2026-11-14T11:52:51
-diviner_rocks,dgdr_ra_avg_cyl_032_img.img,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l3/cylindrical/img/dgdr_ra_avg_cyl_032_img.img,88473600,ok,2026-11-14T11:52:51
-diviner_rocks,dgdr_ra_avg_cyl_032_img.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l3/cylindrical/img/dgdr_ra_avg_cyl_032_img.lbl,4373,ok,2026-11-14T11:52:51
-diviner_rocks,dgdr_ra_avg_cyl_032_img.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l3/cylindrical/img/dgdr_ra_avg_cyl_032_img.xml,11380,ok,2026-11-14T11:52:51
-lola_ldem64,ldem_64.img,https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_64.img,530841600,ok,2026-11-14T11:52:51
-lola_ldem64,ldem_64.lbl,https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_64.lbl,5128,ok,2026-11-14T11:52:51
-lroc_pits,lroc_pits_list.csv,https://lroc.im-ldi.com/atlases/pits/list,18792,ok (278 pozos),2026-11-14T11:52:51
-lunar_prospector_grs,lpgrs_elem_abundance.fmt,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_elem_abundance.fmt,23574,ok,2026-11-14T11:52:51
-lunar_prospector_grs,lpgrs_high1_elem_abundance_2deg.lbl,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_2deg.lbl,8102,ok,2026-11-14T11:52:51
-lunar_prospector_grs,lpgrs_high1_elem_abundance_2deg.tab,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_2deg.tab,9949280,ok,2026-11-14T11:52:51
-lunar_prospector_grs,lpgrs_high1_elem_abundance_2deg.xml,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_2deg.xml,37946,ok,2026-11-14T11:52:51
-lunar_prospector_grs,lpgrs_high1_elem_abundance_5deg.lbl,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_5deg.lbl,8110,ok,2026-11-14T11:52:51
-lunar_prospector_grs,lpgrs_high1_elem_abundance_5deg.tab,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_5deg.tab,1575200,ok,2026-11-14T11:52:51
-lunar_prospector_grs,lpgrs_high1_elem_abundance_5deg.xml,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_5deg.xml,37879,ok,2026-11-14T11:52:51
-pgda_south_pole,LDEM_80S_80MPP_ADJ.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_80MPP_ADJ.TIF,189158392,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_RMSD_100M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_RMSD_100M.TIF,1538829,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_RMSD_1600M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_RMSD_1600M.TIF,1539279,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_RMSD_200M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_RMSD_200M.TIF,1535067,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_RMSD_400M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_RMSD_400M.TIF,1542798,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_RMSD_800M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_RMSD_800M.TIF,1542481,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_ROUGH_100M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_ROUGH_100M.TIF,1490865,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_ROUGH_1600M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_ROUGH_1600M.TIF,1532714,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_ROUGH_200M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_ROUGH_200M.TIF,1419339,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_ROUGH_400M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_ROUGH_400M.TIF,1532181,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_ROUGH_800M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_ROUGH_800M.TIF,1495485,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_SLP_100M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_SLP_100M.TIF,1533793,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_SLP_1600M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_SLP_1600M.TIF,1551713,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_SLP_200M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_SLP_200M.TIF,1539326,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_SLP_400M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_SLP_400M.TIF,1544190,ok,2026-11-14T11:52:51
-pgda_south_pole,LDRM_80S_1000MPP_ADJ_SLP_800M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_SLP_800M.TIF,1549684,ok,2026-11-14T11:52:51
-pgda_south_pole,LPSR_80S_20MPP_ADJ.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LPSR_80S_20MPP_ADJ.TIF,154221202,ok,2026-11-14T11:52:51
-usgs_geology,Unified_Geologic_Map_of_the_Moon_GIS_v2.zip,https://asc-astropedia.s3.us-west-2.amazonaws.com/Moon/Geology/Unified_Geologic_Map_of_the_Moon_GIS_v2.zip,224413040,ok,2026-11-14T11:52:51
+diviner_gcp,global_cumul_avg_cyl_00n10n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_00n10n_002.lbl,3461,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_00n10n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_00n10n_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_00n10n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_00n10n_002.xml,16002,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_10n20n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10n20n_002.lbl,3462,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_10n20n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10n20n_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_10n20n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10n20n_002.xml,16003,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_10s00s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10s00s_002.lbl,3462,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_10s00s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10s00s_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_10s00s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_10s00s_002.xml,16003,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_20n30n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20n30n_002.lbl,3462,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_20n30n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20n30n_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_20n30n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20n30n_002.xml,16003,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_20s10s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20s10s_002.lbl,3464,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_20s10s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20s10s_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_20s10s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_20s10s_002.xml,16005,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_30n40n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30n40n_002.lbl,3462,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_30n40n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30n40n_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_30n40n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30n40n_002.xml,16003,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_30s20s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30s20s_002.lbl,3464,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_30s20s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30s20s_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_30s20s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_30s20s_002.xml,16005,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_40n50n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40n50n_002.lbl,3462,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_40n50n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40n50n_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_40n50n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40n50n_002.xml,16003,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_40s30s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40s30s_002.lbl,3464,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_40s30s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40s30s_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_40s30s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_40s30s_002.xml,16005,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_50n60n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50n60n_002.lbl,3462,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_50n60n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50n60n_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_50n60n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50n60n_002.xml,16003,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_50s40s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50s40s_002.lbl,3464,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_50s40s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50s40s_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_50s40s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_50s40s_002.xml,16005,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_60n70n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60n70n_002.lbl,3462,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_60n70n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60n70n_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_60n70n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60n70n_002.xml,16003,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_60s50s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60s50s_002.lbl,3464,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_60s50s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60s50s_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_60s50s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_60s50s_002.xml,16005,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_70n80n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70n80n_002.lbl,3462,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_70n80n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70n80n_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_70n80n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70n80n_002.xml,16003,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_70s60s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70s60s_002.lbl,3464,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_70s60s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70s60s_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_70s60s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_70s60s_002.xml,16005,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_80n90n_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80n90n_002.lbl,3462,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_80n90n_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80n90n_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_80n90n_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80n90n_002.xml,16003,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_80s70s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80s70s_002.lbl,3464,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_80s70s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80s70s_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_80s70s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_80s70s_002.xml,16005,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_90s80s_002.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_90s80s_002.lbl,3413,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_90s80s_002.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_90s80s_002.tab,156211313,ya estaba,2026-11-14T17:26:15
+diviner_gcp,global_cumul_avg_cyl_90s80s_002.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gcp/global_cumul_avg_cyl_90s80s_002.xml,16005,ya estaba,2026-11-14T17:26:15
+diviner_prp,dlre_prp_south.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_prp/dlre_prp_south.lbl,2167,ya estaba,2026-11-14T17:26:15
+diviner_prp,dlre_prp_south.tab,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_prp/dlre_prp_south.tab,604800210,ya estaba,2026-11-14T17:26:15
+diviner_prp,dlre_prp_south.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_prp/dlre_prp_south.xml,14561,ya estaba,2026-11-14T17:26:15
+diviner_rocks,dgdr_ra_avg_cyl_032_img.img,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l3/cylindrical/img/dgdr_ra_avg_cyl_032_img.img,88473600,ya estaba,2026-11-14T17:26:15
+diviner_rocks,dgdr_ra_avg_cyl_032_img.lbl,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l3/cylindrical/img/dgdr_ra_avg_cyl_032_img.lbl,4373,ya estaba,2026-11-14T17:26:15
+diviner_rocks,dgdr_ra_avg_cyl_032_img.xml,https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l3/cylindrical/img/dgdr_ra_avg_cyl_032_img.xml,11380,ya estaba,2026-11-14T17:26:15
+lola_ldec128,ldec_128.img,https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldec_128.img,2123366400,ok,2026-11-14T17:26:15
+lola_ldec128,ldec_128.lbl,https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldec_128.lbl,3969,ok,2026-11-14T17:26:15
+lola_ldem64,ldem_64.img,https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_64.img,530841600,ya estaba,2026-11-14T17:26:15
+lola_ldem64,ldem_64.lbl,https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_64.lbl,5128,ya estaba,2026-11-14T17:26:15
+lroc_pits,lroc_pits_list.csv,https://lroc.im-ldi.com/atlases/pits/list,18792,ok (278 pozos),2026-11-14T17:26:15
+lunar_prospector_grs,lpgrs_elem_abundance.fmt,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_elem_abundance.fmt,23574,ya estaba,2026-11-14T17:26:15
+lunar_prospector_grs,lpgrs_high1_elem_abundance_2deg.lbl,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_2deg.lbl,8102,ya estaba,2026-11-14T17:26:15
+lunar_prospector_grs,lpgrs_high1_elem_abundance_2deg.tab,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_2deg.tab,9949280,ya estaba,2026-11-14T17:26:15
+lunar_prospector_grs,lpgrs_high1_elem_abundance_2deg.xml,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_2deg.xml,37946,ya estaba,2026-11-14T17:26:15
+lunar_prospector_grs,lpgrs_high1_elem_abundance_5deg.lbl,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_5deg.lbl,8110,ya estaba,2026-11-14T17:26:15
+lunar_prospector_grs,lpgrs_high1_elem_abundance_5deg.tab,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_5deg.tab,1575200,ya estaba,2026-11-14T17:26:15
+lunar_prospector_grs,lpgrs_high1_elem_abundance_5deg.xml,https://pds-geosciences.wustl.edu/lunar/lp-l-grs-5-elem-abundance-v1/lp_9001/data/lpgrs_high1_elem_abundance_5deg.xml,37879,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDEM_80S_80MPP_ADJ.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_80MPP_ADJ.TIF,189158392,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_RMSD_100M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_RMSD_100M.TIF,1538829,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_RMSD_1600M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_RMSD_1600M.TIF,1539279,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_RMSD_200M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_RMSD_200M.TIF,1535067,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_RMSD_400M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_RMSD_400M.TIF,1542798,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_RMSD_800M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_RMSD_800M.TIF,1542481,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_ROUGH_100M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_ROUGH_100M.TIF,1490865,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_ROUGH_1600M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_ROUGH_1600M.TIF,1532714,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_ROUGH_200M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_ROUGH_200M.TIF,1419339,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_ROUGH_400M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_ROUGH_400M.TIF,1532181,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_ROUGH_800M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_ROUGH_800M.TIF,1495485,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_SLP_100M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_SLP_100M.TIF,1533793,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_SLP_1600M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_SLP_1600M.TIF,1551713,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_SLP_200M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_SLP_200M.TIF,1539326,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_SLP_400M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_SLP_400M.TIF,1544190,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LDRM_80S_1000MPP_ADJ_SLP_800M.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDRM_80S_1000MPP_ADJ_SLP_800M.TIF,1549684,ya estaba,2026-11-14T17:26:15
+pgda_south_pole,LPSR_80S_20MPP_ADJ.TIF,https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LPSR_80S_20MPP_ADJ.TIF,154221202,ya estaba,2026-11-14T17:26:15
+usgs_geology,Unified_Geologic_Map_of_the_Moon_GIS_v2.zip,https://asc-astropedia.s3.us-west-2.amazonaws.com/Moon/Geology/Unified_Geologic_Map_of_the_Moon_GIS_v2.zip,224413040,ya estaba,2026-11-14T17:26:15

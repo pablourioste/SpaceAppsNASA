@@ -83,6 +83,6 @@ export class CardGrid {
       const q = col.arr[row];
       values[name] = q === NODATA[col.dtype] ? NaN : q * col.scale + col.offset;
     }
-    return { h3, values, columns: index.columns };
+    return { h3, values, columns: index.columns, cellSizeKm: index.cell_size_km };
   }
 }
