@@ -23,7 +23,7 @@ variables:
     tolerance: 5                     # [supuesto]
     note: "Calcular a la MISMA resolución en los tres cuerpos (enfoque §2.2)"
     sources:
-      moon:  "LOLA (PDS Geosciences / LOLA Data Node)"
+      moon:  "Global: calculada desde LOLA ldem_64. Polo (80–90S): PGDA LDRM_80S_1000MPP_ADJ_SLP_<L>M. Ver docs/06_datos_luna.md"
       mars:  "MOLA / MOLA-HRSC blend (PDS) [verificar]"
       earth: "NASADEM_HGT (Earthdata) o Copernicus DEM GLO-30 (Copernicus Data Space)"
 
@@ -34,7 +34,7 @@ variables:
     tolerance: 3                     # [supuesto]
     note: "Misma resolución que la pendiente"
     sources:
-      moon:  "LOLA"
+      moon:  "Global: calculada desde LOLA ldem_64. Polo: PGDA …_ROUGH_<L>M (o RMSD) [verificar definición]"
       mars:  "MOLA [verificar]"
       earth: "NASADEM / Copernicus DEM"
 
@@ -45,7 +45,7 @@ variables:
     tolerance: 10                    # [supuesto]
     note: "Mejor que la inercia térmica, que depende de la presión del gas (enfoque §2.3)"
     sources:
-      moon:  "Diviner rock abundance [verificar]"
+      moon:  "Diviner dgdr_ra_avg_cyl_032 (60N–60S). En el polo NO existe → vacío (comprobado)"
       mars:  "THEMIS / TES rock abundance [verificar]"
       earth: "SoilGrids, fragmentos gruesos [verificar]"
 
@@ -56,7 +56,7 @@ variables:
     categories: [basalt, anorthosite, other_igneous, sedimentary, evaporite, ice]
     matrix: {}                       # [supuesto] vacía → igual = 1, distinto = 0. La rellena Ciencia.
     sources:
-      moon:  "USGS Unified Geologic Map of the Moon [verificar]"
+      moon:  "Del FeO de Lunar Prospector GRS (2°, global): mucho hierro → basalto (mar), poco → anortosita (tierras altas). Detalle: mapa geológico USGS"
       mars:  "USGS Global Geologic Map of Mars (Tanaka et al., 2014) [verificar]"
       earth: "GLiM (Global Lithological Map) [verificar]"
 
@@ -78,7 +78,7 @@ variables:
     tolerance: 20                    # [supuesto]
     note: "Diviner PRP da la media a 2 cm de profundidad; MODIS da la superficie: no es exactamente la misma magnitud [verificar]"
     sources:
-      moon:  "Diviner PRP, columna temp_avg (PDS Geosciences)"
+      moon:  "Global: Diviner GCP (media de tbol, 0,5°). Polo: Diviner PRP temp_avg (0,5 km)"
       mars:  "Mars Climate Database [verificar]"
       earth: "MODIS LST, MOD11C3 (Earthdata)"
 
@@ -88,7 +88,7 @@ variables:
     type: numeric
     tolerance: 30                    # [supuesto]
     sources:
-      moon:  "Diviner PRP, columna temp_max (PDS Geosciences)"
+      moon:  "Global: Diviner GCP (máximo de tbol, 0,5°). Polo: Diviner PRP temp_max"
       mars:  "Mars Climate Database [verificar]"
       earth: "MODIS LST, MOD11C3 / MOD21A2 (Earthdata)"
 
@@ -99,7 +99,7 @@ variables:
     tolerance: 0.5                   # [supuesto]
     note: "Analogía PARCIAL: en la Luna el hielo sublima al vacío; en la Tierra hay atmósfera"
     sources:
-      moon:  "Diviner PRP, columna ice_depth (PDS Geosciences)"
+      moon:  "Diviner PRP, columna ice_depth (−999 = más de 2,87 m, NO es sin dato) + PGDA LPSR_80S_20MPP (sombra permanente)"
       mars:  "SWIM (Subsurface Water Ice Mapping) [verificar]"
       earth: "ESA CCI Permafrost, espesor de la capa activa [verificar]"
 
@@ -119,7 +119,7 @@ variables:
     type: numeric
     tolerance: 1                     # igual → 1, distinto → 0
     sources:
-      moon:  "LROC Lunar Pit Atlas [verificar]"
+      moon:  "LROC Pits Atlas (278 pozos, global). 0 al sur de −80° (comprobado)"
       mars:  "Mars Global Cave Candidate Catalog, MGC³ (USGS) [verificar]"
       earth: "Proxy: campos volcánicos basálticos (Smithsonian GVP + GLiM) [verificar]"
 

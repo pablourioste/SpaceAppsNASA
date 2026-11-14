@@ -5,6 +5,9 @@ data/processed/**
 !data/**/
 !data/**/.gitkeep
 !data/**/README.md
+# Las LISTAS de lo descargado sí van a git (para reproducir y comparar), los datos no
+!data/raw/**/MANIFEST.csv
+!data/raw/**/LISTADO_*.csv
 
 # Formatos ráster/científicos grandes en cualquier sitio
 *.tif

@@ -23,6 +23,7 @@ Los datos de NASA se descargan y procesan **una vez** y se convierten en un **í
 3. [`docs/03_enfoque.md`](docs/03_enfoque.md): el método y por qué.
 4. [`docs/04_plan_sabado.md`](docs/04_plan_sabado.md): qué hacemos el sábado por la mañana.
 5. [`docs/05_equipo_y_roles.md`](docs/05_equipo_y_roles.md): quién hace qué.
+6. [`docs/06_datos_luna.md`](docs/06_datos_luna.md): qué datos de la Luna recogemos, de qué fichero y cómo.
 
 ## Dónde va cada cosa
 
