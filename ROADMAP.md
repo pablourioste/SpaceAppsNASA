@@ -5,7 +5,7 @@
 
 **Legend:** `app/` = the web app (Vite + CesiumJS) · `src/analogs/` = the engine and Python preprocessing · `app/data/` = the index the app reads (format in [`app/README.md`](app/README.md)).
 
-**Progress:** 27 / 59 tasks done.
+**Progress:** 27 / 60 tasks done.
 
 ---
 
@@ -50,6 +50,9 @@
   Run: `python scripts/download_data.py` (safe to re-run; skips files already downloaded).
 - [x] **3.4** Download surface temperature and dust opacity: MGS TES IR retrievals for Mars Year 26 (Montabone et al., PDS Atmospheres) → `data/raw/mars/tes_atmos_my26/`. One product gives column dust OD, water-ice OD, surface temperature and surface pressure: 5.29 M retrievals over the full year (Ls 0–360). **All retrievals are daytime (~14 h)**, so they give `t_max_K` and `dust_aod` but not a night or diurnal-mean temperature (`t_mean_K` needs another source, see 3.5). MY26 chosen because MY25 had a global dust storm. ~490 MB; the server is slow (~0.1–0.6 MB/s). `python scripts/download_data.py tes_atmos` (resumable).
 - [ ] **3.5** Extract the variables at each Mars target site: slope, roughness, thermal inertia, hydrogen, temperature and dust. *Draft code in `src/analogs/mars.py` + `scripts/build_mars_features.py` (readers checked on MOLA, TES TI and GRS; not run end-to-end yet).*
+  **Slope and roughness at ~463 m (decided):** use MOLA MEGDR 128 px/deg instead of the 16 px/deg global map (3.7 km). The ~10 km site footprint then holds ~20×20 pixels instead of 3×3, and the baseline matches the Moon (LOLA `ldem_64`, ~474 m) and Earth (Copernicus DEM resampled to ~460 m), as decision 006 requires. Tiles in `data/raw/mars/mola_megdr_128ppd/` (`python scripts/download_data.py mola128`, only the tiles that contain a target site).
+  > ⚠️ **Warning: interpolated cells.** MOLA measures along the spacecraft ground tracks; near the equator the gaps between tracks can be several km wide, so at 128 px/deg many cells have **no laser shot and are interpolated**. In those cells the slope comes out **smoother than reality**. For every site, use the shots-per-cell tile (`megc…hb`) to report the **fraction of measured cells** in the footprint, store it as a QC column (e.g. `mola_measured_frac`) and flag sites where it is low (threshold to decide).
+  > **Measured so far (2026-11-14):** at the 12 Mars sites only **15–46 %** of the 128 px/deg cells in the footprint have a laser shot (Viking 1 15 %, Arcadia 19 %, Jezero 46 %). So a fixed "< 50 %" threshold would flag every site: report the fraction on the card instead of discarding sites, and consider computing slope only from measured cells.
   **To decide when doing 3.5:**
   - Source for `t_mean_K`: the TES retrievals are daytime only, so a night/diurnal-mean surface temperature needs another product (e.g. MCS surface temperature, PDS Atmospheres).
   - GRS element maps have no data north of ~45° (Arcadia, Phoenix, Viking 2): use the NS epithermal neutron flux there for ice/hydrogen.
@@ -82,6 +85,7 @@
 - [ ] **4.5** Match card: index, score per variable (target and Earth values, units and source), "not analog" block (gravity, pressure…) and test validity.
 - [ ] **4.6** Browse the 2nd, 3rd… best matches.
 - [ ] **4.7** Reverse direction: click on Earth → which Moon or Mars site it most resembles.
+  *Clicking any point of Mars (not only the target sites) needs Mars-wide slope: download the 10 remaining MOLA 128 px/deg tiles first (~2 GB more; see 5.6).*
 - [ ] **4.8** Show a clearly visible warning when the data is mock (`_aviso`).
 
 ## Phase 5 · Data layers on the globes (`app/`)
@@ -91,6 +95,7 @@
 - [ ] **5.3** H3 hexagon layer on Earth colored by index.
 - [ ] **5.4** Legend and color scale for each layer.
 - [ ] **5.5** Moon: Diviner layer (extreme cold, polar ice).
+- [ ] **5.6** (Later) Mars-wide slope/roughness at ~463 m: download the 10 MOLA 128 px/deg tiles not yet downloaded (16 in total, ~3.1 GB with the shots-per-cell tiles) — better outside OneDrive with `ANALOGS_DATA_DIR`. Needed for the global slope layer and for 4.7 on any point of Mars. Poles (|lat| > 88°) need the MOLA polar products.
 
 ## Phase 6 · Polish and presentation
 

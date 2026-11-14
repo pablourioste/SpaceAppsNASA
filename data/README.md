@@ -47,6 +47,8 @@ El paso 4 (el índice para la app) no está aquí: va a [`app/data/`](../app/REA
 
 > **Luna:** el plan completo (variables → fichero → cómo, y lo descartado) está en [`docs/06_datos_luna.md`](../docs/06_datos_luna.md).
 > ✅ **Kit de la Luna v1 DESCARGADO** (14/11/2026): 88 ficheros, 4,4 GB, 0 errores, con `python scripts/download_moon.py` (se quitaron Mini-RF y el exponente de Hurst: no son variables de la ficha). Qué se bajó y de dónde: [`raw/moon/MANIFEST.csv`](raw/moon/MANIFEST.csv). Huellas para comparar: `raw/moon/LISTADO_marc.csv`.
+>
+> ✅ **Mars kit v1 DOWNLOADED** (14/11/2026): 125 files, 1.95 GB, 0 errors, with `python scripts/download_data.py` (MOLA 16 ppd + 6 tiles of 128 ppd, TES thermal inertia, GRS, TES atmosphere MY26). What was downloaded and from where: [`raw/mars/MANIFEST.csv`](raw/mars/MANIFEST.csv). Fingerprints to compare: `raw/mars/LISTADO_adria.csv`.
 
 Estado: **identificado** = existe y sabemos dónde está · **descargado** · **procesado** (ya está en las fichas).
 
@@ -60,7 +62,7 @@ Estado: **identificado** = existe y sabemos dónde está · **descargado** · **
 | LOLA rugosidad (`ldrm_75s_240m` 29 MB · `ldrm_85s_40m` 115 MB) | Luna | rugosidad (m, desviación estándar) = DN·0,001; sin dato = −32768 | 240 / 40 m | ídem | ídem | identificado | |
 | Mini-RF | Luna | radar (CPR) | [verificar] | [verificar] | PDS Geosciences (página caída el 13/11) | por comprobar | |
 
-| MOLA MEGDR (`megt90n000eb` global 33 MB · teselas `megt…hb` de 65 MB) | Marte | relieve | 16 px/° (~3,7 km) global · 128 px/° (~460 m) en 16 teselas | PDS3 `.img` | PDS Geosciences → `mgs-m-mola-5-megdr-l3-v1/mgsl_300x/` | identificado (tamaños comprobados). Para cada sitio, bajar **solo su tesela** | |
+| MOLA MEGDR 128 ppd tiles (`megt…hb` topography 130 MB · `megc…hb` shots per cell 65 MB) → `raw/mars/mola_megdr_128ppd/` | Marte | relieve (slope/roughness at ~463 m) + QC of interpolated cells | 128 px/° (~463 m), 16 tiles of 44°×90° | PDS3/PDS4 `.img` | PDS Geosciences → MGS → MOLA → MEGDR (PDS4 bundle, `meg128/`) | **descargado: 6 tiles with Mars target sites** (00n090, 00n270, 44n000, 44n090, 44n270, 88n180, ~1.2 GB). The other 10 later (ROADMAP 5.6). ⚠️ Many cells near the equator are interpolated: check `megc` | |
 | MOLA-HRSC blend | Marte | relieve | ~200 m [verificar] | [verificar] | [verificar] | por buscar | |
 | MOLA MEGDR 16 ppd (`megt90n000eb`, `megc90n000eb`) → `raw/mars/mola_megdr_16ppd/` | Marte | topography (m, radius − areoid) + shots per cell | 16 px/deg (~3.7 km) | binary `.img` + PDS3/PDS4 labels, ~33 MB each | PDS Geosciences → MGS → MOLA → MEGDR (PDS4 bundle) | descargado | |
 | TES thermal inertia (`global_ti_{day,night}_2007` + masks) → `raw/mars/tes_thermal_inertia/` | Marte | thermal inertia (J m⁻² K⁻¹ s⁻½) | [see label] | binary `.img` + PDS3 `.lbl` | PDS Geosciences → MGS → TES → Thermal Inertia Maps | descargado | |

@@ -21,6 +21,8 @@ Earth example (Earthdata; needs an Earthdata Login account), still to do:
 """
 from __future__ import annotations
 
+import csv
+import datetime as dt
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -64,6 +66,33 @@ _GRS_ELEMENTS = f"{PDS_GEO}/ody/ody-m-grs-5-elements-v1/odgm_xxxx/data/smoothed"
 _TES_ATMOS = "https://atmos.nmsu.edu/PDS/data/PDS4/mgs_tes_atmos_dust-ice/data_IR_Aerosol_Optical_Depth/MY26"
 # Mars Year 26 (2002–2004): a full year without a global dust storm (MY25 had one in 2001)
 _TES_ATMOS_STEMS = [f"TES_COD_IR_MY26_Ls{a:03d}_Ls{a + 30:03d}" for a in range(0, 360, 30)]
+_MOLA128 = f"{PDS_GEO}/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg128"
+
+
+def mola128_tile(lat: float, lon: float) -> str:
+    """Name of the MOLA MEGDR 128 px/deg tile that contains a point, e.g. '44n270'.
+
+    Tiles are 44° × 90°: latitude bands 88N–44N ('88n'), 44N–0 ('44n'), 0–44S ('00n'),
+    44S–88S ('44s'); longitude 0–90, 90–180, 180–270, 270–360 east. Poles (|lat| > 88°) use
+    polar products instead and are not covered here.
+    """
+    if abs(lat) > 88:
+        raise ValueError(f"lat={lat}: beyond the 128 ppd equatorial tiles (|lat| ≤ 88°)")
+    band = "88n" if lat >= 44 else "44n" if lat >= 0 else "00n" if lat >= -44 else "44s"
+    lon_east = lon % 360
+    return f"{band}{int(lon_east // 90) * 90:03d}"
+
+
+def _mola128_files() -> list[str]:
+    """Topography (megt) + shots per cell (megc) tiles for every Mars target site."""
+    import pandas as pd  # local import: only needed for this dataset
+
+    from .paths import CATALOGS
+
+    sites = pd.read_csv(CATALOGS / "target_sites.csv")
+    sites = sites[sites["body"] == "mars"].dropna(subset=["lat", "lon"])
+    tiles = sorted({mola128_tile(r.lat, r.lon) for r in sites.itertuples()})
+    return _with_labels([f"meg{kind}{t}hb" for t in tiles for kind in ("t", "c")], "img", ["xml", "lbl", "hdr"])
 
 
 def _with_labels(stems: list[str], data_ext: str, label_exts: list[str]) -> list[str]:
@@ -79,6 +108,15 @@ DATASETS: dict[str, Dataset] = {
         base_url=_MOLA,
         # megt = topography (radius − areoid, m); megc = number of laser shots per cell (QC)
         files=_with_labels(["megt90n000eb", "megc90n000eb"], "img", ["xml", "lbl", "hdr"]),
+    ),
+    "mola128": Dataset(
+        key="mola128",
+        body="mars",
+        folder="mola_megdr_128ppd",
+        description="MGS MOLA MEGDR, 128 px/deg (~463 m): only the 44°×90° tiles that contain a Mars "
+                    "target site. Topography (megt, 130 MB/tile) + shots per cell (megc, 65 MB/tile)",
+        base_url=_MOLA128,
+        files=[],  # filled lazily from data/catalogs/target_sites.csv (see download())
     ),
     "tes": Dataset(
         key="tes",
@@ -155,22 +193,73 @@ def _download_file(session: requests.Session, url: str, path: Path) -> str:
     return f"downloaded ({path.stat().st_size / 1e6:.1f} MB)"
 
 
+MANIFEST_FIELDS = ["dataset", "file", "url", "bytes", "status", "downloaded"]
+
+
+def _write_manifest(body: str, rows: list[dict]) -> Path:
+    """data/raw/<body>/MANIFEST.csv, same format as scripts/download_moon.py.
+
+    `dataset` is the folder under data/raw/<body>/. Rows from earlier runs that were not
+    touched this time are kept, so downloading one dataset does not erase the others.
+    """
+    path = RAW / body / "MANIFEST.csv"
+    old = {}
+    if path.exists():
+        with open(path, newline="", encoding="utf-8") as f:
+            old = {(r["dataset"], r["file"]): r for r in csv.DictReader(f)}
+    now = dt.datetime.now().isoformat(timespec="seconds")
+    for r in rows:
+        old[(r["dataset"], r["file"])] = {**r, "downloaded": now}
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=MANIFEST_FIELDS)
+        w.writeheader()
+        for key in sorted(old):
+            w.writerow(old[key])
+    return path
+
+
 def download(keys: list[str] | None = None) -> None:
-    """Download the given datasets (all of them if keys is None) into data/raw/."""
+    """Download the given datasets (all of them if keys is None) into data/raw/.
+
+    At the end, writes data/raw/<body>/MANIFEST.csv (which file, from which URL, how many
+    bytes and when), like scripts/download_moon.py does for the Moon.
+    """
     keys = keys or list(DATASETS)
     unknown = [k for k in keys if k not in DATASETS]
     if unknown:
         raise KeyError(f"Unknown dataset(s): {unknown}. Available: {list(DATASETS)}")
 
+    rows: dict[str, list[dict]] = {}
     with requests.Session() as session:
         session.headers["User-Agent"] = "earth-analogs-spaceapps/0.1 (python-requests)"
         for key in keys:
             ds = DATASETS[key]
+            if key == "mola128" and not ds.files:
+                ds.files = _mola128_files()
             ds.dest.mkdir(parents=True, exist_ok=True)
             print(f"\n[{ds.key}] {ds.description}\n  → {ds.dest}")
             for name in ds.files:
-                status = _download_file(session, f"{ds.base_url}/{name}", ds.dest / name)
+                url = f"{ds.base_url}/{name}"
+                try:
+                    status = _download_file(session, url, ds.dest / name)
+                    manifest_status = "ya estaba" if status.startswith("skipped") else "ok"
+                except Exception as e:  # keep going; the error is recorded in the manifest
+                    status = manifest_status = f"ERROR {type(e).__name__}: {str(e)[:120]}"
+                path = ds.dest / name
+                rows.setdefault(ds.body, []).append({
+                    "dataset": ds.folder, "file": name, "url": url,
+                    "bytes": path.stat().st_size if path.exists() else 0, "status": manifest_status,
+                })
                 print(f"  {name}: {status}")
+
+    for body, body_rows in rows.items():
+        path = _write_manifest(body, body_rows)
+        errors = [r for r in body_rows if r["status"].startswith("ERROR")]
+        total = sum(r["bytes"] for r in body_rows) / 1e9
+        print(f"\n{body}: {len(body_rows) - len(errors)} ok, {len(errors)} with errors, "
+              f"{total:.2f} GB → {path}")
+        for r in errors:
+            print(f"  ✗ {r['dataset']}/{r['file']}: {r['status']}")
 
 
 def download_all() -> None:
