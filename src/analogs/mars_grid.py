@@ -403,6 +403,55 @@ def process_swim(grid: Grid) -> pd.DataFrame:
                          "ice_depth_m": ice_depth_from_swim(ci["ci_0_1m"], ci["ci_1_5m"], ci["ci_5m"])})
 
 
+# Beyond SWIM (|lat| > 60°): epithermal neutrons see hydrogen in the top ~1 m.
+# Threshold calibrated in the 45–60° band against SWIM "ice within 1 m" (balanced accuracy 0.80,
+# checked 2026-11-14). The 2002 NS map was taken in northern WINTER: seasonal CO2 frost hides the
+# hydrogen north of ~70°N (median flux 6.5 cps there vs 1.6 cps at the south pole), so north of
+# NEUTRON_NORTH_LIMIT the depth is an ASSUMPTION from ground-ice stability (Phoenix found ice at
+# ~5 cm at 68°N). The source of every value is kept in `ice_depth_source`.
+# MGS never flew over |lat| > ~87.1° (orbit inclination 92.9°): almost no MOLA shots there and
+# the polar maps are interpolated → slope ~0 is an artefact. Slope/roughness are dropped beyond it.
+MOLA_COVERAGE_LAT = 87.0
+
+
+def apply_polar_limits(df: pd.DataFrame) -> pd.DataFrame:
+    """Blank slope/roughness beyond MOLA's coverage; fix the NS neutron row at ±89.75° (stored as 0,
+    a fill value) with the nearest valid row (±89.25°)."""
+    out = df.copy()
+    beyond = out["lat"].abs() > MOLA_COVERAGE_LAT
+    out.loc[beyond, ["slope_deg", "roughness_deg", "mola_measured_frac"]] = np.nan
+    return out
+
+
+NEUTRON_ICE_CPS = 6.1
+NEUTRON_NORTH_LIMIT = 70.0
+ICE_SOURCE = {1: "SWIM 2.0", 2: "neutrons (GRS NS, calibrated on SWIM)",
+              3: "assumed: ground-ice stability (no reliable data north of 70°N)"}
+
+
+def fill_ice_beyond_swim(df: pd.DataFrame) -> pd.DataFrame:
+    """Add `ice_depth_source` (1 SWIM, 2 neutrons, 3 assumption) and fill ice_depth_m beyond SWIM.
+
+    Neutrons can only say "ice within ~1 m" (0.5 m) or "not detected in the top ~1 m" (NaN with
+    source 2): they do not see deeper.
+    """
+    depth = df["ice_depth_m"].to_numpy(dtype=float).copy()
+    source = np.where(np.isfinite(depth), 1.0, np.nan)
+    flux = df["ns_epithermal_cps"].to_numpy(dtype=float)
+    lat = df["lat"].to_numpy(dtype=float)
+    beyond = ~np.isfinite(depth)
+    by_neutrons = beyond & np.isfinite(flux) & (lat < NEUTRON_NORTH_LIMIT)
+    depth[by_neutrons & (flux <= NEUTRON_ICE_CPS)] = 0.5
+    source[by_neutrons] = 2
+    assumed = beyond & (lat >= NEUTRON_NORTH_LIMIT)
+    depth[assumed] = 0.5
+    source[assumed] = 3
+    out = df.copy()
+    out["ice_depth_m"] = depth.astype("float32")
+    out["ice_depth_source"] = source.astype("float32")
+    return out
+
+
 def ice_depth_from_swim(c01, c15, c5, thr: float = SWIM_ICE_THRESHOLD) -> np.ndarray:
     """Depth class (m) from the three SWIM consistency maps: shallowest layer above `thr`."""
     c01, c15, c5 = (np.asarray(a, dtype=float) for a in (c01, c15, c5))
@@ -440,9 +489,21 @@ def process_grs(grid: Grid) -> pd.DataFrame:
         unit = _grs_unit(tab.with_suffix(".lbl"))
         suffix = "ppm" if ("PPM" in unit.upper() or "MILLION" in unit.upper()) else "wt_pct"
         out[f"grs_{el}_{suffix}"] = _regular_lookup(grid.lat, grid.lon, read_grs_table(tab, 0, 1, 2), 5.0)
-    ns = read_grs_table(RAW_MARS / "grs_special" / "ns_epithermal_020917.tab", 1, 0, 2)
-    out["ns_epithermal_cps"] = _regular_lookup(grid.lat, grid.lon, ns, 0.5)
+    out["ns_epithermal_cps"] = neutron_lookup(grid.lat, grid.lon)
     return pd.DataFrame(out)
+
+
+def neutron_lookup(lat, lon) -> np.ndarray:
+    """Epithermal neutron flux at each point. The rows at ±89.25° and ±89.75° are stored as 0
+    (fill value, not a measurement; checked 2026-11-14): they are treated as no data and filled
+    from the last measured row, ±88.75°."""
+    ns = read_grs_table(RAW_MARS / "grs_special" / "ns_epithermal_020917.tab", 1, 0, 2)
+    ns.loc[ns["value"] <= 0, "value"] = np.nan
+    lat = np.asarray(lat, dtype=float)
+    v = _regular_lookup(lat, lon, ns, 0.5)
+    pole = ~np.isfinite(v) & (np.abs(lat) > 89.0)
+    v[pole] = _regular_lookup(np.sign(lat[pole]) * 88.75, np.asarray(lon)[pole], ns, 0.5)
+    return v
 
 
 def mcs_night_day(cell_deg: float = 5.0) -> pd.DataFrame:
@@ -529,6 +590,7 @@ def build_mars_grid(tiles: list[str] | None = None, with_poles: bool = True) -> 
         topo, ti, swim, grs, atm,
         pd.DataFrame({"sun_elev_max_deg": 90.0 - np.clip(np.abs(lat) - MARS_OBLIQUITY_DEG, 0, None)}),
     ], axis=1)
+    df = fill_ice_beyond_swim(apply_polar_limits(df))
     PROCESSED.mkdir(parents=True, exist_ok=True)
     out = PROCESSED / "mars_h3r5.parquet"
     df.astype({c: "float32" for c in df.columns if c not in ("h3", "lat", "lon")}).to_parquet(out, index=False)

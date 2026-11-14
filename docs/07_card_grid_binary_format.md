@@ -86,12 +86,12 @@ Pentagon base cells have fewer children (e.g. 16,807 vs 16,807 − …): always 
      (e.g. slope tolerance 5° vs error 0.125°);
    - prefer `u1` (1 byte); use `u2` only when needed (elevation, thermal inertia).
    Values outside the range are **clipped** (and counted by the check), never lost as no-data.
-4. **Write it**:
+4. **Write it** (with the display dict of section 5, so the card shows the source tags):
 
    ```python
    from analogs.export import write_grid_binary
-   write_grid_binary(df, "tierra", EARTH_WEB_COLUMNS, EARTH_SOURCES)   # → app/data/tierra/
-   write_grid_binary(df, "luna",   MOON_WEB_COLUMNS,  MOON_SOURCES)    # → app/data/luna/
+   write_grid_binary(df, "tierra", EARTH_WEB_COLUMNS, EARTH_SOURCES, EARTH_DISPLAY)  # → app/data/tierra/
+   write_grid_binary(df, "luna",   MOON_WEB_COLUMNS,  MOON_SOURCES,  MOON_DISPLAY)   # → app/data/luna/
    ```
 
 5. **Check it** (decodes every file and compares with the table):
@@ -104,6 +104,18 @@ Pentagon base cells have fewer children (e.g. 16,807 vs 16,807 − …): always 
 6. **Read it in the app**: `new CardGrid('tierra')`, then `await grid.cardAt(lat, lon)` →
    `{h3, values: {slope_deg: …, …}}` (works for any body and any H3 resolution).
 
+> ⚠️ **Moon: do not use the flat-horizon Sun formula at the poles.** Mars and Earth compute
+> `sun_elev_max_deg` as `90° − max(0, |lat| − obliquity)` (noon, whole year, flat horizon; see
+> `configs/variables.yaml`). The Moon's obliquity is only **1.54°**, so near the poles the Sun never
+> rises more than ~1.5–3° above the horizon and **local relief decides everything**: crater floors
+> can be in permanent shadow while nearby rims are lit most of the time. At the lunar poles the flat
+> formula gives a number that looks precise but is meaningless (it would say "~2°" for both a
+> permanently shadowed crater and a sunlit ridge). Use an **illumination / permanent-shadow map**
+> instead — e.g. PGDA `LPSR_80S_20MPP_ADJ` (permanently shadowed regions, 20 m), already in Marc's
+> Moon kit (`docs/06_datos_luna.md`) — and document in the Moon's `SOURCES`/`DISPLAY` which one
+> was used (a per-cell `source_column` if the formula is kept away from the poles and the map is
+> used near them).
+
 ## 4. Mars encoding (reference)
 
 | Column | dtype | scale | offset | Range | Max error |
@@ -112,7 +124,9 @@ Pentagon base cells have fewer children (e.g. 16,807 vs 16,807 − …): always 
 | `t_mean_K`, `t_max_K`, `t_night_K` | u1 | 1 | 100 | 100–354 K | 0.5 K |
 | `dust_aod` | u1 | 0.01 | 0 | 0–2.54 | 0.005 (47 cells clipped) |
 | `ice_depth_m` | u1 | 0.5 | 0 | 0–127 m | exact (classes 0.5 / 3 / 5 / 10) |
-| `sun_elev_max_deg` | u1 | 0.5 | 0 | 0–127° | 0.25° |
+| `ice_depth_source` | u1 | 1 | 0 | codes 1 SWIM · 2 neutrons · 3 assumed | exact |
+| `ns_epithermal_cps` | u1 | 0.05 | 0 | 0–12.7 counts/s | 0.025 |
+| `sun_elev_max_deg` | u1 | 0.5 | 0 | 0–127° | 0.25° — not measured: **calculated**, h_max = 90° − max(0, \|lat\| − 25.19°) (noon, whole year, flat horizon; see `configs/variables.yaml`) |
 | `mola_measured_frac` | u1 | 0.005 | 0 | 0–1.27 | 0.0025 |
 | `grs_h2o_wt_pct` | u1 | 0.05 | 0 | 0–12.7 wt% | 0.025 |
 | `grs_cl_wt_pct` | u1 | 0.01 | 0 | 0–2.54 wt% | 0.005 |
@@ -123,7 +137,35 @@ Pentagon base cells have fewer children (e.g. 16,807 vs 16,807 − …): always 
 Checked 2026-11-14: Python round trip (`check_grid_binary.py`) and browser (`CardGrid`) give the
 same cells, the same order and values within `scale/2` (Jezero, Gale, Hellas, north pole).
 
-## 5. Target sites
+## 5. Where the source of each value comes from
+
+The binary holds **only numbers**. Everything the card says about a value's origin comes from
+`index.json`, and the app has **nothing about sources hard-coded** (`app/src/card.js` only reads it).
+
+| What | Where it lives | Example | Shown on the card as |
+|---|---|---|---|
+| Full source (one per column) | `index.json` → column `source` | `"MGS MOLA MEGDR 128 px/deg + polar maps (PDS Geosciences)"` | tooltip when hovering the value |
+| Short source (one per column) | `index.json` → column `short_source` | `"MOLA"` | small tag to the right of the value |
+| Full unit | `index.json` → column `unit` | `"J m⁻² K⁻¹ s⁻½"` | tooltip |
+| Short unit (optional, when the full one is long) | `index.json` → column `short_unit` | `"tiu"` (thermal inertia units), `"cps"` (counts/s) | next to the number |
+| **Source that changes from cell to cell** | a **code column in the binary** + `index.json` → `source_column` on the value column and `codes` on the code column | `ice_depth_m` has `"source_column": "ice_depth_source"`; `ice_depth_source` has `"codes": {"1": "SWIM", "2": "neutrons", "3": "assumed"}` | the tag of that cell's code (SWIM / neutrons / assumed) |
+
+How it is produced: in `src/analogs/export.py`, `write_grid_binary(df, body, COLUMNS, SOURCES, DISPLAY)`.
+`SOURCES` gives the full text per column and `DISPLAY` (Mars: `MARS_DISPLAY`) gives `short_source`,
+`short_unit`, `source_column` and `codes`. **For Earth and the Moon, write their own `SOURCES` and
+`DISPLAY` dicts: the card then shows the right tags without touching the app.**
+
+Rule for per-cell sources: if one variable can come from different datasets depending on where you
+are (Mars ice: SWIM within ±60°, neutrons beyond, an assumption north of 70°N), store an integer code
+column next to it (`<variable>_source`, `u1`, scale 1), point to it with `source_column`, and name the
+codes with `codes`. The card also uses it for derived text: e.g. hydrogen shows "ice-rich [neutrons]"
+where GRS has no wt% but the ice value says "within 1 m".
+
+What *is* still in `card.js` (presentation only, not data): the order and grouping of the rows
+(Terrain / Climate / Ice & composition), the short row names ("Slope", "Water ice"…), and the texts
+for the ice classes and for values not measured near the poles.
+
+## 6. Target sites
 
 The real cards of each body's target sites go next to its grid, as readable JSON:
 `app/data/<body>/objetivos.json` (`write_mars_targets` for Mars), same shape as

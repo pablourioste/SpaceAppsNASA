@@ -1,5 +1,6 @@
 // Creates a Cesium globe for one body (earth, mars, moon).
 import * as Cesium from 'cesium';
+import { cellToBoundary } from 'h3-js';
 import { BODIES } from './bodies.js';
 import { formatLatLon, latLonToCartesian, pickLatLon } from './coords.js';
 
@@ -179,9 +180,29 @@ export function createGlobe(container, bodyKey) {
     return site;
   }
 
-  /** Remove the coordinate marker and un-highlight the selected site. */
+  // --- 4.9 Outline of the H3 cell whose card is shown ---
+  let cellOutline = null;
+  function showCell(h3) {
+    clearCell();
+    const ring = cellToBoundary(h3).map(([lat, lon]) => toCartesian(lat, lon, SURFACE_OFFSET));
+    cellOutline = viewer.entities.add({
+      polyline: {
+        positions: [...ring, ring[0]],
+        width: 3,
+        material: COLORS.selected,
+        arcType: Cesium.ArcType.NONE,
+      },
+    });
+  }
+  function clearCell() {
+    if (cellOutline) viewer.entities.remove(cellOutline);
+    cellOutline = null;
+  }
+
+  /** Remove the coordinate marker, the cell outline and un-highlight the selected site. */
   function clearSelection() {
     clearMarker();
+    clearCell();
     if (selected) styleSite(selected, false);
     selected = null;
   }
@@ -228,6 +249,9 @@ export function createGlobe(container, bodyKey) {
     setSites,
     selectSite,
     clearSelection,
+    /** Outline an H3 cell (id string) on the globe; clearCell() removes it. */
+    showCell,
+    clearCell,
     /** fn({ lat, lon }) when the user clicks empty ground. */
     onPick(fn) {
       pickListeners.push(fn);

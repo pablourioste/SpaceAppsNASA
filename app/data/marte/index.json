@@ -14,7 +14,8 @@
    "offset": 0.0,
    "unit": "°",
    "label": "Slope (median, ~460 m baseline)",
-   "source": "MGS MOLA MEGDR 128 px/deg + polar maps (PDS Geosciences)"
+   "source": "MGS MOLA MEGDR 128 px/deg + polar maps (PDS Geosciences)",
+   "short_source": "MOLA"
   },
   {
    "name": "roughness_deg",
@@ -23,7 +24,8 @@
    "offset": 0.0,
    "unit": "°",
    "label": "Roughness (RMS slope after removing a plane)",
-   "source": "MGS MOLA MEGDR 128 px/deg + polar maps (PDS Geosciences)"
+   "source": "MGS MOLA MEGDR 128 px/deg + polar maps (PDS Geosciences)",
+   "short_source": "MOLA"
   },
   {
    "name": "t_mean_K",
@@ -32,7 +34,8 @@
    "offset": 100.0,
    "unit": "K",
    "label": "Mean surface temperature ((day + night) / 2)",
-   "source": "MGS TES IR retrievals MY26 (day) + MRO MCS DDR MY31 (night), PDS Atmospheres"
+   "source": "MGS TES IR retrievals MY26 (day) + MRO MCS DDR MY31 (night), PDS Atmospheres",
+   "short_source": "TES+MCS"
   },
   {
    "name": "t_max_K",
@@ -41,7 +44,8 @@
    "offset": 100.0,
    "unit": "K",
    "label": "Max surface temperature (P95 of afternoon values)",
-   "source": "MGS TES IR retrievals MY26, Montabone et al. (PDS Atmospheres)"
+   "source": "MGS TES IR retrievals MY26, Montabone et al. (PDS Atmospheres)",
+   "short_source": "TES"
   },
   {
    "name": "t_night_K",
@@ -50,7 +54,8 @@
    "offset": 100.0,
    "unit": "K",
    "label": "Night surface temperature (~03 h)",
-   "source": "MRO MCS Derived Data Records v6.2, MY31 (PDS Atmospheres)"
+   "source": "MRO MCS Derived Data Records v6.2, MY31 (PDS Atmospheres)",
+   "short_source": "MCS"
   },
   {
    "name": "dust_aod",
@@ -59,7 +64,8 @@
    "offset": 0.0,
    "unit": "",
    "label": "Dust optical depth (visible, ×2.6 from 9.3 µm)",
-   "source": "MGS TES IR retrievals MY26, Montabone et al. (PDS Atmospheres)"
+   "source": "MGS TES IR retrievals MY26, Montabone et al. (PDS Atmospheres)",
+   "short_source": "TES"
   },
   {
    "name": "ice_depth_m",
@@ -68,7 +74,8 @@
    "offset": 0.0,
    "unit": "m",
    "label": "Depth to water ice (SWIM class; 10 = no ice found)",
-   "source": "SWIM 2.0 ice consistency (NASA MEP / PSI), threshold 0.25"
+   "source": "SWIM 2.0 ice consistency (NASA MEP / PSI), threshold 0.25, within ±60°; beyond: Odyssey GRS epithermal neutrons (≤ 6.1 cps = ice within 1 m, calibrated on SWIM); north of 70°N assumed (ground-ice stability), see ice_depth_source",
+   "source_column": "ice_depth_source"
   },
   {
    "name": "sun_elev_max_deg",
@@ -77,7 +84,8 @@
    "offset": 0.0,
    "unit": "°",
    "label": "Highest noon Sun elevation over a year",
-   "source": "computed from latitude and obliquity (25.19°)"
+   "source": "calculated, not measured: highest noon Sun elevation over a year, flat horizon: 90° − max(0, |lat| − 25.19°) (obliquity of Mars)",
+   "short_source": "calc."
   },
   {
    "name": "mola_measured_frac",
@@ -86,7 +94,8 @@
    "offset": 0.0,
    "unit": "",
    "label": "Fraction of MOLA cells with a laser shot (QC)",
-   "source": "MGS MOLA MEGDR shots per cell (PDS Geosciences)"
+   "source": "MGS MOLA MEGDR shots per cell (PDS Geosciences)",
+   "short_source": "MOLA"
   },
   {
    "name": "grs_h2o_wt_pct",
@@ -95,7 +104,8 @@
    "offset": 0.0,
    "unit": "wt%",
    "label": "Water-equivalent hydrogen (GRS, 5°)",
-   "source": "Mars Odyssey GRS element maps 5°×5° (PDS Geosciences)"
+   "source": "Mars Odyssey GRS element maps 5°×5° (PDS Geosciences)",
+   "short_source": "GRS"
   },
   {
    "name": "grs_cl_wt_pct",
@@ -104,7 +114,8 @@
    "offset": 0.0,
    "unit": "wt%",
    "label": "Chlorine (GRS, 5°)",
-   "source": "Mars Odyssey GRS element maps 5°×5° (PDS Geosciences)"
+   "source": "Mars Odyssey GRS element maps 5°×5° (PDS Geosciences)",
+   "short_source": "GRS"
   },
   {
    "name": "p_surf_Pa",
@@ -113,7 +124,33 @@
    "offset": 0.0,
    "unit": "Pa",
    "label": "Surface pressure (TES)",
-   "source": "MGS TES IR retrievals MY26, Montabone et al. (PDS Atmospheres)"
+   "source": "MGS TES IR retrievals MY26, Montabone et al. (PDS Atmospheres)",
+   "short_source": "TES"
+  },
+  {
+   "name": "ice_depth_source",
+   "dtype": "u1",
+   "scale": 1.0,
+   "offset": 0.0,
+   "unit": "",
+   "label": "Source of ice_depth_m: 1 SWIM, 2 neutrons, 3 assumed",
+   "source": "1 = SWIM 2.0, 2 = Odyssey GRS neutrons, 3 = assumption (ground-ice stability)",
+   "codes": {
+    "1": "SWIM",
+    "2": "neutrons",
+    "3": "assumed"
+   }
+  },
+  {
+   "name": "ns_epithermal_cps",
+   "dtype": "u1",
+   "scale": 0.05,
+   "offset": 0.0,
+   "unit": "counts/s",
+   "label": "Epithermal neutron flux (lower = more hydrogen)",
+   "source": "Mars Odyssey GRS Neutron Spectrometer, first 25.7 days of mapping (2002)",
+   "short_source": "GRS",
+   "short_unit": "cps"
   },
   {
    "name": "elevation_m",
@@ -122,7 +159,8 @@
    "offset": -10000.0,
    "unit": "m",
    "label": "Elevation above the areoid (MOLA)",
-   "source": "MGS MOLA MEGDR 128 px/deg (PDS Geosciences)"
+   "source": "MGS MOLA MEGDR 128 px/deg (PDS Geosciences)",
+   "short_source": "MOLA"
   },
   {
    "name": "thermal_inertia_day_SI",
@@ -131,619 +169,621 @@
    "offset": 0.0,
    "unit": "J m⁻² K⁻¹ s⁻½",
    "label": "Thermal inertia, day (TES)",
-   "source": "MGS TES thermal inertia, Putzig & Mellon 2007 (PDS Geosciences)"
+   "source": "MGS TES thermal inertia, Putzig & Mellon 2007 (PDS Geosciences)",
+   "short_source": "TES",
+   "short_unit": "tiu"
   }
  ],
  "regions": {
   "0": {
    "file": "r000.bin.gz",
    "n_cells": 16807,
-   "bytes": 100031
+   "bytes": 102554
   },
   "1": {
    "file": "r001.bin.gz",
    "n_cells": 16807,
-   "bytes": 102174
+   "bytes": 104135
   },
   "2": {
    "file": "r002.bin.gz",
    "n_cells": 16807,
-   "bytes": 92356
+   "bytes": 96052
   },
   "3": {
    "file": "r003.bin.gz",
    "n_cells": 16807,
-   "bytes": 84201
+   "bytes": 87702
   },
   "4": {
    "file": "r004.bin.gz",
    "n_cells": 14006,
-   "bytes": 68091
+   "bytes": 70691
   },
   "5": {
    "file": "r005.bin.gz",
    "n_cells": 16807,
-   "bytes": 82610
+   "bytes": 85831
   },
   "6": {
    "file": "r006.bin.gz",
    "n_cells": 16807,
-   "bytes": 86466
+   "bytes": 89823
   },
   "7": {
    "file": "r007.bin.gz",
    "n_cells": 16807,
-   "bytes": 89000
+   "bytes": 93030
   },
   "8": {
    "file": "r008.bin.gz",
    "n_cells": 16807,
-   "bytes": 84749
+   "bytes": 87767
   },
   "9": {
    "file": "r009.bin.gz",
    "n_cells": 16807,
-   "bytes": 83736
+   "bytes": 86661
   },
   "10": {
    "file": "r010.bin.gz",
    "n_cells": 16807,
-   "bytes": 82842
+   "bytes": 85882
   },
   "11": {
    "file": "r011.bin.gz",
    "n_cells": 16807,
-   "bytes": 83796
+   "bytes": 86692
   },
   "12": {
    "file": "r012.bin.gz",
    "n_cells": 16807,
-   "bytes": 86973
+   "bytes": 90391
   },
   "13": {
    "file": "r013.bin.gz",
    "n_cells": 16807,
-   "bytes": 89239
+   "bytes": 92679
   },
   "14": {
    "file": "r014.bin.gz",
    "n_cells": 14006,
-   "bytes": 69878
+   "bytes": 72155
   },
   "15": {
    "file": "r015.bin.gz",
    "n_cells": 16807,
-   "bytes": 91773
+   "bytes": 95034
   },
   "16": {
    "file": "r016.bin.gz",
    "n_cells": 16807,
-   "bytes": 89144
+   "bytes": 92737
   },
   "17": {
    "file": "r017.bin.gz",
    "n_cells": 16807,
-   "bytes": 78889
+   "bytes": 81726
   },
   "18": {
    "file": "r018.bin.gz",
    "n_cells": 16807,
-   "bytes": 83124
+   "bytes": 86023
   },
   "19": {
    "file": "r019.bin.gz",
    "n_cells": 16807,
-   "bytes": 93147
+   "bytes": 96580
   },
   "20": {
    "file": "r020.bin.gz",
    "n_cells": 16807,
-   "bytes": 90243
+   "bytes": 93822
   },
   "21": {
    "file": "r021.bin.gz",
    "n_cells": 16807,
-   "bytes": 95758
+   "bytes": 99020
   },
   "22": {
    "file": "r022.bin.gz",
    "n_cells": 16807,
-   "bytes": 100353
+   "bytes": 103742
   },
   "23": {
    "file": "r023.bin.gz",
    "n_cells": 16807,
-   "bytes": 88100
+   "bytes": 91633
   },
   "24": {
    "file": "r024.bin.gz",
    "n_cells": 14006,
-   "bytes": 70146
+   "bytes": 72467
   },
   "25": {
    "file": "r025.bin.gz",
    "n_cells": 16807,
-   "bytes": 89924
+   "bytes": 93290
   },
   "26": {
    "file": "r026.bin.gz",
    "n_cells": 16807,
-   "bytes": 88152
+   "bytes": 91661
   },
   "27": {
    "file": "r027.bin.gz",
    "n_cells": 16807,
-   "bytes": 87202
+   "bytes": 90384
   },
   "28": {
    "file": "r028.bin.gz",
    "n_cells": 16807,
-   "bytes": 95237
+   "bytes": 98294
   },
   "29": {
    "file": "r029.bin.gz",
    "n_cells": 16807,
-   "bytes": 91245
+   "bytes": 94596
   },
   "30": {
    "file": "r030.bin.gz",
    "n_cells": 16807,
-   "bytes": 91206
+   "bytes": 94091
   },
   "31": {
    "file": "r031.bin.gz",
    "n_cells": 16807,
-   "bytes": 92034
+   "bytes": 95344
   },
   "32": {
    "file": "r032.bin.gz",
    "n_cells": 16807,
-   "bytes": 82110
+   "bytes": 85338
   },
   "33": {
    "file": "r033.bin.gz",
    "n_cells": 16807,
-   "bytes": 97588
+   "bytes": 100982
   },
   "34": {
    "file": "r034.bin.gz",
    "n_cells": 16807,
-   "bytes": 84037
+   "bytes": 87593
   },
   "35": {
    "file": "r035.bin.gz",
    "n_cells": 16807,
-   "bytes": 77505
+   "bytes": 80655
   },
   "36": {
    "file": "r036.bin.gz",
    "n_cells": 16807,
-   "bytes": 84682
+   "bytes": 88496
   },
   "37": {
    "file": "r037.bin.gz",
    "n_cells": 16807,
-   "bytes": 86429
+   "bytes": 89517
   },
   "38": {
    "file": "r038.bin.gz",
    "n_cells": 14006,
-   "bytes": 76985
+   "bytes": 79520
   },
   "39": {
    "file": "r039.bin.gz",
    "n_cells": 16807,
-   "bytes": 87522
+   "bytes": 90769
   },
   "40": {
    "file": "r040.bin.gz",
    "n_cells": 16807,
-   "bytes": 92087
+   "bytes": 95733
   },
   "41": {
    "file": "r041.bin.gz",
    "n_cells": 16807,
-   "bytes": 89068
+   "bytes": 92142
   },
   "42": {
    "file": "r042.bin.gz",
    "n_cells": 16807,
-   "bytes": 94118
+   "bytes": 97401
   },
   "43": {
    "file": "r043.bin.gz",
    "n_cells": 16807,
-   "bytes": 90092
+   "bytes": 93490
   },
   "44": {
    "file": "r044.bin.gz",
    "n_cells": 16807,
-   "bytes": 88442
+   "bytes": 91824
   },
   "45": {
    "file": "r045.bin.gz",
    "n_cells": 16807,
-   "bytes": 85113
+   "bytes": 88411
   },
   "46": {
    "file": "r046.bin.gz",
    "n_cells": 16807,
-   "bytes": 82953
+   "bytes": 86630
   },
   "47": {
    "file": "r047.bin.gz",
    "n_cells": 16807,
-   "bytes": 89382
+   "bytes": 92377
   },
   "48": {
    "file": "r048.bin.gz",
    "n_cells": 16807,
-   "bytes": 89161
+   "bytes": 92516
   },
   "49": {
    "file": "r049.bin.gz",
    "n_cells": 14006,
-   "bytes": 73815
+   "bytes": 76068
   },
   "50": {
    "file": "r050.bin.gz",
    "n_cells": 16807,
-   "bytes": 90510
+   "bytes": 94175
   },
   "51": {
    "file": "r051.bin.gz",
    "n_cells": 16807,
-   "bytes": 86738
+   "bytes": 90253
   },
   "52": {
    "file": "r052.bin.gz",
    "n_cells": 16807,
-   "bytes": 93804
+   "bytes": 97514
   },
   "53": {
    "file": "r053.bin.gz",
    "n_cells": 16807,
-   "bytes": 87094
+   "bytes": 90078
   },
   "54": {
    "file": "r054.bin.gz",
    "n_cells": 16807,
-   "bytes": 82845
+   "bytes": 86277
   },
   "55": {
    "file": "r055.bin.gz",
    "n_cells": 16807,
-   "bytes": 85774
+   "bytes": 88983
   },
   "56": {
    "file": "r056.bin.gz",
    "n_cells": 16807,
-   "bytes": 86388
+   "bytes": 89519
   },
   "57": {
    "file": "r057.bin.gz",
    "n_cells": 16807,
-   "bytes": 89476
+   "bytes": 92989
   },
   "58": {
    "file": "r058.bin.gz",
    "n_cells": 14006,
-   "bytes": 74961
+   "bytes": 77129
   },
   "59": {
    "file": "r059.bin.gz",
    "n_cells": 16807,
-   "bytes": 83517
+   "bytes": 86712
   },
   "60": {
    "file": "r060.bin.gz",
    "n_cells": 16807,
-   "bytes": 84494
+   "bytes": 87400
   },
   "61": {
    "file": "r061.bin.gz",
    "n_cells": 16807,
-   "bytes": 89047
+   "bytes": 92237
   },
   "62": {
    "file": "r062.bin.gz",
    "n_cells": 16807,
-   "bytes": 96591
+   "bytes": 99546
   },
   "63": {
    "file": "r063.bin.gz",
    "n_cells": 14006,
-   "bytes": 69168
+   "bytes": 71489
   },
   "64": {
    "file": "r064.bin.gz",
    "n_cells": 16807,
-   "bytes": 98292
+   "bytes": 101918
   },
   "65": {
    "file": "r065.bin.gz",
    "n_cells": 16807,
-   "bytes": 89952
+   "bytes": 93005
   },
   "66": {
    "file": "r066.bin.gz",
    "n_cells": 16807,
-   "bytes": 89587
+   "bytes": 92917
   },
   "67": {
    "file": "r067.bin.gz",
    "n_cells": 16807,
-   "bytes": 95624
+   "bytes": 99017
   },
   "68": {
    "file": "r068.bin.gz",
    "n_cells": 16807,
-   "bytes": 89389
+   "bytes": 92809
   },
   "69": {
    "file": "r069.bin.gz",
    "n_cells": 16807,
-   "bytes": 98288
+   "bytes": 101861
   },
   "70": {
    "file": "r070.bin.gz",
    "n_cells": 16807,
-   "bytes": 90147
+   "bytes": 93372
   },
   "71": {
    "file": "r071.bin.gz",
    "n_cells": 16807,
-   "bytes": 94050
+   "bytes": 98136
   },
   "72": {
    "file": "r072.bin.gz",
    "n_cells": 14006,
-   "bytes": 74383
+   "bytes": 76910
   },
   "73": {
    "file": "r073.bin.gz",
    "n_cells": 16807,
-   "bytes": 87950
+   "bytes": 91084
   },
   "74": {
    "file": "r074.bin.gz",
    "n_cells": 16807,
-   "bytes": 92343
+   "bytes": 95546
   },
   "75": {
    "file": "r075.bin.gz",
    "n_cells": 16807,
-   "bytes": 90161
+   "bytes": 93373
   },
   "76": {
    "file": "r076.bin.gz",
    "n_cells": 16807,
-   "bytes": 90072
+   "bytes": 93312
   },
   "77": {
    "file": "r077.bin.gz",
    "n_cells": 16807,
-   "bytes": 94302
+   "bytes": 97687
   },
   "78": {
    "file": "r078.bin.gz",
    "n_cells": 16807,
-   "bytes": 94381
+   "bytes": 98045
   },
   "79": {
    "file": "r079.bin.gz",
    "n_cells": 16807,
-   "bytes": 95025
+   "bytes": 98203
   },
   "80": {
    "file": "r080.bin.gz",
    "n_cells": 16807,
-   "bytes": 83852
+   "bytes": 86762
   },
   "81": {
    "file": "r081.bin.gz",
    "n_cells": 16807,
-   "bytes": 93932
+   "bytes": 97486
   },
   "82": {
    "file": "r082.bin.gz",
    "n_cells": 16807,
-   "bytes": 94588
+   "bytes": 98554
   },
   "83": {
    "file": "r083.bin.gz",
    "n_cells": 14006,
-   "bytes": 71390
+   "bytes": 73599
   },
   "84": {
    "file": "r084.bin.gz",
    "n_cells": 16807,
-   "bytes": 92522
+   "bytes": 95566
   },
   "85": {
    "file": "r085.bin.gz",
    "n_cells": 16807,
-   "bytes": 102212
+   "bytes": 105901
   },
   "86": {
    "file": "r086.bin.gz",
    "n_cells": 16807,
-   "bytes": 91584
+   "bytes": 94936
   },
   "87": {
    "file": "r087.bin.gz",
    "n_cells": 16807,
-   "bytes": 95654
+   "bytes": 99037
   },
   "88": {
    "file": "r088.bin.gz",
    "n_cells": 16807,
-   "bytes": 86898
+   "bytes": 90177
   },
   "89": {
    "file": "r089.bin.gz",
    "n_cells": 16807,
-   "bytes": 89845
+   "bytes": 93142
   },
   "90": {
    "file": "r090.bin.gz",
    "n_cells": 16807,
-   "bytes": 95962
+   "bytes": 99841
   },
   "91": {
    "file": "r091.bin.gz",
    "n_cells": 16807,
-   "bytes": 91080
+   "bytes": 94367
   },
   "92": {
    "file": "r092.bin.gz",
    "n_cells": 16807,
-   "bytes": 92884
+   "bytes": 95790
   },
   "93": {
    "file": "r093.bin.gz",
    "n_cells": 16807,
-   "bytes": 97251
+   "bytes": 101029
   },
   "94": {
    "file": "r094.bin.gz",
    "n_cells": 16807,
-   "bytes": 94054
+   "bytes": 97217
   },
   "95": {
    "file": "r095.bin.gz",
    "n_cells": 16807,
-   "bytes": 97235
+   "bytes": 100655
   },
   "96": {
    "file": "r096.bin.gz",
    "n_cells": 16807,
-   "bytes": 95285
+   "bytes": 98622
   },
   "97": {
    "file": "r097.bin.gz",
    "n_cells": 14006,
-   "bytes": 81468
+   "bytes": 84009
   },
   "98": {
    "file": "r098.bin.gz",
    "n_cells": 16807,
-   "bytes": 102402
+   "bytes": 105707
   },
   "99": {
    "file": "r099.bin.gz",
    "n_cells": 16807,
-   "bytes": 93023
+   "bytes": 96184
   },
   "100": {
    "file": "r100.bin.gz",
    "n_cells": 16807,
-   "bytes": 98683
+   "bytes": 102188
   },
   "101": {
    "file": "r101.bin.gz",
    "n_cells": 16807,
-   "bytes": 99333
+   "bytes": 102762
   },
   "102": {
    "file": "r102.bin.gz",
    "n_cells": 16807,
-   "bytes": 99084
+   "bytes": 102643
   },
   "103": {
    "file": "r103.bin.gz",
    "n_cells": 16807,
-   "bytes": 96523
+   "bytes": 100007
   },
   "104": {
    "file": "r104.bin.gz",
    "n_cells": 16807,
-   "bytes": 94410
+   "bytes": 97428
   },
   "105": {
    "file": "r105.bin.gz",
    "n_cells": 16807,
-   "bytes": 96808
+   "bytes": 101057
   },
   "106": {
    "file": "r106.bin.gz",
    "n_cells": 16807,
-   "bytes": 98868
+   "bytes": 102405
   },
   "107": {
    "file": "r107.bin.gz",
    "n_cells": 14006,
-   "bytes": 80640
+   "bytes": 83376
   },
   "108": {
    "file": "r108.bin.gz",
    "n_cells": 16807,
-   "bytes": 94887
+   "bytes": 98470
   },
   "109": {
    "file": "r109.bin.gz",
    "n_cells": 16807,
-   "bytes": 95774
+   "bytes": 98995
   },
   "110": {
    "file": "r110.bin.gz",
    "n_cells": 16807,
-   "bytes": 99113
+   "bytes": 102742
   },
   "111": {
    "file": "r111.bin.gz",
    "n_cells": 16807,
-   "bytes": 103467
+   "bytes": 106947
   },
   "112": {
    "file": "r112.bin.gz",
    "n_cells": 16807,
-   "bytes": 93122
+   "bytes": 96411
   },
   "113": {
    "file": "r113.bin.gz",
    "n_cells": 16807,
-   "bytes": 93909
+   "bytes": 97210
   },
   "114": {
    "file": "r114.bin.gz",
    "n_cells": 16807,
-   "bytes": 99546
+   "bytes": 102849
   },
   "115": {
    "file": "r115.bin.gz",
    "n_cells": 16807,
-   "bytes": 93463
+   "bytes": 96713
   },
   "116": {
    "file": "r116.bin.gz",
    "n_cells": 16807,
-   "bytes": 93161
+   "bytes": 96374
   },
   "117": {
    "file": "r117.bin.gz",
    "n_cells": 14006,
-   "bytes": 77993
+   "bytes": 80103
   },
   "118": {
    "file": "r118.bin.gz",
    "n_cells": 16807,
-   "bytes": 95841
+   "bytes": 98779
   },
   "119": {
    "file": "r119.bin.gz",
    "n_cells": 16807,
-   "bytes": 102389
+   "bytes": 105701
   },
   "120": {
    "file": "r120.bin.gz",
    "n_cells": 16807,
-   "bytes": 106308
+   "bytes": 108621
   },
   "121": {
    "file": "r121.bin.gz",
    "n_cells": 16807,
-   "bytes": 102315
+   "bytes": 103953
   }
  }
 }

@@ -90,6 +90,8 @@ MARS_WEB_COLUMNS: dict[str, tuple[str, float, float, str, str]] = {
     "grs_h2o_wt_pct":         ("u1", 0.05, 0.0, "wt%", "Water-equivalent hydrogen (GRS, 5°)"),
     "grs_cl_wt_pct":          ("u1", 0.01, 0.0, "wt%", "Chlorine (GRS, 5°)"),
     "p_surf_Pa":              ("u1", 5.0, 0.0, "Pa", "Surface pressure (TES)"),
+    "ice_depth_source":       ("u1", 1.0, 0.0, "", "Source of ice_depth_m: 1 SWIM, 2 neutrons, 3 assumed"),
+    "ns_epithermal_cps":      ("u1", 0.05, 0.0, "counts/s", "Epithermal neutron flux (lower = more hydrogen)"),
     "elevation_m":            ("u2", 1.0, -10000.0, "m", "Elevation above the areoid (MOLA)"),
     "thermal_inertia_day_SI": ("u2", 1.0, 0.0, "J m⁻² K⁻¹ s⁻½", "Thermal inertia, day (TES)"),
 }
@@ -104,11 +106,16 @@ MARS_SOURCES = {
     "t_night_K": "MRO MCS Derived Data Records v6.2, MY31 (PDS Atmospheres)",
     "dust_aod": "MGS TES IR retrievals MY26, Montabone et al. (PDS Atmospheres)",
     "p_surf_Pa": "MGS TES IR retrievals MY26, Montabone et al. (PDS Atmospheres)",
-    "ice_depth_m": "SWIM 2.0 ice consistency (NASA MEP / PSI), threshold 0.25",
+    "ice_depth_m": "SWIM 2.0 ice consistency (NASA MEP / PSI), threshold 0.25, within ±60°; beyond: "
+                   "Odyssey GRS epithermal neutrons (≤ 6.1 cps = ice within 1 m, calibrated on SWIM); "
+                   "north of 70°N assumed (ground-ice stability), see ice_depth_source",
+    "ice_depth_source": "1 = SWIM 2.0, 2 = Odyssey GRS neutrons, 3 = assumption (ground-ice stability)",
+    "ns_epithermal_cps": "Mars Odyssey GRS Neutron Spectrometer, first 25.7 days of mapping (2002)",
     "grs_h2o_wt_pct": "Mars Odyssey GRS element maps 5°×5° (PDS Geosciences)",
     "grs_cl_wt_pct": "Mars Odyssey GRS element maps 5°×5° (PDS Geosciences)",
     "thermal_inertia_day_SI": "MGS TES thermal inertia, Putzig & Mellon 2007 (PDS Geosciences)",
-    "sun_elev_max_deg": "computed from latitude and obliquity (25.19°)",
+    "sun_elev_max_deg": "calculated, not measured: highest noon Sun elevation over a year, flat horizon: "
+                        "90° − max(0, |lat| − 25.19°) (obliquity of Mars)",
 }
 
 
@@ -120,8 +127,38 @@ def _quantize(values: np.ndarray, dtype: str, scale: float, offset: float) -> np
     return q.astype("<u1" if dtype == "u1" else "<u2")
 
 
-def write_grid_binary(df: pd.DataFrame, body: str, columns: dict, sources: dict) -> dict:
-    """Write app/data/<body>/ from a card grid (one row per H3 cell, column `h3`)."""
+# Display metadata written into index.json so the app needs no per-body hard-coding:
+#   short_source  tag shown next to the value on the card ("MOLA", "TES"…)
+#   short_unit    unit shown on the card when the full one is too long ("tiu", "cps")
+#   source_column the value's source varies per cell: name of a code column holding it
+#   codes         for code columns: {code: short tag}
+MARS_DISPLAY: dict[str, dict] = {
+    "slope_deg": {"short_source": "MOLA"},
+    "roughness_deg": {"short_source": "MOLA"},
+    "elevation_m": {"short_source": "MOLA"},
+    "mola_measured_frac": {"short_source": "MOLA"},
+    "t_mean_K": {"short_source": "TES+MCS"},
+    "t_max_K": {"short_source": "TES"},
+    "t_night_K": {"short_source": "MCS"},
+    "dust_aod": {"short_source": "TES"},
+    "p_surf_Pa": {"short_source": "TES"},
+    "sun_elev_max_deg": {"short_source": "calc."},
+    "ice_depth_m": {"source_column": "ice_depth_source"},
+    "ice_depth_source": {"codes": {"1": "SWIM", "2": "neutrons", "3": "assumed"}},
+    "grs_h2o_wt_pct": {"short_source": "GRS"},
+    "grs_cl_wt_pct": {"short_source": "GRS"},
+    "ns_epithermal_cps": {"short_source": "GRS", "short_unit": "cps"},
+    "thermal_inertia_day_SI": {"short_source": "TES", "short_unit": "tiu"},  # tiu = J m⁻² K⁻¹ s⁻½
+}
+
+
+def write_grid_binary(df: pd.DataFrame, body: str, columns: dict, sources: dict,
+                      display: dict | None = None) -> dict:
+    """Write app/data/<body>/ from a card grid (one row per H3 cell, column `h3`).
+
+    `display` (optional, like MARS_DISPLAY) adds short_source / short_unit / source_column /
+    codes to each column entry of index.json.
+    """
     import datetime as dt
     import gzip
 
@@ -156,7 +193,7 @@ def write_grid_binary(df: pd.DataFrame, body: str, columns: dict, sources: dict)
                     "value = stored*scale + offset; stored = max of dtype means no data",
         "cell_order": "ascending H3 index among the res-5 children of each base cell (region)",
         "columns": [{"name": n, "dtype": d, "scale": s, "offset": o, "unit": u, "label": lab,
-                     "source": sources.get(n, "")}
+                     "source": sources.get(n, ""), **(display or {}).get(n, {})}
                     for n, (d, s, o, u, lab) in columns.items()],
         "regions": regions,
     }

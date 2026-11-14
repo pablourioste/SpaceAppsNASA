@@ -65,11 +65,22 @@ variables:
     unit: "°"
     type: numeric
     tolerance: 3                     # [supuesto]
-    note: "Calculada con geometría solar; definición exacta (qué periodo) a cerrar (enfoque §2.4)"
+    # Definition (closed 2026-11-14; used for Mars in src/analogs/mars_grid.py and for Earth in
+    # src/analogs/earth.py): highest NOON Sun elevation over a whole year, flat horizon:
+    #     h_max = 90° − max(0, |lat| − obliquity)
+    # Noon elevation is 90° − |lat − δ|, with the Sun's declination δ between −obliquity and
+    # +obliquity over the year → 90° inside the tropics (|lat| ≤ obliquity), otherwise the
+    # summer-solstice value. Example: Phoenix 68.2°N on Mars → 90 − (68.2 − 25.19) = 47°.
+    # Assumptions: flat horizon (no terrain shadowing), geometry only (no atmosphere), it is the
+    # yearly MAXIMUM (not mean insolation or hours of daylight).
+    # Moon poles: obliquity 1.54° keeps the Sun within ~3° of the horizon, so local relief decides
+    # everything there (permanent shadow / near-permanent light): use an illumination map
+    # (e.g. PGDA LPSR_80S_20MPP, in Marc's Moon kit) instead of this flat-horizon formula.
+    note: "h_max = 90° − max(0, |lat| − obliquity), noon, whole year, flat horizon (see comment above)"
     sources:
-      moon:  "calculada (geometría)"
-      mars:  "calculada (geometría)"
-      earth: "calculada (geometría)"
+      moon:  "calculated: obliquity 1.54° (poles: use an illumination map, see comment)"
+      mars:  "calculated: obliquity 25.19°, planetocentric latitude"
+      earth: "calculated: obliquity 23.44°"
 
   t_mean_K:
     label: "Temperatura media anual"
