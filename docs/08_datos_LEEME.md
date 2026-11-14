@@ -187,5 +187,9 @@ Todos los datos son públicos (NASA, NOAA, USGS): se pueden compartir dentro del
 
 - **Luna**: escribir `src/analogs/moon.py` (Diviner GCP/PRP, LOLA a ~1 km, Lunar Prospector, pozos) → `fichas_objetivos_moon.parquet`. Faltan las **coordenadas de las 9 regiones del polo sur** (NASA 2024) en `data/catalogs/target_sites.csv`: sacarlas de los polígonos oficiales, no a ojo.
 - **Marte**: ejecutar `build_mars_features.py` con los datos importados; decidir si la pendiente se calcula con MOLA 128 px/° remuestreado a ~0,93 km (misma escala que la Tierra).
-- **Tierra**: litología (GLiM) y permafrost (ESA CCI), fuera de Earthdata; la lluvia de IMERG sobrestima en desiertos hiperáridos (Atacama) [verificar].
+- **Tierra**: litología (GLiM) y permafrost (ESA CCI), fuera de Earthdata.
+- **Calidad de datos de la Tierra a revisar**:
+  - la lluvia de IMERG sobrestima en desiertos hiperáridos (Atacama da 80–260 mm/año; lo real son unos pocos mm) [verificar];
+  - la sílice de ECOSTRESS solo es fiable en roca/suelo desnudo: en zonas basálticas con vegetación sale alta (Kilauea ~76 %, cuando el basalto tiene ~50 %) [verificar]. Úsala solo dentro de la máscara (desiertos);
+  - el polvo de MERRA-2 es un reanálisis de ~55 km: sirve como contexto regional, no para distinguir sitios cercanos.
 - **Ciencia**: fijar tolerancias, pesos y umbrales de la máscara; decidir qué máscara usa cada prueba (superficie vs. geología).

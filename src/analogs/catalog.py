@@ -52,6 +52,12 @@ DATASETS: list[Dataset] = [
       "elevation_m, slope_deg, roughness_deg (solo donde no hay SRTMGL30)", "30″ (~0,93 km)", "FIJO",
       "GeoTIFF float32 43200×21600; incluye batimetría (mar < 0): en los polos solo se usa lo que está > 0 m",
       "NOAA NCEI (sin cuenta)", "scripts/download_earth.py dem", "1,6 GB", "src/analogs/earth.py"),
+    C("earth", "etopo2022_15s", "NOAA ETOPO 2022 v1, 15″, superficie (piezas de 15°×15°)",
+      "Relieve global a ~460 m: MISMA línea base que MOLA 128 px/° (Marte) y LOLA ldem_64 (Luna)",
+      "slope_deg, roughness_deg, elevation_m (malla H3: earth_grid.py)", "15″ (~0,46 km)", "FIJO",
+      "GeoTIFF float32 3600×3600 por pieza; nombre = esquina superior izquierda (N30E000); incluye "
+      "batimetría: solo se usan los píxeles de tierra según MCD12C1", "NOAA NCEI (sin cuenta)",
+      "scripts/download_earth.py dem15 (solo las 226 piezas con tierra)", "4,6 GB", "src/analogs/earth_grid.py"),
     C("earth", "myd11c3", "MODIS Aqua MYD11C3 v061",
       "Temperatura de la superficie, mensual, de día (13:30) y de noche (01:30)", "t_mean_K, t_max_K, t_min_K",
       "0,05° (~5,6 km)", "CLIMATOLOGÍA 2019–2023: 12 medias mensuales → media, mes más cálido (día), mes más frío (noche)",

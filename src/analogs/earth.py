@@ -126,6 +126,9 @@ def lst_climatology(land: np.ndarray) -> dict[str, np.ndarray]:
             "t_mean_K": np.where(months_ok >= 6, np.nanmean(both, 0), np.nan),
             "t_max_K": np.nanmax(np.where(np.isfinite(day), day, -np.inf), 0),
             "t_min_K": np.nanmin(np.where(np.isfinite(night), night, np.inf), 0),
+            # medias anuales de cada pasada: equivalen a t_night_K (~03 h) / t_day_K (~14–15 h) de Marte
+            "t_night_K": np.where(np.isfinite(night).sum(0) >= 6, np.nanmean(night, 0), np.nan),
+            "t_day_K": np.where(np.isfinite(day).sum(0) >= 6, np.nanmean(day, 0), np.nan),
             "lst_months": months_ok.astype("f4"),
         }
     res["t_max_K"][~np.isfinite(res["t_max_K"])] = np.nan
@@ -350,10 +353,12 @@ def sun_elevation_max(lat_deg: np.ndarray, obliquity_deg: float = EARTH_OBLIQUIT
 ENV_NAMES = {0: "fuera", 1: "hielo polar", 2: "desierto (suelo desnudo)", 3: "árido abierto (matorral/estepa)"}
 
 
-def compute_fields(m: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
-    """Todas las variables en la malla 0,05° (se leen los productos una sola vez)."""
+def compute_fields(m: dict[str, np.ndarray], relief: bool = True) -> dict[str, np.ndarray]:
+    """Todas las variables en la malla 0,05° (se leen los productos una sola vez).
+    relief=False: sin relieve (la malla H3 lo calcula aparte, a 15″, en earth_grid.py)."""
     fields: dict[str, np.ndarray] = {"precip_mm_year": m["precip_mm_year"]}
-    fields.update(etopo_fill(srtm_relief(), m["land"]))
+    if relief:
+        fields.update(etopo_fill(srtm_relief(), m["land"]))
     fields.update(lst_climatology(m["land"]))
     fields.update(merra2_dust())
     fields.update(ecostress_silica())

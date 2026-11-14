@@ -4,7 +4,8 @@
     .venv\\Scripts\\python.exe scripts\\download_earth.py mask temp       # solo algunos grupos
     .venv\\Scripts\\python.exe scripts\\download_earth.py --list          # enseña qué bajaría
 
-Grupos: mask (cubierta del suelo + lluvia) · dem (relieve) · temp (temperatura) · polvo · silice · nieve
+Grupos: mask (cubierta del suelo + lluvia) · dem (relieve 30″) · dem15 (relieve 15″ ≈ 460 m, como Marte/Luna)
+        · temp (temperatura) · polvo · silice · nieve
 Se puede relanzar: lo que ya está descargado se salta.
 
 Necesita una cuenta de Earthdata Login en ~/.netrc (Windows: C:\\Users\\<tú>\\.netrc):
@@ -58,6 +59,12 @@ GROUPS: dict[str, dict[str, dict]] = {
             "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/30s/30s_surface_elev_gtif/"
             "ETOPO_2022_v1_30s_N90W180_surface.tif"]),
     },
+    # Relieve a 15″ (~460 m): MISMA línea base que Marte (MOLA 128 px/°, ~463 m) y la Luna (LOLA ldem_64,
+    # ~474 m) para la pendiente y la rugosidad (decisión 006 / ROADMAP 3.5). Piezas de 15°×15°: solo las
+    # que tienen tierra (según la máscara MCD12C1). ~20–35 MB cada una.
+    "dem15": {
+        "etopo2022_15s": dict(how="etopo15"),
+    },
     "temp": {
         "myd11c3": dict(how="earthaccess", short_name="MYD11C3", version="061", temporal=CLIMA),
     },
@@ -74,14 +81,31 @@ GROUPS: dict[str, dict[str, dict]] = {
 }
 
 
+_LOCK = __import__("threading").Lock()
+
+
 def _manifest(rows: list[list]) -> None:
+    with _LOCK:            # varias descargas en paralelo escriben aquí
+        _manifest_unlocked(rows)
+
+
+def _manifest_unlocked(rows: list[list]) -> None:
+    """Añade/actualiza filas de MANIFEST.csv (una por dataset + fichero; relanzar no duplica)."""
     path = DEST / "MANIFEST.csv"
-    new = not path.exists()
-    with path.open("a", newline="", encoding="utf-8") as fh:
+    header = ["dataset", "product", "file", "bytes", "downloaded_utc"]
+    table: dict[tuple, list] = {}
+    if path.exists():
+        with path.open(newline="", encoding="utf-8") as fh:
+            for r in list(csv.reader(fh))[1:]:
+                table[(r[0], r[2])] = r
+    for r in rows:
+        key = (r[0], r[2])
+        if key not in table or str(table[key][3]) != str(r[3]):   # nuevo o con otro tamaño
+            table[key] = [str(x) for x in r]
+    with path.open("w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
-        if new:
-            w.writerow(["dataset", "product", "file", "bytes", "downloaded_utc"])
-        w.writerows(rows)
+        w.writerow(header)
+        w.writerows(sorted(table.values()))
 
 
 def _row(folder: str, product: str, p: Path) -> list:
@@ -129,8 +153,9 @@ def get_opendap(folder: str, spec: dict, listing: bool) -> None:
     _manifest(rows)
 
 
-def get_url(folder: str, spec: dict, listing: bool) -> None:
-    print(f"  {folder}: {len(spec['urls'])} fichero(s) por URL directa")
+def get_url(folder: str, spec: dict, listing: bool, quiet: bool = False) -> None:
+    if not quiet:
+        print(f"  {folder}: {len(spec['urls'])} fichero(s) por URL directa")
     if listing:
         return
     out = DEST / folder
@@ -148,6 +173,53 @@ def get_url(folder: str, spec: dict, listing: bool) -> None:
     _manifest(rows)
 
 
+ETOPO15 = "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/"
+
+
+def etopo15_tiles() -> list[str]:
+    """Nombres de las piezas ETOPO 2022 15″ (15°×15°, nombre = esquina superior izquierda) con tierra."""
+    import numpy as np
+
+    from analogs.paths import INTERIM
+    npz = INTERIM / "earth_mask_005deg.npz"
+    land = np.load(npz)["land"] if npz.exists() else None
+    names = []
+    for top in range(90, -90, -15):
+        for west in range(-180, 180, 15):
+            if land is not None:
+                r0, c0 = int((90 - top) / 0.05), int((west + 180) / 0.05)
+                if not land[r0:r0 + 300, c0:c0 + 300].any():
+                    continue
+            ns, ew = ("N" if top >= 0 else "S"), ("E" if west >= 0 else "W")
+            names.append(f"ETOPO_2022_v1_15s_{ns}{abs(top):02d}{ew}{abs(west):03d}_surface.tif")
+    return names
+
+
+def get_etopo15(folder: str, listing: bool, threads: int) -> None:
+    from concurrent.futures import ThreadPoolExecutor
+
+    names = etopo15_tiles()
+    print(f"  {folder}: {len(names)} piezas con tierra (~20–35 MB c/u)")
+    if listing:
+        return
+    spec = {"urls": [ETOPO15 + n for n in names]}
+    out = DEST / folder
+    out.mkdir(parents=True, exist_ok=True)
+
+    def one(url: str) -> None:
+        for _ in range(5):
+            try:
+                get_url(folder, {"urls": [url]}, False, quiet=True)
+                return
+            except subprocess.CalledProcessError:
+                continue
+        print(f"    ✗ {url.rsplit('/', 1)[1]} (relanza para reintentar)")
+
+    with ThreadPoolExecutor(threads) as ex:
+        list(ex.map(one, spec["urls"]))
+    print(f"    {len(list(out.glob('*.tif')))} piezas en {out}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("groups", nargs="*", default=list(GROUPS), help=f"grupos: {', '.join(GROUPS)}")
@@ -162,7 +234,8 @@ def main() -> None:
         for folder, spec in GROUPS[g].items():
             {"earthaccess": lambda: get_earthaccess(folder, spec, args.list, args.threads),
              "opendap": lambda: get_opendap(folder, spec, args.list),
-             "url": lambda: get_url(folder, spec, args.list)}[spec["how"]]()
+             "url": lambda: get_url(folder, spec, args.list),
+             "etopo15": lambda: get_etopo15(folder, args.list, args.threads)}[spec["how"]]()
     print(f"\nDestino: {DEST}")
 
 
