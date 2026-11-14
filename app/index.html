@@ -1,9 +1,35 @@
-﻿<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Analog Lab · Comparador lunar</title>
-<style>
-:root{color-scheme:dark;--bg:#0b111b;--panel:#131e2c;--muted:#9eb0c5;--green:#a8f0cf}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#edf3fa;font:15px system-ui,sans-serif}header,main,footer{max-width:1250px;margin:auto;padding:28px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #263346}.logo{letter-spacing:3px;font-size:13px;font-weight:750}.tag{color:#ffd98d;background:#352b19;border:1px solid #756039;padding:8px 14px;border-radius:30px;font-size:12px}h1{font-size:clamp(30px,4vw,48px);letter-spacing:-2px;margin:12px 0}h2{font-size:20px;margin:0 0 20px}h3{font-size:16px}.intro{max-width:750px;color:var(--muted);line-height:1.7;margin-bottom:30px}.layout{display:grid;grid-template-columns:300px 1fr;gap:24px}.panel{background:var(--panel);border:1px solid #28364a;border-radius:18px;padding:24px}label{display:block;margin:16px 0 8px;color:var(--muted)}select,button{font:inherit;border:1px solid #41526a;border-radius:8px;padding:10px;color:#edf3fa;background:#1c2a3c}select{width:100%}button{cursor:pointer}button:hover{border-color:var(--green)}input[type=range]{width:100%;accent-color:var(--green)}.weight{display:flex;justify-content:space-between}.hint,small{color:var(--muted);font-size:12px;line-height:1.6}.summary{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.chip{background:#1a2a39;border-radius:8px;padding:10px;font-size:13px}.results{display:grid;gap:10px}.result{text-align:left;display:flex;align-items:center;justify-content:space-between;width:100%;padding:18px;background:#111c29}.result.active{border-color:var(--green);background:#18302f}.score{font-size:28px;color:var(--green);font-variant-numeric:tabular-nums}.detail{margin-top:22px}.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:13px 8px;border-bottom:1px solid #2c3a4c}th{color:var(--muted);font-weight:500}.bar{display:inline-block;height:6px;background:var(--green);border-radius:4px;max-width:100%}.notice{color:#ffd98d;line-height:1.6}.tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}footer{color:var(--muted);font-size:12px}.empty{padding:25px;border:1px dashed #526078;border-radius:12px}input[type=file]{max-width:100%;font:inherit;font-size:12px} @media(max-width:780px){.layout{grid-template-columns:1fr}header,main,footer{padding:20px}.tag{max-width:160px;text-align:center}h1{letter-spacing:-1px}}
-</style>
-<header><div class="logo">◒ ANALOG LAB <span style="color:#7d94ae">/ LUNA → TIERRA</span></div><div class="tag" id="badge">DEMOSTRACIÓN · DATOS FICTICIOS</div></header>
-<main><div class="hint" style="margin-top:15px;letter-spacing:2px">EXPLORAR · COMPARAR · ENTENDER</div><h1>Encuentra un terreno parecido.</h1><p class="intro">Elige una zona lunar y decide qué propiedades importan. Compara pendiente, rugosidad, temperatura y profundidad del hielo con lugares de la Tierra.</p>
-<div class="layout"><aside class="panel"><h2>Tu comparación</h2><label for="target">Zona lunar</label><select id="target"></select><label for="profile">Punto de partida</label><select id="profile"><option value="balanced">Equilibrado</option><option value="terrain">Terreno y movilidad</option><option value="cold">Temperatura y hielo</option></select><div id="weights"></div><label for="coverage">Cobertura mínima de variables activas</label><select id="coverage"><option value="1">100 % · Todas</option><option value="0.75">75 %</option><option value="0.5">50 %</option><option value="0">Sin mínimo</option></select><p class="hint">Un peso de 0 excluye la variable. Las tolerancias son provisionales; no constituyen una validación científica.</p><button id="reset">Restablecer demo</button></aside>
-<section><div class="panel"><h2 id="heading">Análogos terrestres</h2><div id="summary" class="summary"></div><p class="notice" id="warning"></p><div id="results" class="results"></div></div><div class="panel detail" id="detail"></div><div class="panel detail"><h2>Conectar los datos del equipo</h2><p class="hint">Carga un paquete JSON con zonas, variables y metadatos comparables. Descarga el ejemplo para ver el contrato. Los archivos se leen solo en este navegador.</p><label for="upload">Paquete de fichas (.json)</label><input id="upload" type="file" accept=".json,application/json"><p id="import-status" role="status" class="notice"></p><div class="tools"><button id="example">Descargar JSON de ejemplo</button><button id="export">Exportar resultados JSON</button></div></div></section></div></main><footer>Índice de analogía, no probabilidad. La gravedad, el vacío y la radiación no se reproducen en la Tierra. Las coordenadas y cifras de esta demo son ilustrativas.</footer>
-<script src="comparator.js"></script><script src="demo-data.js"></script><script src="app.js"></script></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Earth Analogs — Moon & Mars</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="toolbar">
+      <h1>Earth Analogs</h1>
+      <div class="switch" role="group" aria-label="Target body">
+        <button type="button" data-body="mars" class="active">Mars</button>
+        <button type="button" data-body="moon">Moon</button>
+      </div>
+      <label class="relief">
+        <input type="checkbox" id="relief" />
+        Relief
+      </label>
+    </header>
+
+    <main class="panes">
+      <section class="pane">
+        <span class="pane-label" id="target-label">Mars</span>
+        <div id="target" class="globe"></div>
+      </section>
+      <section class="pane">
+        <span class="pane-label">Earth</span>
+        <div id="earth" class="globe"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

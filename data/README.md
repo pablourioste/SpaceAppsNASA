@@ -59,8 +59,14 @@ Estado: **identificado** = existe y sabemos dónde está · **descargado** · **
 | LOLA pendiente (`ldsm_75s_240m` 29 MB · `ldsm_85s_40m` 115 MB) | Luna | pendiente (°) = DN·0,0015 + 45 | 240 / 40 m | PDS3 `.img`, entero de 16 bits | ídem | identificado. ⚠️ La etiqueta dice a la vez "línea base 240 m" y "30–120 m" [verificar] → para comparar con la Tierra, **mejor calcularla nosotros desde el DEM** | |
 | LOLA rugosidad (`ldrm_75s_240m` 29 MB · `ldrm_85s_40m` 115 MB) | Luna | rugosidad (m, desviación estándar) = DN·0,001; sin dato = −32768 | 240 / 40 m | ídem | ídem | identificado | |
 | Mini-RF | Luna | radar (CPR) | [verificar] | [verificar] | PDS Geosciences (página caída el 13/11) | por comprobar | |
+
 | MOLA MEGDR (`megt90n000eb` global 33 MB · teselas `megt…hb` de 65 MB) | Marte | relieve | 16 px/° (~3,7 km) global · 128 px/° (~460 m) en 16 teselas | PDS3 `.img` | PDS Geosciences → `mgs-m-mola-5-megdr-l3-v1/mgsl_300x/` | identificado (tamaños comprobados). Para cada sitio, bajar **solo su tesela** | |
 | MOLA-HRSC blend | Marte | relieve | ~200 m [verificar] | [verificar] | [verificar] | por buscar | |
+| MOLA MEGDR 16 ppd (`megt90n000eb`, `megc90n000eb`) → `raw/mars/mola_megdr_16ppd/` | Marte | topography (m, radius − areoid) + shots per cell | 16 px/deg (~3.7 km) | binary `.img` + PDS3/PDS4 labels, ~33 MB each | PDS Geosciences → MGS → MOLA → MEGDR (PDS4 bundle) | descargado | |
+| TES thermal inertia (`global_ti_{day,night}_2007` + masks) → `raw/mars/tes_thermal_inertia/` | Marte | thermal inertia (J m⁻² K⁻¹ s⁻½) | [see label] | binary `.img` + PDS3 `.lbl` | PDS Geosciences → MGS → TES → Thermal Inertia Maps | descargado | |
+| GRS special products (NS/HEND neutron flux, 2002) → `raw/mars/grs_special/` | Marte | epithermal / thermal / fast neutron flux | [see label] | `.tab` text + labels | PDS Geosciences → Odyssey → GRS → Special Products | descargado | |
+| GRS element maps, smoothed 5°×5° → `raw/mars/grs_elements/` | Marte | H₂O, Cl, Fe, Si, K, Th (wt%/ppm), K/Th | 5°×5° | `.tab` text + labels | PDS Geosciences → Odyssey → GRS → Element concentration maps | descargado | |
+| TES IR retrievals, Mars Year 26 (Montabone et al.) → `raw/mars/tes_atmos_my26/` | Marte | column dust OD (9.3 µm), water-ice OD (12.1 µm), surface temperature (K), surface pressure (Pa). **Daytime only (~14 h local time)**: 5.29 M retrievals, Ls 0–360 | individual retrievals (~3 km footprint), 12 files × 30° Ls | fixed-width text `.dat` + PDS4 `.xml`, ~490 MB | PDS Atmospheres → MGS → TES → Atmospheric IR and VIS Derived Data | descargado | |
 | `NASADEM_HGT` v001 | Tierra | relieve | 1″ (~30 m) | [verificar] | Earthdata (LP DAAC) | identificado | |
 | `MOD11C3` v061 | Tierra | temperatura de superficie mensual | 0,05° | HDF | Earthdata (LP DAAC) | identificado | |
 | `MOD21A2` v061 | Tierra | temperatura de superficie, 8 días | 1 km | HDF | Earthdata (LP DAAC) | identificado | |

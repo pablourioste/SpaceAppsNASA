@@ -18,6 +18,7 @@ earthaccess        # NASA Earthdata (con tu Earthdata Login)
 pystac-client      # Copernicus Data Space (STAC)
 requests
 tqdm
+truststore         # use the OS certificate store (fixes SSL errors behind proxies/antivirus)
 
 # --- Análisis y gráficos ---
 scikit-learn
