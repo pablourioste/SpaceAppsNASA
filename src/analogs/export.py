@@ -191,7 +191,7 @@ def write_grid_binary(df: pd.DataFrame, body: str, columns: dict, sources: dict,
         "n_cells": int(len(ids)),
         "encoding": "gzip; column blocks in the order of `columns`; little-endian unsigned ints; "
                     "value = stored*scale + offset; stored = max of dtype means no data",
-        "cell_order": "ascending H3 index among the res-5 children of each base cell (region)",
+        "cell_order": f"ascending H3 index among the res-{res} children of each base cell (region)",
         "columns": [{"name": n, "dtype": d, "scale": s, "offset": o, "unit": u, "label": lab,
                      "source": sources.get(n, ""), **(display or {}).get(n, {})}
                     for n, (d, s, o, u, lab) in columns.items()],
